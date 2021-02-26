@@ -2,7 +2,7 @@ import React from "react"
 
 
 class FileTag extends React.Component{
-
+/**/
     state = {
 		parent :"",
 		name:"",
