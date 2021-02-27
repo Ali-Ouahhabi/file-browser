@@ -36,36 +36,15 @@ class FileTag extends React.Component {
 	}
 
 	onDrop(props, monitor, component) {
-
 		if (this.state.self.isFile)
 			return this.state.parent.onDrop(props, monitor, component)
-		
 		let item = monitor.getItem()
-		
-		if(item.self == this.state.self || this.props.path.startsWith(item.path))
+		if(item.index == this.props.index || this.props.path.startsWith(item.path))
 			return;
-		let id = item.id;
-		let selfN = {...item.self};
-		let origin = item.parent.getSelf()
-		selfN.parent = props.self
-		this.setState(((state, props) => {
-			let newState = {...state}
-			newState.self.children = state.self.children.concat(selfN)
-			return newState
-			
-		}),()=>origin.removeChild(id))
+		this.props.reportChange(item.index, this.props.index)
 	}
 
 	emit(str, obj) { }
-
-	removeChild(id) {
-		this.setState((state, props) => {
-			let newState = {...state}
-			newState.self.children=state.self.children.slice(0, id).concat(state.self.children.slice(id + 1));
-			return newState
-		})
-
-	}
 
 	getPath() {
 		return (this.state.parent ? this.state.parent.getPath() + "/" : "") + this.state.name;
@@ -76,10 +55,13 @@ class FileTag extends React.Component {
 
 	render() {
 		let children = () => {
-			if (this.state.self.children && this.state.isToggeld) {
-				return this.state.self.children.map((child, index) => {
+			console.log(this.props)
+			let tmp =[]
+			if (this.props.self.children && this.state.isToggeld) {
+				return this.props.self.children.map((child, index) => {
+					tmp = this.props.index.concat(index)
 					return (
-						<FileTagC key={index+child.name} id={index} parent={this} self={child} path={this.props.path+"/"+child.name}
+						<FileTagC key={index+child.name} id={index} index={tmp} reportChange={this.props.reportChange} parent={this} self={child} path={this.props.path+"/"+child.name} 
 						/>
 					)
 				})
@@ -93,12 +75,11 @@ class FileTag extends React.Component {
 				<div key="head" className={name}
 					onClick={(e) => { e.preventDefault(); this.setState({ isToggeld: !this.state.isToggeld }) }}
 
-				>
+				><div>{this.props.filter||""}</div>
 					<span className={"file-tag" + "-icon"}>
 						{this.state.self.isFile ? <ImFileText2 /> : this.state.isToggeld ? <ImFolderOpen /> : <ImFolder />}
 					</span>
 					<span className={"file-tag" + "-name"}> {this.props.self.name}</span>
-
 				</div>)),
 			<div key="body" className={name + "-children"}>
 				{
@@ -121,7 +102,7 @@ const dropCall = {
 }
 const dragContent = {
 	beginDrag(props, monitor, component) {
-		return props
+		return {index: props.index}
 	},
 }
 
