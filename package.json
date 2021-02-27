@@ -8,6 +8,8 @@
     "@testing-library/user-event": "^12.7.3",
     "node-sass": "^5.0.0",
     "react": "^17.0.1",
+    "react-dnd": "^13.1.1",
+    "react-dnd-html5-backend": "^12.1.1",
     "react-dom": "^17.0.1",
     "react-icons": "^4.2.0",
     "react-scripts": "4.0.3",
