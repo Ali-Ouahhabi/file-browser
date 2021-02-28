@@ -103,12 +103,30 @@ function App() {
       },
 
     ],
-
   }
-  let [treeV, setTreeV] = useState({ ...tree })
 
+  let [treeV, setTreeV] = useState({ ...tree })
+  let [filterData, setFilterData] = useState({
+    isFirstCall: true,
+    saveData: {}
+  })
   function filtering(v) {
-    let vv = { ...tree, children: filterTree(tree.children, v) }
+    if (filterData.isFirstCall) {
+      setFilterData({
+        isFirstCall: false,
+        saveData: JSON.parse(JSON.stringify(treeV))
+      })
+    }
+
+    if (!v) {
+      setFilterData({
+        isFirstCall: true,
+      })
+      setTreeV(filterData.saveData);
+      return
+    }
+
+    let vv = { ...treeV, children: filterTree(treeV.children, v) }
     setTreeV(vv)
 
     function filterTree(ch, val) {
@@ -137,9 +155,12 @@ function App() {
   function permute(el, toIn) {
 
     let newTree = { ...treeV }
-
-    addElAt(toIn, getElAt(el))
-    removeElAt(el)
+    if (el instanceof DataTransferItemList) {
+      addElAt(toIn, getFileStructure(el))
+    } else if (el instanceof Array) {
+      addElAt(toIn, getElAt(el))
+      removeElAt(el)
+    }
     setTreeV(newTree)
 
     function removeElAt(index) {
@@ -155,7 +176,7 @@ function App() {
       let tmp = newTree
       for (let i = 0; i < index.length; i++)
         tmp = tmp.children[index[i]]
-      tmp.children.push(el)
+      tmp.children = tmp.children.concat(el)
       return tmp
     }
 
@@ -167,6 +188,37 @@ function App() {
       }
       let child = tmp.children[index[i]]
       return child
+    }
+
+    function getFileStructure(items) {
+      return Array.from(items).map(item => {
+        if (item instanceof DataTransferItem) item = item.webkitGetAsEntry();
+        if (item.isFile) {
+          return {
+            name: item.name,
+            isFile: item.isFile,
+            children: null
+          }
+        } else if (item.isDirectory) {
+          //console.log("isDirectory >", item.name)
+          let tmp = {
+            name: item.name,
+            isFile: item.isFile,
+            children: []
+          }
+          // Get folder contents
+          var dirReader = item.createReader();
+          dirReader.readEntries((entries) =>
+            tmp.children.push(
+              ...getFileStructure(entries)
+            )
+
+          )
+          return tmp;
+        }
+        else
+          return [];
+      })
     }
   }
 
