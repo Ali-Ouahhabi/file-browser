@@ -1,7 +1,8 @@
 $color1: #001e35; //#001e35
-$color2: #52616b;
+$color2: #536073;
 $color3: #ffffff;
-$color4: #f0f5f9;
+$color4: #536073;
+$color5:#03070d;
 div {
   color: $color1;
   width: 100%;
@@ -9,10 +10,21 @@ div {
     background-color: $color3;
     display: inline-block;
     width: 100%;
-    border-bottom: solid 1px;
-    border-left: solid 2px;
+    border: solid 1px;
+    border-left: solid 3px;
     margin: 1px;
+    margin-left: 0px;
     padding: 1px;
+  }
+
+  .file-tag-folder-hover{
+    background-color: $color1;
+    color: $color3;
+    border-color: $color3;
+    border-style: groove;
+    border-width: 2px;
+    //border-bottom-width: 0px;
+    padding: 4px;
   }
 
   .file-tag-file {
@@ -38,6 +50,7 @@ div {
 
   .file-tag-folder-children {
     padding-left: 8px;
+    border-left: solid 1px $color2;
   }
   .file-tag-icon {
     padding-left: 5px;

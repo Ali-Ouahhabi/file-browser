@@ -1,9 +1,10 @@
 import { DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
-import './App.css';
+import './App.scss';
 import FileTag from './components/FileTag';
 import React, { useState } from 'react';
-
+import { ImCloudUpload, ImCloudDownload, ImBin } from "react-icons/im";
+import { BiRename } from "react-icons/bi"
 function App() {
 
   const tree = {
@@ -225,7 +226,36 @@ function App() {
 
   return (
     <div>
-      <input type="text" name="filter" onChange={(e) => filtering(e.target.value)} />
+      <div>
+        <div class="menu">
+          <span class="menu-icon">
+            <ImCloudDownload />
+          </span>
+          <span class="menu-title">Download</span>
+        </div>
+
+        <div class="menu">
+          <span class="menu-icon">
+            <ImCloudUpload /></span>
+          <span class="menu-title">Upload</span>
+        </div>
+        
+        <div class="menu">
+          <span class="menu-icon">
+            <ImBin /></span>
+          <span class="menu-title">Remove</span>
+        </div>
+        
+        <div class="menu">
+          <span class="menu-icon">
+            <BiRename /></span>
+          <span class="menu-title">Rename</span>
+        </div>
+        <div class="menu-s">
+        <input class="menu-search" type="text" name="filter" onChange={(e) => filtering(e.target.value)} />
+        <span class="">search</span>
+        </div>
+      </div>
       <DndProvider backend={HTML5Backend}>
         <div className="App" >
           <FileTag self={treeV} index={[]} reportChange={permute} path={"/" + tree.name}  ></FileTag>

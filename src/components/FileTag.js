@@ -77,7 +77,7 @@ class FileTag extends React.Component {
 
 		return ([
 			this.props.connectDragSource(this.props.connectDropTarget(
-				<div key="head" className={name}
+				<div key="head" className={name+(!this.state.self.isFile&&this.props.isOver?"-hover":"")}
 					onClick={(e) => { e.preventDefault(); this.setState({ isToggeld: !this.state.isToggeld }) }}
 
 				><div>{this.props.filter || ""}</div>
@@ -103,11 +103,12 @@ const dropCall = {
 			component.onDrop(props, monitor, component)
 			return
 		}
-	}
+	},
+	
 }
 const dragContent = {
 	beginDrag(props, monitor, component) {
-		return { index: props.index }
+		return { index: props.index, path: props.path }
 	},
 }
 
@@ -115,8 +116,9 @@ const FileTagC = DragSource('FT', dragContent, (connect, monitor) => ({
 	connectDragSource: connect.dragSource(),
 	isDragging: monitor.isDragging()
 }))(
-	DropTarget(['FT', NativeTypes.FILE], dropCall, connect => ({
+	DropTarget(['FT', NativeTypes.FILE], dropCall, (connect, monitor) => ({
 		connectDropTarget: connect.dropTarget(),
+		isOver: monitor.isOver()
 	}))(FileTag)
 );
 
