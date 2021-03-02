@@ -6,7 +6,10 @@ import reportWebVitals from './reportWebVitals';
 
 ReactDOM.render(
 
+    <div>
+    <meta content="width=device-width, initial-scale=1" name="viewport" />
     <App />
+    </div>
 ,
   document.getElementById('root')
 );

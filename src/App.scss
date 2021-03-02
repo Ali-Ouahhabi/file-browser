@@ -2,180 +2,108 @@ $color1: #001e35; //#001e35
 $color2: #536073;
 $color3: #ffffff;
 $color4: #536073;
-$color5:#03070d;
+$color5: #03070d;
 
-.menu{
-	//margin: 15px;
-	display: inline-grid;
-	width: 10%;
-	align-content: center;
-	padding: 5px;
-	margin-bottom: 20px;
-	margin-top: 20px;
+
+@media (max-width: 800px) {
+  .header {
+	  flex-direction: column;
+    .logo {
+      order: 1;
+	  align-self: flex-start;
+    }
+    .menu {
+      order: 2;
+	  align-self: flex-end;
+    }
+    .search-container {
+      order: 3;
+	  flex: 0 0 100%;
+	  align-self: flex-start;
+	  margin: 10px 0;
+    }
+  }
+}
+.header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  margin: 20px 5px;
+}
+.logo {
+  flex: 2;
+  order: 1;
+  white-space: nowrap;
 }
 
-.menu:hover{
-	//margin: 15px;
-	background-color: $color1;
-	color: $color3;
-	border-width:2px ;
-	border-style: outset;
-}
+.menu {
+  order: 3;
+  flex: 1;
+  display: flex;
+  justify-content: flex-end;
 
-.menu-icon {
-    //padding: 10px;
-	font-weight: 20px;
-	display: block;
-	margin-left: auto;
-	margin-right: auto;
+  .menu-block {
+    margin: 10px 5px;
+    padding: 5px 0px;
+ //   flex-basis: 100px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 70px;
+    //max-width: 70px;
+    cursor: pointer;
+  }
+
+  .menu-block:hover {
+    background-color: $color1;
+    color: $color3;
+  }
+
+  .menu-icon {
+    font-size: 20px;
+    display: block;
   }
   .menu-title {
-    //padding-right: 10px;
-	font-weight: 20px;
-	margin-left: auto;
-	margin-right: auto;
+    text-decoration: underline;
+    font-size: 13px;
   }
-
-.menu-s{
-	display: inline-grid;
-	width: 50%;
 }
 
-  .menu-search {
-    //padding-right: 10px;
-	font-weight: 20px;
-	margin-left: 20px;
-	border-width: 3px;
-	border-style: solid;
-	border-radius:5px ;
-	border-color: $color5;
-	width: 100%;
+.search-container {
+  order: 2;
+  flex: 2;
+  display: flex;
+  margin: 10px 40px;
+  background-color: none;
+
+  .search-label {
+    margin: 0px 10px;
   }
 
-
-
-
-em {
-	font-style: italic;
-}
-
-strong {
-	font-weight: bold;
+  .search-bare {
+    font-weight: 20px;
+    border-style: solid;
+    border-radius: 2px;
+    border-color: $color5;
+    width: 70%;
+    max-width: 400px;
+    min-width: 200px;
+    border-width: 1px 0px 1px 0px;
+    background-color: transparent;
+  }
 }
 
 html,
 body {
-	margin:0;
-	padding:0;
-	height:100%;
-	color: white;
-
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  color: white;
+  background-color: #18223b05;
 }
 /* /END RESET */
 body {
-	font-family:  serif;
-	font-weight: 500;
-	font-size: 17px;
+  font-family: serif;
+  font-weight: 500;
+  font-size: 17px;
 }
-
-p {
-	line-height: 150%;
-	margin: 0 0 10px;
-}
-
-h1, h2, h3, h4, h5, h6 {
-	color: #2E4A74;
-	font-family: Arial, Helvetica, sans-serif;
-}
-
-h1 {
-	font-size: 20px;
-	margin: 0 0 15px;
-	font-weight: normal;
-}
-
-h2 {
-	font-size: 18px;
-	margin: 0 0 12px;
-	font-weight: normal;
-}
-
-h3 {
-	font-size: 15px;
-	margin: 0 0 12px;
-	font-weight: normal;
-}
-
-
-h4, h5, h6 {
-	margin: 5px 0 5px;
-	font-weight: bold;
-}
-
-h1 a,
-h2 a,
-h3 a,
-h4 a,
-h5 a,
-h6 a {}
-
-a img {
-	border: none;
-	outline: none;
-}
-
-a {
-	color: #363636;
-	outline: none;
-	text-decoration: none;
-}
-
-a:hover {
-	color: #999;
-}
-
-/* remove dotted lines on some links in FF browser */
-
-a,
-a:active,
-a:visited,
-a img {
-	outline: none;
-}
-
-/* / */
-	
-/* CLEARFIX */
-.clearfix:after {
-	content: ".";
-	display: block;
-	clear: both;
-	visibility: hidden;
-	line-height: 0;
-	height: 0;
-}
- 
-.clearfix {
-	display: inline-block;
-}
- 
-html[xmlns] .clearfix {
-	display: block;
-}
- 
-* html .clearfix {
-	height: 1%;
-}
-/* /END CLEARFIX */
-
-/* 
-=====================================================
-	Layout & Framework
-===================================================== */
-
-
-
-/* 
-=====================================================
-	Dynamic Displays
-===================================================== */

@@ -226,35 +226,46 @@ function App() {
 
   return (
     <div>
-      <div>
+      <div class="header">
+
+        <div class="logo">
+          <span>Some Logo</span>
+        </div>
+        
         <div class="menu">
-          <span class="menu-icon">
-            <ImCloudDownload />
-          </span>
-          <span class="menu-title">Download</span>
+
+          <div class="menu-block">
+            <span class="menu-icon">
+              <ImCloudDownload />
+            </span>
+            <span class="menu-title">Download</span>
+          </div>
+
+          <div class="menu-block">
+            <span class="menu-icon">
+              <ImCloudUpload /></span>
+            <span class="menu-title">Upload</span>
+          </div>
+
+          <div class="menu-block">
+            <span class="menu-icon">
+              <ImBin /></span>
+            <span class="menu-title">Remove</span>
+          </div>
+
+          <div class="menu-block">
+            <span class="menu-icon">
+              <BiRename /></span>
+            <span class="menu-title">Rename</span>
+          </div>
+
         </div>
 
-        <div class="menu">
-          <span class="menu-icon">
-            <ImCloudUpload /></span>
-          <span class="menu-title">Upload</span>
+        <div class="search-container">
+          <span class="search-label">Search</span>
+          <input class="search-bare" type="text" name="filter" onChange={(e) => filtering(e.target.value)} />
         </div>
-        
-        <div class="menu">
-          <span class="menu-icon">
-            <ImBin /></span>
-          <span class="menu-title">Remove</span>
-        </div>
-        
-        <div class="menu">
-          <span class="menu-icon">
-            <BiRename /></span>
-          <span class="menu-title">Rename</span>
-        </div>
-        <div class="menu-s">
-        <input class="menu-search" type="text" name="filter" onChange={(e) => filtering(e.target.value)} />
-        <span class="">search</span>
-        </div>
+
       </div>
       <DndProvider backend={HTML5Backend}>
         <div className="App" >

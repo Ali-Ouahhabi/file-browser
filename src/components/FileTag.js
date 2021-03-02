@@ -5,29 +5,14 @@ import { DragSource, DropTarget } from "react-dnd";
 import { NativeTypes } from "react-dnd-html5-backend";
 
 
-
-
 class FileTag extends React.Component {
 	/**/
 	state = {
-		name: "",
-		isFile: "",
-		index: "",//optional if not by reference
-		isToggeld: true
+		isToggled: false
 	}
-
-
 
 	constructor(props) {
 		super(props);
-		this.state = {
-			...this.state,
-			parent: props.parent,
-			self: props.self
-		}
-		this.getSelf = this.getSelf.bind(this);
-		this.onDrop = this.onDrop.bind(this)
-
 	}
 
 	getSelf() {
@@ -35,8 +20,8 @@ class FileTag extends React.Component {
 	}
 
 	onDrop(props, monitor, component) {
-		if (this.state.self.isFile)
-			return this.state.parent.onDrop(props, monitor, component)
+		if (this.props.self.isFile)
+			return this.props.parent.onDrop(props, monitor, component)
 		if (monitor.getItemType() === NativeTypes.FILE) {
 			let items = monitor.getItem().items
 			this.props.reportChange(items, this.props.index)
@@ -53,16 +38,15 @@ class FileTag extends React.Component {
 	emit(str, obj) { }
 
 	getPath() {
-		return (this.state.parent ? this.state.parent.getPath() + "/" : "") + this.state.name;
+		return (this.props.parent ? this.props.parent.getPath() + "/" : "") + this.state.name;
 	}
 
 	sortBy() { }
-	togel() { }
 
 	render() {
 		let children = () => {
 			let tmp = []
-			if (this.props.self.children && this.state.isToggeld) {
+			if (this.props.self.children && this.state.isToggled) {
 				return this.props.self.children.map((child, index) => {
 					tmp = this.props.index.concat(index)
 					return (
@@ -72,17 +56,17 @@ class FileTag extends React.Component {
 				})
 			}
 		};
-		let name = "file-tag-" + (this.state.self.isFile ? "file" : "folder")
+		let name = "file-tag-" + (this.props.self.isFile ? "file" : "folder")
 
 
 		return ([
 			this.props.connectDragSource(this.props.connectDropTarget(
-				<div key="head" className={name+(!this.state.self.isFile&&this.props.isOver?"-hover":"")}
-					onClick={(e) => { e.preventDefault(); this.setState({ isToggeld: !this.state.isToggeld }) }}
+				<div key="head" className={name+(!this.props.self.isFile&&this.props.isOver?"-hover":"")}
+					onClick={(e) => { e.preventDefault(); this.setState({ isToggled: !this.state.isToggled }) }}
 
 				><div>{this.props.filter || ""}</div>
 					<span className={"file-tag-icon"}>
-						{this.state.self.isFile ? <ImFileText2 /> : this.state.isToggeld ? <ImFolderOpen /> : <ImFolder />}
+						{this.props.self.isFile ? <ImFileText2 /> : this.state.isToggled ? <ImFolderOpen /> : <ImFolder />}
 					</span>
 					<span className={"file-tag-name"}> {this.props.self.name}</span>
 				</div>)),
