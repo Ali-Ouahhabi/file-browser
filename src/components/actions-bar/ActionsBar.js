@@ -1,7 +1,6 @@
 import React from 'react';
 import { ImCloudUpload, ImCloudDownload, ImBin } from "react-icons/im";
 import { BiRename } from "react-icons/bi"
-import PropTypes from 'prop-types';
 import './ActionsBar.scss';
 
 class ActionsBar extends React.Component {
