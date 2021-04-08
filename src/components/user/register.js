@@ -6,6 +6,7 @@ import {
     Link,
     TextField,
 } from "@material-ui/core";
+import {User} from "../../redux/request";
 
 
 class Register extends React.Component {
@@ -27,15 +28,8 @@ class Register extends React.Component {
         });
     }
 
-    handleSubmit() {
-        console.log("vals ", this.state);
-        // signup(this.state).then((e)=>{
-
-        //   console.log(" signed up returned ",e)
-
-        // }).catch((er) =>{
-        //   console.log(" Error signing up ", er);
-        // })
+    handleSubmit(){
+        this.props.request(this.state);
     }
 
     render() {
@@ -119,7 +113,7 @@ class Register extends React.Component {
                     </Button>
                     <Grid container justify="flex-end">
                         <Grid item>
-                            <Link href="#" variant="body2" onClick={this.props.login}>
+                            <Link href="#" variant="body2" onClick={this.props.revert}>
                                 Already have an account? Sign in
                              </Link>
                         </Grid>

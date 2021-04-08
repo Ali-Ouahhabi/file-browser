@@ -1,7 +1,7 @@
 import { Actions, setAction } from "./Actions"
 import { User, Folder, File, Error_log } from "./request"
 
-export function apiService({ dispatch }) {
+export default function apiService({ dispatch }) {
     console.log("apiMid ", dispatch)
     return (next) => (action) => {
 
@@ -59,6 +59,7 @@ export function apiService({ dispatch }) {
                                         )
                                     })
                                     .catch((error) => {
+                                        console.log(error)
                                         dispatch(
                                             setAction(
                                                 Actions.UserManager.USER.SIGN_IN.LOCAL.ERROR,
@@ -229,6 +230,7 @@ export function apiService({ dispatch }) {
                                         )
                                     })
                                     .catch((error) => {
+                                        console.log(action+" [error] "+error)
                                         dispatch(
                                             setAction(
                                                 Actions.FileManager.FILE.UPLOAD.LOCAL.ERROR,

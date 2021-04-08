@@ -24,7 +24,7 @@ class FileTag extends React.Component {
 			return this.props.parent.onDrop(props, monitor, component)
 		if (monitor.getItemType() === NativeTypes.FILE) {
 			let items = monitor.getItem().items
-			this.props.reportChange(items, this.props.index)
+			this.props.reportChange(items, this.getPath())
 		} else {
 			let item = monitor.getItem()
 
@@ -38,10 +38,10 @@ class FileTag extends React.Component {
 	emit(event) {
 		//event.stopPropagation();
 		this.props.selected(this.props.index);
-	 }
+	}
 
 	getPath() {
-		return (this.props.parent ? this.props.parent.getPath() + "/" : "") + this.state.name;
+		return (this.props.parent ? this.props.parent.getPath() : "") + (this.props.self.isFile ? "" : this.props.self.name + "/");
 	}
 
 	sortBy() { }
@@ -53,7 +53,7 @@ class FileTag extends React.Component {
 				return this.props.self.children.map((child, index) => {
 					tmp = this.props.index.concat(index)
 					return (
-						<FileTagC key={index + child.name} id={index} index={tmp} selected = {this.props.selected} reportChange={this.props.reportChange} parent={this} self={child} path={this.props.path + "/" + child.name}
+						<FileTagC key={index + child.name} id={index} index={tmp} selected={this.props.selected} reportChange={this.props.reportChange} parent={this} self={child} path={this.props.path + "/" + child.name}
 						/>
 					)
 				})
@@ -64,16 +64,25 @@ class FileTag extends React.Component {
 
 		return ([
 			this.props.connectDragSource(this.props.connectDropTarget(
-				<div key="head" className={name+(!this.props.self.isFile&&this.props.isOver?"-hover":"")} 
-					onClick={(e) => { e.preventDefault(); this.setState({ isToggled: !this.state.isToggled }); this.emit(this.props.index) }}
+				<div
+					key="head"
+					className={name + (!this.props.self.isFile && this.props.isOver ? "-hover" : "")}
+					onClick={
+						(e) => {
+							e.preventDefault();
+							this.setState({ isToggled: !this.state.isToggled });
+							this.emit(this.props.index)
+						}
+					}
 
-				><div>{this.props.filter || ""}</div>
+				>
+					<div>{this.props.filter || ""}</div>
 					<span className={"file-tag-icon"}>
 						{this.props.self.isFile ? <ImFileText2 /> : this.state.isToggled ? <ImFolderOpen /> : <ImFolder />}
 					</span>
 					<span className={"file-tag-name"}> {this.props.self.name}</span>
 				</div>
-				)),
+			)),
 			<div key="body" className={name + "-children"}>
 				{
 					children()
@@ -92,7 +101,7 @@ const dropCall = {
 			return
 		}
 	},
-	
+
 }
 const dragContent = {
 	beginDrag(props, monitor, component) {

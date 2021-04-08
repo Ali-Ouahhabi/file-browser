@@ -1,9 +1,10 @@
 import React from 'react';
-import { ImCloudUpload, ImCloudDownload, ImBin } from "react-icons/im";
+import { ImCloudUpload, ImCloudDownload, ImBin ,ImFolder} from "react-icons/im";
 import { BiRename } from "react-icons/bi"
 import './ActionsBar.scss';
+import { connect } from 'react-redux';
 
-class ActionsBar extends React.Component {
+class ActionsBar_ extends React.Component {
 
   constructor(props){
     super(props);
@@ -33,18 +34,23 @@ class ActionsBar extends React.Component {
               <span className="menu-title">Upload</span>
             </div>
 
-            <div className="menu-block" onClick={this.props.OnRemove}>
+            <div className="menu-block" onClick={this.props.OnRename}>
               <span className="menu-icon">
-                <ImBin /></span>
-              <span className="menu-title">Remove</span>
+                <ImFolder /></span>
+              <span className="menu-title">New</span>
             </div>
-
+            
             <div className="menu-block" onClick={this.props.OnRename}>
               <span className="menu-icon">
                 <BiRename /></span>
               <span className="menu-title">Rename</span>
             </div>
 
+            <div className="menu-block" onClick={this.props.OnRemove}>
+              <span className="menu-icon">
+                <ImBin /></span>
+              <span className="menu-title">Remove</span>
+            </div>
           </div>
 
           <div className="search-container">
@@ -57,8 +63,14 @@ class ActionsBar extends React.Component {
   }
 }
 
-ActionsBar.propTypes = {};
-
-ActionsBar.defaultProps = {};
+function mapDispatchToProps(dispatch) {
+  return {
+    dispatch: todo => dispatch(todo)
+  };
+}
+const ActionsBar = connect(
+  null,
+  mapDispatchToProps
+)( ActionsBar_);
 
 export default ActionsBar;

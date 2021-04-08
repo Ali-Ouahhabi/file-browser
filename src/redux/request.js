@@ -1,7 +1,7 @@
 import axios from "axios";
 
-const PORT="";
-const BASE_URL= "http://localhost"+PORT
+const PORT=":"+8080;
+const BASE_URL= "http://localhost"+PORT+"/api/v1";
 
 export default function isOfStructure(object, structure){
     let tmp = object;
@@ -12,99 +12,59 @@ export default function isOfStructure(object, structure){
 
     return true;
 }
+
 const http = axios.create({
     baseURL: BASE_URL,
     // timeout: 1000,
     // headers: {'X-Custom-Header': 'foobar'}
   });
+  
+  http.interceptors.request.use(
+    request=>{
+        console.log("intercepted....."+localStorage.getItem("jwt"))
+        if(request.url.startsWith("/user"))
+            return request
+        request.headers["Authorization"]= "Bearer "+localStorage.getItem("jwt")
+        return request;
+    }
+)
 
 function userSignIn(payload){
-    throw new Error(" api call SignIn not implemented")
     return http({
-        url:"",
-        method:"",
-        params: {},
-        //'PUT', 'POST', 'DELETE , and 'PATCH'
-        data: {},//payload
-        withCredentials: true,
-        //HTTP Basic auth 
-        auth: {
-            username: '',
-            password: ''
-        },
-        responseType: 'json', // default
+        url:"/user/login",
+        method:"post",
+        data: payload,
     })
 }
 
 function userLogOut(payload){
-    throw new Error(" api call LogOut not implemented")
     return http({
-        url:"",
-        method:"",
-        params: {},
-        //'PUT', 'POST', 'DELETE , and 'PATCH'
-        data: {},//payload
-        withCredentials: true,
-        //HTTP Basic auth 
-        auth: {
-            username: '',
-            password: ''
-        },
-        responseType: 'json', // default
+        url:"/user/logout",
+        method:"get",
     })
 }
 
 function userRegister(payload){
-    throw new Error(" api call Register not implemented")
     return http({
-        url:"",
-        method:"",
-        params: {},
-        //'PUT', 'POST', 'DELETE , and 'PATCH'
-        data: {},//payload
-        withCredentials: true,
-        //HTTP Basic auth 
-        auth: {
-            username: '',
-            password: ''
-        },
-        responseType: 'json', // default
+        url:"/user/register",
+        method:"post",
+        data: payload,
     })
 }
 
 function fileUpload(payload){
-    throw new Error(" api call fileUpload not implemented")
     return http({
-        url:"",
+        url:"/files/uploads",
         method:"POST",
-        params: {},
-        //'PUT', 'POST', 'DELETE , and 'PATCH'
-        data: {},//payload
-        withCredentials: true,
-        //HTTP Basic auth 
-        auth: {
-            username: '',
-            password: ''
-        },
-        responseType: 'json', // default
+        data: payload,//payload
     })
 }
 
 function fileDownload(payload){
-    throw new Error(" api call fileDownload not implemented")
     return http({
-        url:"",
-        method:"",
-        params: {},
-        //'PUT', 'POST', 'DELETE , and 'PATCH'
-        data: {},//payload
-        withCredentials: true,
-        //HTTP Basic auth 
-        auth: {
-            username: '',
-            password: ''
-        },
-        responseType: 'json', // default
+        url:"/files/download",
+        method:"get",
+        params: {file_id:payload},
     })
 }
 

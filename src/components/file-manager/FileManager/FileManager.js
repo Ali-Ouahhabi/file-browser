@@ -4,8 +4,10 @@ import ActionsBar from '../../actions-bar/ActionsBar';
 import FileTag from '../../file-tag/FileTag';
 import { DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
+import { connect } from 'react-redux';
+import { Actions, setAction } from '../../../redux/Actions';
 
-class FileManager extends React.Component {
+class FileManager_ extends React.Component {
 
   constructor(props) {
     super(props);
@@ -122,7 +124,7 @@ class FileManager extends React.Component {
   }
 
   setTreeV(v) {
-    this.setState({ treeV:{...v} })
+    this.setState({ treeV:{...v} })//dispatch newtree for the moment 
   }
   setFilterData(FilterDataObject){
     this.setState({ filterData:{...FilterDataObject} })
@@ -133,7 +135,7 @@ class FileManager extends React.Component {
     if (this.state.filterData.isFirstCall) {
       this.setFilterData({
         isFirstCall: false,
-        saveData: JSON.parse(JSON.stringify(this.state.treeV))
+        saveData: JSON.parse(JSON.stringify(this.props.fileTree))
       })
     }
 
@@ -145,7 +147,7 @@ class FileManager extends React.Component {
       return
     }
 
-    let vv = { ...this.state.treeV, children: filterTree(this.state.treeV.children, v) }
+    let vv = { ...this.props.fileTree, children: filterTree(this.props.fileTree.children, v) }
     this.setTreeV(vv)
 
     function filterTree(ch, val) {
@@ -173,14 +175,27 @@ class FileManager extends React.Component {
 
   permute(el, toIn) {
 
-    let newTree = { ...this.state.treeV }
+    let formData = new FormData();
+    let jsonBodyData = [];
+
+    let newTree = { ...this.props.fileTree }
     if (el instanceof DataTransferItemList) {
-      addElAt(toIn, getFileStructure(el))
+      formedData(el,toIn)
+      formData.append(
+        'metadata',
+        new Blob(
+          [JSON.stringify(jsonBodyData)],
+          { type: 'application/json' }
+        )
+      );
+      this.props.dispatch(setAction(["FILE", "UPLOAD", "REMOTE"],formData));
+      // addElAt(toIn, getFileStructure(el))
     } else if (el instanceof Array) {
       addElAt(toIn, getElAt(el))
       removeElAt(el)
     }
     this.setTreeV(newTree)
+
 
     function removeElAt(index) {
       let tmp = newTree
@@ -207,6 +222,39 @@ class FileManager extends React.Component {
       }
       let child = tmp.children[index[i]]
       return child
+    }
+
+    function formatHelper(file, path) {
+      formData.append('files', file)
+      console.log("formatHelper ",JSON.stringify(file))
+      jsonBodyData.push(
+       {
+        "path": path,
+        "lastModified": file.lastModified,
+        "name": file.name,
+        "lastModifiedDate": file.lastModifiedDate.toLocaleString(),
+        "type": file.type,
+        "size": file.size
+      })
+    }
+    function formedData(items,path) {
+      return Array.from(items).map(item => {
+        if (item instanceof DataTransferItem)  item = item.webkitGetAsEntry();
+        if (item.isFile) {
+          console.log("isFile >", item.name)
+          await item.file(file=>formatHelper(file,path));// push to an array of promise on resolve all send request !!!!!! or send file by file??????
+          return ;
+        } else if (item.isDirectory) {
+          console.log("isDirectory >", item.name)
+          // Get folder contents
+          var dirReader = item.createReader();
+          dirReader.readEntries((entry) => formedData(entry,path+"/"+item.name)
+          )
+          return ;
+        }
+        else 
+          return console.log(" uns usual");
+      })
     }
 
     function getFileStructure(items) {
@@ -257,11 +305,11 @@ class FileManager extends React.Component {
         <DndProvider backend={HTML5Backend}>
           <div className="App" >
             <FileTag
-              self={this.state.treeV}
+              self={this.props.fileTree}
               index={[]}
               selected={this.selected}
               reportChange={this.permute}
-              path={"/" + this.state.treeV.name}
+              path={"/" + this.props.fileTree.name}
             ></FileTag>
           </div>
         </DndProvider>
@@ -270,5 +318,22 @@ class FileManager extends React.Component {
   }
 
 };
+
+const mapStateToProps = state => {
+  console.log("mapping ",state)
+  return { 
+    fileTree: state.fileTree
+  };
+};
+
+function mapDispatchToProps(dispatch) {
+  return {
+    dispatch: todo => dispatch(todo)
+  };
+}
+const FileManager = connect(
+  mapStateToProps,
+  mapDispatchToProps
+)( FileManager_);
 
 export default FileManager;

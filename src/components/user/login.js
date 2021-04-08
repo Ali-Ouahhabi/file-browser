@@ -19,15 +19,13 @@ class LogIn extends React.Component {
    }
  
      handleChange(event){
-         console.log("***********************************")
-         console.log(event)
          this.setState({
          [event.target.name]: event.target.value
          });
      }
    
      handleSubmit(){
-         console.log("vals ",this.state);
+         this.props.request(this.state);
      }
 
      render(){
@@ -84,7 +82,7 @@ class LogIn extends React.Component {
                 </Button>
                 <Grid container justify="flex-end">
                     <Grid item>
-                        <Link href="#" variant="body2" onClick={this.props.login}>
+                        <Link href="#" variant="body2" onClick={this.props.revert}>
                             Don't have an account? Sign in
                          </Link>
                     </Grid>
