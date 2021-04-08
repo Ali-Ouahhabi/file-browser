@@ -14,6 +14,7 @@ class SubTree {
         this.parent=null;
         this.children=[];
         this.status = new Status("s",null);
+        this.isFile=false;
     }
 
     setPath(path) { this.path = path }
@@ -25,6 +26,14 @@ class SubTree {
         if (object instanceof SubTree)
             this = {...object}
         else throw console.error("SubTree.setThis");
+    }
+    setFrom(dict){
+        if(dict["path"]) this.path=dict["path"];
+        if(dict["children"]) this.children = this.children;
+        if(dict["name"]) this.name = dict["name"];
+        if(dict["parent"]) this.parent = dict["parent"];
+        if(dict["isFile"]) this.isFile = dict["isFile"];
+        if(dict["status"]) this.status = dict["status"];
     }   
 
     removeElAt(index) {

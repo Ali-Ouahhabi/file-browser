@@ -6,6 +6,8 @@ import { DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
 import { connect } from 'react-redux';
 import { Actions, setAction } from '../../../redux/Actions';
+import subTree from '../../../redux/subTree';
+import subTree from '../../../redux/subTree';
 
 class FileManager_ extends React.Component {
 
@@ -62,10 +64,10 @@ class FileManager_ extends React.Component {
               name: "Pictures",
               isFile: false,
               children: [
-  
+
               ]
             },
-  
+
           ]
         },
         {
@@ -104,10 +106,10 @@ class FileManager_ extends React.Component {
                 }
               ]
             },
-  
+
           ]
         },
-  
+
       ],
     }
 
@@ -124,10 +126,10 @@ class FileManager_ extends React.Component {
   }
 
   setTreeV(v) {
-    this.setState({ treeV:{...v} })//dispatch newtree for the moment 
+    this.setState({ treeV: { ...v } })//dispatch newtree for the moment 
   }
-  setFilterData(FilterDataObject){
-    this.setState({ filterData:{...FilterDataObject} })
+  setFilterData(FilterDataObject) {
+    this.setState({ filterData: { ...FilterDataObject } })
   }
 
 
@@ -180,7 +182,7 @@ class FileManager_ extends React.Component {
 
     let newTree = { ...this.props.fileTree }
     if (el instanceof DataTransferItemList) {
-      formedData(el,toIn)
+      formedData(el, toIn)
       formData.append(
         'metadata',
         new Blob(
@@ -188,7 +190,7 @@ class FileManager_ extends React.Component {
           { type: 'application/json' }
         )
       );
-      this.props.dispatch(setAction(["FILE", "UPLOAD", "REMOTE"],formData));
+      this.props.dispatch(setAction(["FILE", "UPLOAD", "REMOTE"], formData));
       // addElAt(toIn, getFileStructure(el))
     } else if (el instanceof Array) {
       addElAt(toIn, getElAt(el))
@@ -226,61 +228,76 @@ class FileManager_ extends React.Component {
 
     function formatHelper(file, path) {
       formData.append('files', file)
-      console.log("formatHelper ",JSON.stringify(file))
+      console.log("formatHelper ", JSON.stringify(file))
       jsonBodyData.push(
-       {
-        "path": path,
-        "lastModified": file.lastModified,
-        "name": file.name,
-        "lastModifiedDate": file.lastModifiedDate.toLocaleString(),
-        "type": file.type,
-        "size": file.size
-      })
+        {
+          "path": path,
+          "lastModified": file.lastModified,
+          "name": file.name,
+          "lastModifiedDate": file.lastModifiedDate.toLocaleString(),
+          "type": file.type,
+          "size": file.size
+        })
     }
-    function formedData(items,path) {
+    function formedData(items, path) {
       return Array.from(items).map(item => {
-        if (item instanceof DataTransferItem)  item = item.webkitGetAsEntry();
+        if (item instanceof DataTransferItem) item = item.webkitGetAsEntry();
         if (item.isFile) {
           console.log("isFile >", item.name)
-          await item.file(file=>formatHelper(file,path));// push to an array of promise on resolve all send request !!!!!! or send file by file??????
-          return ;
+          await item.file(file => formatHelper(file, path));// push to an array of promise on resolve all send request !!!!!! or send file by file??????
+          return;
         } else if (item.isDirectory) {
           console.log("isDirectory >", item.name)
           // Get folder contents
           var dirReader = item.createReader();
-          dirReader.readEntries((entry) => formedData(entry,path+"/"+item.name)
+          dirReader.readEntries((entry) => formedData(entry, path + "/" + item.name)
           )
-          return ;
+          return;
         }
-        else 
+        else
           return console.log(" uns usual");
       })
     }
 
-    function getFileStructure(items) {
+    let promises = []
+
+    // after getFile structure end follow it with settle promises //request
+
+    function getFileStructure(items,path) {
       return Array.from(items).map(item => {
         if (item instanceof DataTransferItem) item = item.webkitGetAsEntry();
         if (item.isFile) {
-          return {
+          let leaf = new subTree(item.name)
+          leaf.setFrom({
             name: item.name,
             isFile: item.isFile,
             children: null
-          }
+          })
+          //push promise of file
+          promises.push( new Promise((resolve)=>{
+              item.file((file)=>{
+                resolve(file,path)
+              })
+          }))
+          return leaf;
         } else if (item.isDirectory) {
           //console.log("isDirectory >", item.name)
-          let tmp = {
+          let subTree = new subTree(item.name);
+          subTree.setFrom({
             name: item.name,
             isFile: item.isFile,
             children: []
-          }
+          })
+          let tmp = [];
           // Get folder contents
           var dirReader = item.createReader();
           dirReader.readEntries((entries) =>
-            tmp.children.push(
-              ...getFileStructure(entries)
+            tmp.push(
+              ...getFileStructure(entries,path+"/"+item.name)
             )
 
           )
+          subTree.setChildren(tmp)
           return tmp;
         }
         else
@@ -320,8 +337,8 @@ class FileManager_ extends React.Component {
 };
 
 const mapStateToProps = state => {
-  console.log("mapping ",state)
-  return { 
+  console.log("mapping ", state)
+  return {
     fileTree: state.fileTree
   };
 };
@@ -334,6 +351,6 @@ function mapDispatchToProps(dispatch) {
 const FileManager = connect(
   mapStateToProps,
   mapDispatchToProps
-)( FileManager_);
+)(FileManager_);
 
 export default FileManager;

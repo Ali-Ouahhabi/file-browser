@@ -46,6 +46,7 @@ class FileTag extends React.Component {
 
 	sortBy() { }
 
+	//add status
 	render() {
 		let children = () => {
 			let tmp = []
