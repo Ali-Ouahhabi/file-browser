@@ -263,47 +263,7 @@ class FileManager_ extends React.Component {
 
     // after getFile structure end follow it with settle promises //request
 
-    function getFileStructure(items,path) {
-      return Array.from(items).map(item => {
-        if (item instanceof DataTransferItem) item = item.webkitGetAsEntry();
-        if (item.isFile) {
-          let leaf = new subTree(item.name)
-          leaf.setFrom({
-            name: item.name,
-            isFile: item.isFile,
-            children: null
-          })
-          //push promise of file
-          promises.push( new Promise((resolve)=>{
-              item.file((file)=>{
-                resolve(file,path)
-              })
-          }))
-          return leaf;
-        } else if (item.isDirectory) {
-          //console.log("isDirectory >", item.name)
-          let subTree = new subTree(item.name);
-          subTree.setFrom({
-            name: item.name,
-            isFile: item.isFile,
-            children: []
-          })
-          let tmp = [];
-          // Get folder contents
-          var dirReader = item.createReader();
-          dirReader.readEntries((entries) =>
-            tmp.push(
-              ...getFileStructure(entries,path+"/"+item.name)
-            )
 
-          )
-          subTree.setChildren(tmp)
-          return tmp;
-        }
-        else
-          return [];
-      })
-    }
   }
 
   selected(index) {
