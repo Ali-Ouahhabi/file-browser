@@ -6,8 +6,7 @@ import { DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
 import { connect } from 'react-redux';
 import { Actions, setAction } from '../../../redux/Actions';
-import subTree from '../../../redux/subTree';
-import subTree from '../../../redux/subTree';
+import {SubTree} from '../../../redux/subTree';
 
 class FileManager_ extends React.Component {
 
@@ -182,7 +181,7 @@ class FileManager_ extends React.Component {
 
     let newTree = { ...this.props.fileTree }
     if (el instanceof DataTransferItemList) {
-      formedData(el, toIn)
+      // formedData(el, toIn)
       formData.append(
         'metadata',
         new Blob(
@@ -226,42 +225,6 @@ class FileManager_ extends React.Component {
       return child
     }
 
-    function formatHelper(file, path) {
-      formData.append('files', file)
-      console.log("formatHelper ", JSON.stringify(file))
-      jsonBodyData.push(
-        {
-          "path": path,
-          "lastModified": file.lastModified,
-          "name": file.name,
-          "lastModifiedDate": file.lastModifiedDate.toLocaleString(),
-          "type": file.type,
-          "size": file.size
-        })
-    }
-    function formedData(items, path) {
-      return Array.from(items).map(item => {
-        if (item instanceof DataTransferItem) item = item.webkitGetAsEntry();
-        if (item.isFile) {
-          console.log("isFile >", item.name)
-          await item.file(file => formatHelper(file, path));// push to an array of promise on resolve all send request !!!!!! or send file by file??????
-          return;
-        } else if (item.isDirectory) {
-          console.log("isDirectory >", item.name)
-          // Get folder contents
-          var dirReader = item.createReader();
-          dirReader.readEntries((entry) => formedData(entry, path + "/" + item.name)
-          )
-          return;
-        }
-        else
-          return console.log(" uns usual");
-      })
-    }
-
-    let promises = []
-
-    // after getFile structure end follow it with settle promises //request
 
 
   }

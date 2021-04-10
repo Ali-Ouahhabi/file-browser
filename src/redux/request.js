@@ -65,6 +65,7 @@ function fileDownload(payload){
         url:"/files/download",
         method:"get",
         params: {file_id:payload},
+        headers:{'Content-Type': 'multipart/form-data'}
     })
 }
 

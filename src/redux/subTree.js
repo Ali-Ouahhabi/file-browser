@@ -1,4 +1,4 @@
-class SubTree {
+export class SubTree {
 
     /*
     name :String
@@ -15,6 +15,7 @@ class SubTree {
         this.children=[];
         this.status = new Status("s",null);
         this.isFile=false;
+        this.data=null;
     }
 
     setPath(path) { this.path = path }
@@ -22,10 +23,8 @@ class SubTree {
     setParent(parent) { this.parent = parent }
     setChildren(children) { this.children = children }
     setStatus(status) { this.status = status }
-    setThis(object){
-        if (object instanceof SubTree)
-            this = {...object}
-        else throw console.error("SubTree.setThis");
+    setData(object){
+        this.data=object;
     }
     setFrom(dict){
         if(dict["path"]) this.path=dict["path"];
@@ -34,6 +33,7 @@ class SubTree {
         if(dict["parent"]) this.parent = dict["parent"];
         if(dict["isFile"]) this.isFile = dict["isFile"];
         if(dict["status"]) this.status = dict["status"];
+        if(dict["data"]) this.status = dict["data"];
     }   
 
     removeElAt(index) {
@@ -41,7 +41,7 @@ class SubTree {
         if(index.length>1){
             this.children[index[0]].removeElAt(index)
         }else{
-            this.children = [...this.children.slice(0, index[i]) ,...this.children.slice(index[i] + 1)]
+            this.children = [...this.children.slice(0, index[0]) ,...this.children.slice(index[0] + 1)]
         }
       }
   
@@ -64,12 +64,12 @@ class SubTree {
       }
 }
 
-class Status{
-    constructor(stat,object){
-        if(state in ["up","er","sc","s"]) this.stat = stat;
-        else throw console.error("asd'salkdb'lsabfkdsjfbg");
+export class Status{
+    constructor(state,object){
+        if(state in ["up","er","sc","s"]) this.state = state;
+        else this.state = "er";
         this.object = object;
     }
 }
 
-export default {Status,SubTree};
+// export default {SubTree,Status};
