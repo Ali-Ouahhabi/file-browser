@@ -5,8 +5,8 @@ import FileTag from '../../file-tag/FileTag';
 import { DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
 import { connect } from 'react-redux';
-import { Actions, setAction } from '../../../redux/Actions';
-import {SubTree} from '../../../redux/subTree';
+import { Actions, setAction } from '../../../redux/actions/Actions';
+import {SubTree} from '../../../redux/models/subTree';
 
 class FileManager_ extends React.Component {
 

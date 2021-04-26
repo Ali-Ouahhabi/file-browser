@@ -124,20 +124,10 @@ function fileDelete(payload){
 }
 
 function folderUpload(payload){
-    throw new Error(" api call folderUpload not implemented")
     return http({
-        url:"",
+        url:"/files/uploads",
         method:"POST",
-        params: {},
-        //'PUT', 'POST', 'DELETE , and 'PATCH'
-        data: {},//payload
-        withCredentials: true,
-        //HTTP Basic auth 
-        auth: {
-            username: '',
-            password: ''
-        },
-        responseType: 'json', // default
+        data: payload,//payload
     })
 }
 

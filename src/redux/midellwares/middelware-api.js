@@ -1,21 +1,19 @@
-import { Actions, setAction } from "./Actions"
-import { User, Folder, File, Error_log } from "./request"
+import { Actions, setAction } from "../actions/Actions"
+import { User, Folder, File, Error_log } from "../models/request"
+import { Status, SubTree } from "../models/subTree";
 
 export default function apiService({ dispatch }) {
     console.log("apiMid ", dispatch)
     return (next) => (action) => {
 
         switch (action.type[2]) {
-            case Actions.ACTION.LOCAL:
-                return next(action);
-
             case Actions.ACTION.REMOTE:
                 switch (action.type[0]) {
                     case Actions.ACTION.USER:
                         switch (action.type[1]) {
                             case Actions.ACTION.REGISTER:
                                 //dispatch loading status
-                                dispatch(
+                                next(
                                     setAction(
                                         Actions.UserManager.USER.REGISTER.LOCAL.LOADING,
                                         action.payload
@@ -24,7 +22,7 @@ export default function apiService({ dispatch }) {
                                 // create file request
                                 User.userRegister(action.payload)
                                     .then((data) => {
-                                        dispatch(
+                                        next(
                                             setAction(
                                                 Actions.UserManager.USER.REGISTER.LOCAL.SUCCESS,
                                                 data
@@ -32,7 +30,7 @@ export default function apiService({ dispatch }) {
                                         )
                                     })
                                     .catch((error) => {
-                                        dispatch(
+                                        next(
                                             setAction(
                                                 Actions.UserManager.USER.REGISTER.LOCAL.ERROR,
                                                 error
@@ -42,7 +40,7 @@ export default function apiService({ dispatch }) {
                                 return;
                             case Actions.ACTION.SIGN_IN:
                                 //dispatch loading status
-                                dispatch(
+                                next(
                                     setAction(
                                         Actions.UserManager.USER.SIGN_IN.LOCAL.LOADING,
                                         action.payload
@@ -51,7 +49,7 @@ export default function apiService({ dispatch }) {
                                 // create file request
                                 User.userSignIn(action.payload)
                                     .then((data) => {
-                                        dispatch(
+                                        next(
                                             setAction(
                                                 Actions.UserManager.USER.SIGN_IN.LOCAL.SUCCESS,
                                                 data
@@ -60,7 +58,7 @@ export default function apiService({ dispatch }) {
                                     })
                                     .catch((error) => {
                                         console.log(error)
-                                        dispatch(
+                                        next(
                                             setAction(
                                                 Actions.UserManager.USER.SIGN_IN.LOCAL.ERROR,
                                                 error
@@ -230,7 +228,7 @@ export default function apiService({ dispatch }) {
                                         )
                                     })
                                     .catch((error) => {
-                                        console.log(action+" [error] "+error)
+                                        console.log(action + " [error] " + error)
                                         dispatch(
                                             setAction(
                                                 Actions.FileManager.FILE.UPLOAD.LOCAL.ERROR,
@@ -354,32 +352,49 @@ export default function apiService({ dispatch }) {
                                     })
                                 return;
                             case Actions.ACTION.UPLOAD:
+                                console.log("<<",Actions.ACTION.UPLOAD)
+                                let data = action.payload.data;
+                                let subtree = action.payload.subTree;
+                                console.log("subtree",subtree)
+                                debugger;
                                 //dispatch loading status
-                                dispatch(
+                                next(
                                     setAction(
-                                        Actions.FileManager.FOLDER.UPLOAD.LOCAL.LOADING,
-                                        action.payload
+                                        Actions.Tree.ADD,
+                                        {subTree:subtree}
                                     )
                                 )
                                 //upload folder request
-                                Folder.folderUpload(action.payload)
+                                return Folder.folderUpload(data)
                                     .then((data) => {
-                                        dispatch(
+                                        subtree.propStatus(new Status("sc", "uploaded"))
+                                        let subtreeSc = new SubTree(subtree.getName());
+                                        subtreeSc.setFrom(subtree);
+                                        console.log("Upload success")
+                                        console.log("subtreeSc ",subtreeSc)
+                                        debugger;
+                                        return next(
                                             setAction(
-                                                Actions.FileManager.FOLDER.UPLOAD.LOCAL.SUCCESS,
-                                                data
+                                                Actions.Tree.ADD,
+                                                {subTree:subtreeSc}
                                             )
-                                        )
+                                        );
                                     })
                                     .catch((error) => {
-                                        dispatch(
+                                        console.log("ERROR",error)
+                                        console.log("subtree",subtree)
+                                        console.log("subtree",subtree)
+                                        debugger;
+                                        subtree.propStatus(new Status("er", error))
+                                        let subtreeEr = new SubTree(subtree.getName());
+                                        subtreeEr.setFrom(subtree);
+                                        return next(
                                             setAction(
-                                                Actions.FileManager.FOLDER.UPLOAD.LOCAL.ERROR,
-                                                error
+                                                Actions.Tree.ADD,
+                                                {subTree:subtreeEr}
                                             )
-                                        )
+                                        );
                                     })
-                                return;
                             default:
                                 Error_log(action)
                                 return;
@@ -389,12 +404,10 @@ export default function apiService({ dispatch }) {
                         Error_log(action)
                         return;
                 }
-
-
             default:
                 Error_log(action)
-                        return;
-            }
+                return;
         }
     }
+}
 

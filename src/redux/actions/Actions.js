@@ -2,10 +2,17 @@
 
 const Actions = {
     ACTION: {
+
+        USER: "USER",
+        TREE:"TREE",
+        FILE: "FILE",
+        FOLDER: "FOLDER",
+
         SIGN_IN: "SIGN_IN",
         LOG_OUT: "LOG_OUT",
         REGISTER: "REGISTER",
-        USER: "USER",
+
+        ADD:"ADD",
 
         CREATE: "CREATE",
         RENAME: "RENAME",
@@ -15,9 +22,6 @@ const Actions = {
 
         LOCAL: "LOCAL",
         REMOTE: "REMOTE",
-
-        FILE: "FILE",
-        FOLDER: "FOLDER",
 
         LOADING: "LOADING",
         SUCCESS: "SUCCESS",
@@ -59,14 +63,6 @@ const Actions = {
     FileManager: {
 
         FILE: {
-            CREATE: {
-                REMOTE: ["FILE", "CREATE", "REMOTE"],
-                LOCAL: {
-                    LOADING: ["FILE", "CREATE", "LOCAL", "LOADING"],
-                    SUCCESS: ["FILE", "CREATE", "LOCAL", "SUCCESS"],
-                    ERROR: ["FILE", "CREATE", "LOCAL", "ERROR"]
-                }
-            },
             RENAME: {
                 REMOTE: ["FILE", "RENAME", "REMOTE"],
                 LOCAL: {
@@ -142,6 +138,18 @@ const Actions = {
                 }
             }
         }
+    },
+    DataConverter:{
+        CREATE: "CREATE",
+        RENAME: "RENAME",
+        DELETE: "DELETE",
+        MOVE:"MOVE",
+        DOWNLOAD: "DOWNLOAD",
+        UPLOAD: "UPLOAD",
+    },
+
+    Tree:{
+        ADD:["TREE","ADD"],
     }
 }
 

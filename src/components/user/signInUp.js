@@ -1,8 +1,8 @@
 import React from "react";
 import LogIn from "./login";
 import Register from "./register";
-import {User} from "../../redux/request";
-import { Actions, setAction } from "../../redux/Actions"
+import {User} from "../../redux/models/request";
+import { Actions, setAction } from "../../redux/actions/Actions"
 import { connect } from "react-redux";
 function mapDispatchToProps(dispatch) {
     return {
