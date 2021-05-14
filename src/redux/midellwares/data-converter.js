@@ -1,32 +1,27 @@
 import { Actions, setAction } from "../actions/Actions"
 import { Status, SubTree } from "../models/subTree";
 
+// TODO group by batch size 
+
 export default function DataConverter({ dispatch }) {
-    console.log("apiMid ", dispatch)
     return (next) => (action) => {
-        console.log("action >>",action)
         switch (action.type) {
             case Actions.DataConverter.UPLOAD:
-                console.log("<<",Actions.DataConverter.UPLOAD)
                 let items = action.payload.items;
                 let subtree = action.payload.subTree;
-                return getFileStructure(items, subtree).then(e => {//catch .......
+                return getFileStructure(items, subtree).then(e => {//TODO catch .......
                     return Promise.all(e).then(leafs => {
-                        console.log("leaf what?? ", leafs)
                         let files = new FormData();
                         let meta = []
                         Array.from(leafs).forEach(elements => {
                             Array.from(elements).forEach(element => {
                                 if (element.isFile) {
-                                    console.log(" seting a file in the FormData")
                                     files.append("files", element.data);
                                     meta.push({
                                         "path": element.getPath(),
                                         "name": element.getName(),
                                         "index":element.getIndex()
                                     })
-                                } else {
-                                    console.log("the leaf is not a leaf", element);
                                 }
                             })
                         });
@@ -42,8 +37,6 @@ export default function DataConverter({ dispatch }) {
                     })
                 })
             default:
-                console.log("DEFAULT")
-                console.log("action >>",action)
                 return next(action);
         }
     }

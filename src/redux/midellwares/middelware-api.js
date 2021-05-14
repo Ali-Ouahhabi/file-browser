@@ -2,6 +2,8 @@ import { Actions, setAction } from "../actions/Actions"
 import { User, Folder, File, Error_log } from "../models/request"
 import { Status, SubTree } from "../models/subTree";
 
+//TODO restructure the Actions minise to necessary  
+
 export default function apiService({ dispatch }) {
     console.log("apiMid ", dispatch)
     return (next) => (action) => {
@@ -54,7 +56,8 @@ export default function apiService({ dispatch }) {
                                                 Actions.UserManager.USER.SIGN_IN.LOCAL.SUCCESS,
                                                 data
                                             )
-                                        )
+                                        );
+                                        User.initSubtree().then((data)=>console.log("$$$$$$$",data))
                                     })
                                     .catch((error) => {
                                         console.log(error)
@@ -351,49 +354,39 @@ export default function apiService({ dispatch }) {
                                         )
                                     })
                                 return;
-                            case Actions.ACTION.UPLOAD:
-                                console.log("<<",Actions.ACTION.UPLOAD)
+                            case Actions.ACTION.UPLOAD://----------------------------------------------------------------------------------------------------------------------------------
                                 let data = action.payload.data;
                                 let subtree = action.payload.subTree;
-                                console.log("subtree",subtree)
-                                debugger;
-                                //dispatch loading status
-                                next(
-                                    setAction(
-                                        Actions.Tree.ADD,
-                                        {subTree:subtree}
-                                    )
-                                )
+                                // next(
+                                //     setAction(
+                                //         Actions.Tree.ADD,
+                                //         {subTree:subtree}
+                                //     )
+                                // )
                                 //upload folder request
                                 return Folder.folderUpload(data)
                                     .then((data) => {
                                         subtree.propStatus(new Status("sc", "uploaded"))
-                                        let subtreeSc = new SubTree(subtree.getName());
-                                        subtreeSc.setFrom(subtree);
-                                        console.log("Upload success")
-                                        console.log("subtreeSc ",subtreeSc)
-                                        debugger;
-                                        return next(
+                                        // let subtreeSc = new SubTree(subtree.getName());
+                                        // subtreeSc.setFrom(subtree);
+                                        // TODO Dispath tree
+                                        return; /*next(
                                             setAction(
                                                 Actions.Tree.ADD,
                                                 {subTree:subtreeSc}
                                             )
-                                        );
+                                        );*/
                                     })
                                     .catch((error) => {
-                                        console.log("ERROR",error)
-                                        console.log("subtree",subtree)
-                                        console.log("subtree",subtree)
-                                        debugger;
                                         subtree.propStatus(new Status("er", error))
-                                        let subtreeEr = new SubTree(subtree.getName());
-                                        subtreeEr.setFrom(subtree);
-                                        return next(
+                                        // let subtreeEr = new SubTree(subtree.getName());
+                                        // subtreeEr.setFrom(subtree);
+                                        return /*next(
                                             setAction(
                                                 Actions.Tree.ADD,
                                                 {subTree:subtreeEr}
                                             )
-                                        );
+                                        );*/
                                     })
                             default:
                                 Error_log(action)

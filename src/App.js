@@ -1,11 +1,10 @@
 import './App.scss';
 import React from 'react';
-import FileManager from './components/file-manager/FileManager/FileManager';
+import FileManager from './components/file-manager/FileManager';
 import SignInUp from './components/user/signInUp';
 import { connect } from 'react-redux';
 
 const mapStateToProps = state => {
-  console.log("mapping ",state)
   return { 
     connected: state.connected
   };

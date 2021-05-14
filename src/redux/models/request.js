@@ -51,7 +51,12 @@ function userRegister(payload){
         data: payload,
     })
 }
-
+function initSubtree(){
+    return http({
+        url:"/files/list",
+        method:"get"
+    })
+}
 function fileUpload(payload){
     return http({
         url:"/files/uploads",
@@ -224,7 +229,8 @@ function Error_log(action){
 const User = {
     userLogOut,
     userRegister,
-    userSignIn
+    userSignIn,
+    initSubtree
 }
 const Folder = {
     folderCreate,

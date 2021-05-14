@@ -3,41 +3,46 @@ import "./FileTag.scss"
 import { ImFolder, ImFolderOpen, ImFileText2 } from "react-icons/im";
 import { DragSource, DropTarget } from "react-dnd";
 import { NativeTypes } from "react-dnd-html5-backend";
-import { Status, SubTree } from "../../redux/models/subTree";
 import { Actions, setAction } from "../../redux/actions/Actions";
 import { connect } from "react-redux";
+import status from "../status/status";
 
 
 class FileTag extends React.Component {
-	/**/
+
 	state = {
 		isToggled: false
 	}
 
 	constructor(props) {
 		super(props);
-		this.promises = []
 	}
 
 	getSelf() {
 		return this.props.self;
 	}
 
-	
+
 
 	onDrop(props, monitor, component) {
+
 		if (this.props.self.isFile)
 			return this.props.parent.onDrop(props, monitor, component)
+
 		if (monitor.getItemType() === NativeTypes.FILE) {
 			let items = monitor.getItem().items
-			// this.props.reportChange(items, this.getPath())
-			this.props.dispatch(setAction(Actions.DataConverter.UPLOAD,{items:items,subTree:this.props.self}))
+			this.props.dispatch(
+				setAction(
+					Actions.DataConverter.UPLOAD,
+					{ items: items, subTree: this.props.self }
+				)
+			)
+
 		} else {
 			let item = monitor.getItem()
-
-			if (item.index === this.props.index || this.props.path.startsWith(item.path))
-				return;
+			if (item.index === this.props.index || this.props.path.startsWith(item.path)) return;
 			this.props.reportChange(item.index, this.props.index)
+
 		}
 
 	}
@@ -53,46 +58,57 @@ class FileTag extends React.Component {
 
 	sortBy() { }
 
+	clicked(e) {
+		e.preventDefault();
+		this.setState({ isToggled: !this.state.isToggled });
+		this.emit(this.props.index)
+		console.log("Selected Tag")
+	}
+
+	retry(){
+		
+	}
+
 	//add status
 	render() {
+		let name = "file-tag-" + (this.props.self.isFile ? "file" : "folder")
 		let children = () => {
 			let tmp = []
 			if (this.props.self.children && this.state.isToggled) {
 				return this.props.self.children.map((child, index) => {
 					tmp = this.props.index.concat(index)
 					return (
-						<FileTagC key={index + child.name} id={index} index={tmp} selected={this.props.selected} reportChange={this.props.reportChange} parent={this} self={child} path={this.props.path + "/" + child.name}
+						<FileTagC key={index + child.name}
+							id={index}
+							index={tmp}
+							selected={this.props.selected}
+							reportChange={this.props.reportChange}
+							parent={this}
+							self={child}
+							path={this.props.path + "/" + child.name}
 						/>
 					)
 				})
 			}
-		};
-		let name = "file-tag-" + (this.props.self.isFile ? "file" : "folder")
 
+		}
 
 		return ([
 			this.props.connectDragSource(this.props.connectDropTarget(
-				<div
-					key="head"
+				<div key="head"
 					className={name + (!this.props.self.isFile && this.props.isOver ? "-hover" : "")}
-					onClick={
-						(e) => {
-							e.preventDefault();
-							this.setState({ isToggled: !this.state.isToggled });
-							this.emit(this.props.index)
-						}
-					}
-
+					onClick={this.clicked}
 				>
 					<div>{this.props.filter || ""}</div>
 					<span className={"file-tag-icon"}>
 						{this.props.self.isFile ? <ImFileText2 /> : this.state.isToggled ? <ImFolderOpen /> : <ImFolder />}
 					</span>
 					<span className={"file-tag-name"}> {this.props.self.name}</span>
-					<span>{"     >>>>>>"+this.props.self.status.state}</span>
+					<status status={this.props.self.status} retry={this.retry}></status>
 				</div>
 			)),
-			<div key="body" className={name + "-children"}>
+			<div key="body"
+				className={name + "-children"}>
 				{
 					children()
 				}

@@ -19,15 +19,6 @@ export class SubTree {
         this.data = null;
     }
 
-    setPath(path) { this.path = path }
-    setName(name) { this.name = name }
-    setParent(parent) { this.parent = parent }
-    setChildren(children) { this.children = children }
-    setStatus(status) { this.status = status }
-    setIndex(index) { this.index = index }
-    setData(object) {
-        this.data = object;
-    }
     setFrom(dict) {
         if (dict["path"]) this.path = dict["path"];
         if (dict["children"]) this.children = this.children;
@@ -35,12 +26,24 @@ export class SubTree {
         if (dict["parent"]) this.parent = dict["parent"];
         if (dict["isFile"]) this.isFile = dict["isFile"];
         if (dict["status"]) this.status = dict["status"];
-        if (dict["data"]) this.status = dict["data"];
+        if (dict["data"]) this.data = dict["data"];
     }
-
-    addChild(subT) {
-        return this.children.push(subT) - 1;
-    }
+    setName(name) { this.name = name }
+    setIndex(index) { this.index = index }
+    setParent(parent) { this.parent = parent }
+    setChildren(children) { this.children = children }    
+    setStatus(status) { this.status = status }
+    setData(object) { this.data = object }
+    setPath(path) { this.path = path }
+    
+    getName() { return this.name }
+    getPath() { return this.path }
+    getIndex() { return this.index }
+    
+    //TODO possibly adding moveat function for local changes
+    
+    
+    addChild(subT) { return this.children.push(subT) - 1 }
 
     removeElAt(index) {
         index.shift();
@@ -71,9 +74,6 @@ export class SubTree {
         }
     }
 
-    getName() { return this.name }
-    getPath() { return this.path }
-    getIndex() { return this.index }
 
     propStatus(status) {
         this.setStatus(status);
@@ -88,5 +88,3 @@ export class Status {
         this.object = object;
     }
 }
-
-// export default {SubTree,Status};
