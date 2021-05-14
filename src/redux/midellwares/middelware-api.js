@@ -1,10 +1,10 @@
 import { Actions, setAction } from "../actions/Actions"
-import { User, Folder, File, Error_log } from "../models/request"
+import { User, Folder, File, Tree,Error_log } from "../models/request"
 import { Status, SubTree } from "../models/subTree";
 
 //TODO restructure the Actions minise to necessary  
 
-export default function apiService({ dispatch }) {
+export default function apiService({getState , dispatch }) {
     console.log("apiMid ", dispatch)
     return (next) => (action) => {
 
@@ -91,150 +91,6 @@ export default function apiService({ dispatch }) {
                                         dispatch(
                                             setAction(
                                                 Actions.UserManager.USER.LOG_OUT.LOCAL.ERROR,
-                                                error
-                                            )
-                                        )
-                                    })
-                                return;
-                            default:
-                                Error_log(action)
-                                return;
-                        }
-
-                    case Actions.ACTION.FILE:
-                        switch (action.type[1]) {
-                            case Actions.ACTION.CREATE:
-                                //dispatch loading status
-                                dispatch(
-                                    setAction(
-                                        Actions.FileManager.FILE.CREATE.LOCAL.LOADING,
-                                        action.payload
-                                    )
-                                )
-                                // create file request
-                                File.fileCreate(action.payload)
-                                    .then((data) => {
-                                        dispatch(
-                                            setAction(
-                                                Actions.FileManager.FILE.CREATE.LOCAL.SUCCESS,
-                                                data
-                                            )
-                                        )
-                                    })
-                                    .catch((error) => {
-                                        dispatch(
-                                            setAction(
-                                                Actions.FileManager.FILE.CREATE.LOCAL.ERROR,
-                                                error
-                                            )
-                                        )
-                                    })
-                                return;
-
-                            case Actions.ACTION.RENAME:
-                                //dispatch loading status
-                                dispatch(
-                                    setAction(
-                                        Actions.FileManager.FILE.RENAME.LOCAL.LOADING,
-                                        action.payload
-                                    )
-                                )
-                                //rename file request
-                                File.fileRename(action.payload)
-                                    .then((data) => {
-                                        dispatch(
-                                            setAction(
-                                                Actions.FileManager.FILE.RENAME.LOCAL.SUCCESS,
-                                                data
-                                            )
-                                        )
-                                    })
-                                    .catch((error) => {
-                                        dispatch(
-                                            setAction(
-                                                Actions.FileManager.FILE.RENAME.LOCAL.ERROR,
-                                                error
-                                            )
-                                        )
-                                    })
-                                return;
-                            case Actions.ACTION.DELETE:
-                                //dispatch loading status
-                                dispatch(
-                                    setAction(
-                                        Actions.FileManager.FILE.DELETE.LOCAL.LOADING,
-                                        action.payload
-                                    )
-                                )
-                                //delete file request
-                                File.fileDelete(action.payload)
-                                    .then((data) => {
-                                        dispatch(
-                                            setAction(
-                                                Actions.FileManager.FILE.DELETE.LOCAL.SUCCESS,
-                                                data
-                                            )
-                                        )
-                                    })
-                                    .catch((error) => {
-                                        dispatch(
-                                            setAction(
-                                                Actions.FileManager.FILE.DELETE.LOCAL.ERROR,
-                                                error
-                                            )
-                                        )
-                                    })
-                                return;
-                            case Actions.ACTION.DOWNLOAD:
-                                //dispatch loading status
-                                dispatch(
-                                    setAction(
-                                        Actions.FileManager.FILE.DOWNLOAD.LOCAL.LOADING,
-                                        action.payload
-                                    )
-                                )
-                                //download file request
-                                File.fileDownload(action.payload)
-                                    .then((data) => {
-                                        dispatch(
-                                            setAction(
-                                                Actions.FileManager.FILE.DOWNLOAD.LOCAL.SUCCESS,
-                                                data
-                                            )
-                                        )
-                                    })
-                                    .catch((error) => {
-                                        dispatch(
-                                            setAction(
-                                                Actions.FileManager.FILE.DOWNLOAD.LOCAL.ERROR,
-                                                error
-                                            )
-                                        )
-                                    })
-                                return;
-                            case Actions.ACTION.UPLOAD:
-                                //dispatch loading status
-                                dispatch(
-                                    setAction(
-                                        Actions.FileManager.FILE.UPLOAD.LOCAL.LOADING,
-                                        action.payload
-                                    )
-                                )
-                                //upload file request
-                                File.fileUpload(action.payload)
-                                    .then((data) => {
-                                        dispatch(
-                                            setAction(
-                                                Actions.FileManager.FILE.UPLOAD.LOCAL.SUCCESS,
-                                                data
-                                            )
-                                        )
-                                    })
-                                    .catch((error) => {
-                                        console.log(action + " [error] " + error)
-                                        dispatch(
-                                            setAction(
-                                                Actions.FileManager.FILE.UPLOAD.LOCAL.ERROR,
                                                 error
                                             )
                                         )
@@ -367,9 +223,10 @@ export default function apiService({ dispatch }) {
                                 return Folder.folderUpload(data)
                                     .then((data) => {
                                         subtree.propStatus(new Status("sc", "uploaded"))
-                                        // let subtreeSc = new SubTree(subtree.getName());
+                                        let subtreeJs = JSON.stringify(subtree);
                                         // subtreeSc.setFrom(subtree);
-                                        // TODO Dispath tree
+                                        // TODO upload tree
+                                        Tree.updateTree({tree:getState().fileTree}).then(e => console.log("resp Update Tree",e==subtreeJs))
                                         return; /*next(
                                             setAction(
                                                 Actions.Tree.ADD,
@@ -392,15 +249,19 @@ export default function apiService({ dispatch }) {
                                 Error_log(action)
                                 return;
                         }
-
-                    default:
-                        Error_log(action)
-                        return;
+                    case Actions.ACTION.TREE:
+                        switch(action.type[1]){
+                            case Actions.ACTION.FETCH:
+                                return Tree.fetchTree(action.payload).then(e=>next({action:Actions.ACTION.TREE.REFRESH,payload:JSON.parse(e)})).catch(e=>console.log("ERROR FETCHING TREE"));
+                            default:
+                                Error_log(action)
+                                return;
                 }
             default:
                 Error_log(action)
                 return;
         }
     }
+}
 }
 

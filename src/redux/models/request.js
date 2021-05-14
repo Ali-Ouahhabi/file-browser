@@ -226,6 +226,21 @@ function Error_log(action){
     })
 }
 
+function fetchTree(payload){
+    return http({
+        url:"/tree",
+        method:"get",
+    })
+}
+
+function updateTree(payload){
+    return http({
+        url:"/tree/update",
+        method:"POST",
+        data: payload,//payload
+    })
+}
+
 const User = {
     userLogOut,
     userRegister,
@@ -247,7 +262,12 @@ const File = {
     fileUpload
 }
 
-export { User, Folder, File, Error_log}
+const Tree = {
+    fetchTree,
+    updateTree
+}
+
+export { User, Folder, File, Tree, Error_log}
 
 /*
 const requestConfig = {

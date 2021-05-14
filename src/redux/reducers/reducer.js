@@ -63,18 +63,10 @@ export default function reduce(state = initialState, action) {
  
         case Actions.ACTION.TREE:
             switch (action.type[1]) {
-                case Actions.ACTION.ADD:
-                    // console.log("< action ",Actions.ACTION.ADD)
-                    // console.log("< payload ",action.payload)
-                    // console.log("subtree",action.payload.subTree)
-                    // debugger;
-                    // let subTree = action.payload.subTree;
-                    // if(subTree.getIndex().length==1)
-                    //     state.fileTree=subTree;
-                    // else if(subTree.getIndex().length>1)
-                    //     state.fileTree.addElAt(subTree);
-                    
-                    return state;
+                case Actions.ACTION.REFRESH:
+                    return {...state,fileTree:action.payload};
+                case Actions.ACTION.UPDATE:
+                    return {...state,fileTree:action.payload};                
                 default:
                     return state;
 

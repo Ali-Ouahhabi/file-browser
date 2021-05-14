@@ -7,7 +7,6 @@ import { Actions, setAction } from "../../redux/actions/Actions";
 import { connect } from "react-redux";
 import status from "../status/status";
 
-
 class FileTag extends React.Component {
 
 	state = {

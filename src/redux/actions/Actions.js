@@ -12,7 +12,9 @@ const Actions = {
         LOG_OUT: "LOG_OUT",
         REGISTER: "REGISTER",
 
-        ADD:"ADD",
+        FETCH:"FETCH",
+        UPDATE:"UPDATE",
+        REFRESH:"REFRESH",
 
         CREATE: "CREATE",
         RENAME: "RENAME",
@@ -149,7 +151,9 @@ const Actions = {
     },
 
     Tree:{
-        ADD:["TREE","ADD"],
+        FETCH:["TREE","FETCH"],
+        UPDATE:["TREE","UPDATE"],
+        REFRESH:["TREE","REFRESH"]
     }
 }
 

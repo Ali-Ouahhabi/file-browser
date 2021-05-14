@@ -1,6 +1,6 @@
 import { Actions, setAction } from "../actions/Actions"
 import { Status, SubTree } from "../models/subTree";
-
+// const MaxBatchSize = ??
 // TODO group by batch size 
 
 export default function DataConverter({ dispatch }) {
@@ -13,6 +13,7 @@ export default function DataConverter({ dispatch }) {
                     return Promise.all(e).then(leafs => {
                         let files = new FormData();
                         let meta = []
+                        let size=0;
                         Array.from(leafs).forEach(elements => {
                             Array.from(elements).forEach(element => {
                                 if (element.isFile) {
@@ -20,7 +21,10 @@ export default function DataConverter({ dispatch }) {
                                     meta.push({
                                         "path": element.getPath(),
                                         "name": element.getName(),
-                                        "index":element.getIndex()
+                                        "index":element.getIndex(),
+                                        "lastModified":element.data.lastModified,
+                                        "size":element.data.size,
+                                        "type":element.data.type
                                     })
                                 }
                             })

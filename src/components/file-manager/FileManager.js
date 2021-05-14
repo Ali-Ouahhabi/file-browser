@@ -1,12 +1,11 @@
 import React from 'react';
-import './FileManager.scss';
-import ActionsBar from '../../actions-bar/ActionsBar';
-import FileTag from '../../file-tag/FileTag';
+import './fileManager.scss';
+import ActionsBar from '../actions-bar/ActionsBar';
+import FileTag from '../file-tag/FileTag';
 import { DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
 import { connect } from 'react-redux';
-import { Actions, setAction } from '../../../redux/actions/Actions';
-import { SubTree } from '../../../redux/models/subTree';
+import { Actions, setAction } from '../../redux/actions/Actions';
 
 class FileManager_ extends React.Component {
 
@@ -139,10 +138,17 @@ class FileManager_ extends React.Component {
     console.log("selected ", index)
   }
 
+  componentDidMount(){
+    this.props.dispatch(
+      setAction(
+        Actions.ACTIONS.TREE.FETCH
+      )
+    )
+  }
+
   render() {
     return (
       <div>
-
         <ActionsBar filtering={this.filtering}
           OnDownload={() => console.log("Download")}
           OnUpload={() => console.log("Upload")}
