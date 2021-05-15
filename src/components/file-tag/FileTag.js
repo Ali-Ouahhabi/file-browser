@@ -5,7 +5,7 @@ import { DragSource, DropTarget } from "react-dnd";
 import { NativeTypes } from "react-dnd-html5-backend";
 import { Actions, setAction } from "../../redux/actions/Actions";
 import { connect } from "react-redux";
-import status from "../status/status";
+import Status from "../status/status";
 
 class FileTag extends React.Component {
 
@@ -15,6 +15,7 @@ class FileTag extends React.Component {
 
 	constructor(props) {
 		super(props);
+		this.clicked =this.clicked.bind(this)
 	}
 
 	getSelf() {
@@ -103,7 +104,7 @@ class FileTag extends React.Component {
 						{this.props.self.isFile ? <ImFileText2 /> : this.state.isToggled ? <ImFolderOpen /> : <ImFolder />}
 					</span>
 					<span className={"file-tag-name"}> {this.props.self.name}</span>
-					<status status={this.props.self.status} retry={this.retry}></status>
+					<Status status={this.props.self.status} retry={this.retry}></Status>
 				</div>
 			)),
 			<div key="body"

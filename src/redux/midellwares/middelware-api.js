@@ -226,7 +226,7 @@ export default function apiService({getState , dispatch }) {
                                         let subtreeJs = JSON.stringify(subtree);
                                         // subtreeSc.setFrom(subtree);
                                         // TODO upload tree
-                                        Tree.updateTree({tree:getState().fileTree}).then(e => console.log("resp Update Tree",e==subtreeJs))
+                                        Tree.updateTree(getState().fileTree).then(e => console.log("resp Update Tree",e==subtreeJs))
                                         return; /*next(
                                             setAction(
                                                 Actions.Tree.ADD,
@@ -252,7 +252,16 @@ export default function apiService({getState , dispatch }) {
                     case Actions.ACTION.TREE:
                         switch(action.type[1]){
                             case Actions.ACTION.FETCH:
-                                return Tree.fetchTree(action.payload).then(e=>next({action:Actions.ACTION.TREE.REFRESH,payload:JSON.parse(e)})).catch(e=>console.log("ERROR FETCHING TREE"));
+                                console.log("Fetchinig tree")
+                                return Tree.fetchTree(action.payload).then(
+                                    (e)=>{
+                                        console.log("received data ",e)
+                                        return next(setAction(
+                                                Actions.Tree.REFRESH,
+                                                e.data
+                                            ))
+                                    }
+                                        ).catch(e=>console.log("ERROR FETCHING TREE ",e));
                             default:
                                 Error_log(action)
                                 return;

@@ -1,7 +1,7 @@
 import React from 'react';
-import './status.css';
+import './status.scss';
 
-class status extends React.Component {
+class Status extends React.Component {
 
 constructor(props) {
     super(props);
@@ -16,4 +16,4 @@ constructor(props) {
   }
 }
 
-export default status;
+export default Status;

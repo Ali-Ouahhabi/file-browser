@@ -1,5 +1,5 @@
 import React from 'react';
-import './fileManager.scss';
+import './FileManager.scss';
 import ActionsBar from '../actions-bar/ActionsBar';
 import FileTag from '../file-tag/FileTag';
 import { DndProvider } from 'react-dnd';
@@ -13,7 +13,7 @@ class FileManager_ extends React.Component {
     super(props);
 
     this.state = {
-      treeV: { ...tree },
+      //treeV: { ...tree },
       filterData: {
         isFirstCall: true,
         saveData: {}
@@ -141,7 +141,7 @@ class FileManager_ extends React.Component {
   componentDidMount(){
     this.props.dispatch(
       setAction(
-        Actions.ACTIONS.TREE.FETCH
+        Actions.Tree.FETCH
       )
     )
   }

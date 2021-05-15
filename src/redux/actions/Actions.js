@@ -151,9 +151,9 @@ const Actions = {
     },
 
     Tree:{
-        FETCH:["TREE","FETCH"],
-        UPDATE:["TREE","UPDATE"],
-        REFRESH:["TREE","REFRESH"]
+        FETCH:["TREE","FETCH", "REMOTE"],
+        UPDATE:["TREE","UPDATE", "REMOTE"],
+        REFRESH:["TREE","REFRESH", "LOCAL"]
     }
 }
 

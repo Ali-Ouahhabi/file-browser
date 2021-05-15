@@ -9,7 +9,7 @@ export default function reduce(state = initialState, action) {
 
     if (action.type[2] == Actions.ACTION.REMOTE)
         throw new Error("Reducer invalid actions " + action.type.join('/'))
-
+console.log("payload ",action.payload)
     switch (action.type[0]) {
         case Actions.ACTION.USER:
             switch (action.type[1]) {
