@@ -1,6 +1,7 @@
 import { Actions, setAction } from "../actions/Actions"
 import { User, Folder, File, Tree,Error_log } from "../models/request"
 import { Status, SubTree } from "../models/subTree";
+import SubTreeHelper from "../models/subTreeHelper";
 
 //TODO restructure the Actions minise to necessary  
 
@@ -222,12 +223,12 @@ export default function apiService({getState , dispatch }) {
                                 //upload folder request
                                 return Folder.folderUpload(data)
                                     .then((data) => {
-                                        subtree.propStatus(new Status("sc", "uploaded"))
+                                        SubTreeHelper.propStatus(subtree,new Status("sc", "uploaded"))
                                         let subtreeJs = JSON.stringify(subtree);
                                         // subtreeSc.setFrom(subtree);
                                         // TODO upload tree
-                                        Tree.updateTree(getState().fileTree).then(e => console.log("resp Update Tree",e==subtreeJs))
-                                        return; /*next(
+                                        
+                                        return Tree.updateTree(getState().fileTree).then(e => console.log("resp Update Tree",e)); /*next(
                                             setAction(
                                                 Actions.Tree.ADD,
                                                 {subTree:subtreeSc}
@@ -235,7 +236,7 @@ export default function apiService({getState , dispatch }) {
                                         );*/
                                     })
                                     .catch((error) => {
-                                        subtree.propStatus(new Status("er", error))
+                                        SubTreeHelper.propStatus(subtree,new Status("er", error))
                                         // let subtreeEr = new SubTree(subtree.getName());
                                         // subtreeEr.setFrom(subtree);
                                         return /*next(
@@ -261,11 +262,13 @@ export default function apiService({getState , dispatch }) {
                                         let index = from.index
                                         to.children=[].concat(to.children,from)
                                         from.index=[].concat(to.index,to.children.length)
-                                        getState().fileTree.removeElAt(index)
+                                        SubTreeHelper.removeElAt(getState().fileTree,index)
+                                        // getState().fileTree.removeElAt(index)
                                         console.log("zzzzzz",getState().fileTree)
-                                        Tree.updateTree(getState().fileTree).then(e => console.log("resp Update Tree",getState().fileTree)).catch((error) => {
-                                            console.error(action.type,error)
-                                        })
+                                        //TODO uncomment after fixing sub directory issue 
+                                        // Tree.updateTree(getState().fileTree).then(e => console.log("resp Update Tree",getState().fileTree)).catch((error) => {
+                                        //     console.error(action.type,error)
+                                        // })
 
                                     })
                                     .catch((error) => {

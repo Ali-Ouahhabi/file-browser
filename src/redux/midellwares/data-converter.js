@@ -1,7 +1,9 @@
 import { Actions, setAction } from "../actions/Actions"
 import { Status, SubTree } from "../models/subTree";
+import SubTreeHelper from "../models/subTreeHelper";
 // const MaxBatchSize = ??
 // TODO group by batch size 
+// TODO clean the old subtree class 
 
 export default function DataConverter({ dispatch }) {
     return (next) => (action) => {
@@ -59,11 +61,11 @@ const getFileStructure = (items, subtree) => {
                 isFile: item.isFile,
                 children: null,
                 status: new Status("up", "init"),
-                path: subtree.getPath()
+                path: subtree.path
             })
             //
             leaf.setIndex(
-                [].concat(subtree.getIndex(),/*??*/ subtree.addChild(leaf))
+                [].concat(subtree.index,/*??*/ SubTreeHelper.addChildTo(subtree,leaf))
             )
             //
             return new Promise((resolve) => {
@@ -80,12 +82,12 @@ const getFileStructure = (items, subtree) => {
                 isFile: item.isFile,
                 children: [],
                 status: new Status("up", "init"),
-                path: subtree.getPath() + item.name + "/"
+                path: subtree.path + item.name + "/"
             })
             // 
-            subTree.setIndex(
-                [].concat(subtree.getIndex(),/*??*/ subtree.addChild(subTree))
-            )
+            SubTreeHelper.setIndex(subTree, 
+                [].concat(subtree.index,
+                SubTreeHelper.addChildTo(subtree, subTree)))
             // 
             var dirReader = item.createReader();
                 

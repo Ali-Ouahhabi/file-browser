@@ -64,7 +64,10 @@ console.log("payload ",action.payload)
         case Actions.ACTION.TREE:
             switch (action.type[1]) {
                 case Actions.ACTION.REFRESH:
-                    return {...state,fileTree:action.payload};
+                    console.log(action.type,action.payload)
+                    if(action.payload!='')
+                        return {...state,fileTree:action.payload};
+                    else return state
                 case Actions.ACTION.UPDATE:
                     return {...state,fileTree:action.payload};                
                 default:

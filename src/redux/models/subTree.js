@@ -1,5 +1,5 @@
 export class SubTree {
-    //TODO from state full to stateless 
+    //TODO might need to be removed
     /*
     name :String
     path: String
@@ -9,7 +9,7 @@ export class SubTree {
     */
 
     constructor(name) {
-        this.name = name;
+        this.name = name?name:null;
         this.path = "/";
         this.index = [0];
         this.parent = null;

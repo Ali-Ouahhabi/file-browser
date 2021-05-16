@@ -41,15 +41,8 @@ class FileTag extends React.Component {
 
 		} else {
 			let item = monitor.getItem()
-			if (item.index === this.props.index || this.props.path.startsWith(item.path)) return;
-			//this.props.reportChange(item.index, this.props.index)
-			//TODO change the dnd drop function to pass the object self dispatch an event move 
-			//with the local and the new child in the middleware check if it is a file then 
-			//include name otherwise just the path from to, if successful update the tree structure 
-			//and send the new structure to the api  
-			console.log("DISPATCHING ",item) 
-			console.log("to ",this.props.self)  
-			console.log("??",this.props.dispatch) 
+			//FIXME redefine condition for direct sub directory or sub file
+			if (item.index === this.props.index || this.props.path === item.path) return;
 			this.props.dispatch(
 				setAction(
 					Actions.FileManager.FOLDER.MOVE.REMOTE,
@@ -119,6 +112,7 @@ class FileTag extends React.Component {
 						{this.props.self.isFile ? <ImFileText2 /> : this.state.isToggled ? <ImFolderOpen /> : <ImFolder />}
 					</span>
 					<span className={"file-tag-name"}> {this.props.self.name}</span>
+					<span > {/* tempo */ this.props.self.index }</span>
 					<Status status={this.props.self.status} retry={this.retry}></Status>
 				</div>
 			)),
@@ -143,8 +137,28 @@ const dropCall = {
 	},
 
 }
+function _typeof(obj) {
+	"@babel/helpers - typeof";
+	if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") {
+	  _typeof = function _typeof(obj) {
+		return typeof obj;
+	  };
+	} else {
+	  _typeof = function _typeof(obj) {
+		return obj &&
+		  typeof Symbol === "function" &&
+		  obj.constructor === Symbol &&
+		  obj !== Symbol.prototype
+		  ? "symbol"
+		  : typeof obj;
+	  };
+	}
+	return _typeof(obj);
+  }
 const dragContent = {
 	beginDrag(props, monitor, component) {
+		console.log("beginDrag _typeof ",_typeof(props.self))
+		console.log("beginDrag _typeof ", typeof props.self)
 		return props.self//instead we can use self 
 	},
 }
