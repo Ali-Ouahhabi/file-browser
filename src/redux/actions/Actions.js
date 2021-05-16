@@ -21,6 +21,7 @@ const Actions = {
         DELETE: "DELETE",
         DOWNLOAD: "DOWNLOAD",
         UPLOAD: "UPLOAD",
+        MOVE: "MOVE",
 
         LOCAL: "LOCAL",
         REMOTE: "REMOTE",
@@ -137,6 +138,14 @@ const Actions = {
                     LOADING: ["FOLDER", "UPLOAD", "LOCAL", "LOADING"],
                     SUCCESS: ["FOLDER", "UPLOAD", "LOCAL", "SUCCESS"],
                     ERROR: ["FOLDER", "UPLOAD", "LOCAL", "ERROR"]
+                }
+            },
+            MOVE: {
+                REMOTE: ["FOLDER", "MOVE", "REMOTE"],
+                LOCAL: {
+                    LOADING: ["FOLDER", "MOVE", "LOCAL", "LOADING"],
+                    SUCCESS: ["FOLDER", "MOVE", "LOCAL", "SUCCESS"],
+                    ERROR: ["FOLDER", "MOVE", "LOCAL", "ERROR"]
                 }
             }
         }

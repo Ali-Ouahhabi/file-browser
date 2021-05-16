@@ -96,16 +96,16 @@ class FileManager_ extends React.Component {
       // addElAt(toIn, getFileStructure(el))
     } else if (el instanceof Array) {
 
-      // TODO either in the concerned components or here dispatch event so it would set the changes remotlyan localy
+      // TODO either in the concerned components or here dispatch event so it would set the changes remotely locally
 
       addElAt(toIn, getElAt(el))
       removeElAt(el)
     }
 
-    //TODO after dispatching it won't be neded any more
+    //TODO after dispatching it won't be needed any more
     this.setTreeV(newTree)
 
-    // TODO chould be delegated to the class subtree or a handler class 
+    // TODO should be delegated to the class subtree or a handler class 
     function removeElAt(index) {
       let tmp = newTree
       let i = 0

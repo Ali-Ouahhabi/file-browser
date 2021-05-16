@@ -245,6 +245,32 @@ export default function apiService({getState , dispatch }) {
                                             )
                                         );*/
                                     })
+                            case Actions.ACTION.MOVE:
+                                //dispatch loading status
+                                console.log("Mid received",action.payload)
+                                let from=action.payload.from
+                                let to = action.payload.to
+                                let tmp = {
+                                    name:from.isFile?action.payload.from.getName:null,
+                                    from:from.path,
+                                    to:to.path
+                                }
+
+                                return Folder.folderMove(tmp)
+                                    .then((data) => {
+                                        let index = from.index
+                                        to.children=[].concat(to.children,from)
+                                        from.index=[].concat(to.index,to.children.length)
+                                        getState().fileTree.removeElAt(index)
+                                        console.log("zzzzzz",getState().fileTree)
+                                        Tree.updateTree(getState().fileTree).then(e => console.log("resp Update Tree",getState().fileTree)).catch((error) => {
+                                            console.error(action.type,error)
+                                        })
+
+                                    })
+                                    .catch((error) => {
+                                        console.error(action.type,error)
+                                    })
                             default:
                                 Error_log(action)
                                 return;

@@ -5,6 +5,7 @@ import { Status, SubTree } from "../models/subTree";
 
 export default function DataConverter({ dispatch }) {
     return (next) => (action) => {
+        console.log("..........",action)
         switch (action.type) {
             case Actions.DataConverter.UPLOAD:
                 let items = action.payload.items;
@@ -41,6 +42,7 @@ export default function DataConverter({ dispatch }) {
                     })
                 })
             default:
+                console.log("Dataconverter frowarding ",action)
                 return next(action);
         }
     }

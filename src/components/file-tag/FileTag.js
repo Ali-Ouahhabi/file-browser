@@ -16,6 +16,7 @@ class FileTag extends React.Component {
 	constructor(props) {
 		super(props);
 		this.clicked =this.clicked.bind(this)
+		this.onDrop =this.onDrop.bind(this)
 	}
 
 	getSelf() {
@@ -41,7 +42,21 @@ class FileTag extends React.Component {
 		} else {
 			let item = monitor.getItem()
 			if (item.index === this.props.index || this.props.path.startsWith(item.path)) return;
-			this.props.reportChange(item.index, this.props.index)
+			//this.props.reportChange(item.index, this.props.index)
+			//TODO change the dnd drop function to pass the object self dispatch an event move 
+			//with the local and the new child in the middleware check if it is a file then 
+			//include name otherwise just the path from to, if successful update the tree structure 
+			//and send the new structure to the api  
+			console.log("DISPATCHING ",item) 
+			console.log("to ",this.props.self)  
+			console.log("??",this.props.dispatch) 
+			this.props.dispatch(
+				setAction(
+					Actions.FileManager.FOLDER.MOVE.REMOTE,
+					{ from: item, to: this.props.self }
+				)
+			)
+			console.log("asdasdsadsad")
 
 		}
 
@@ -130,7 +145,7 @@ const dropCall = {
 }
 const dragContent = {
 	beginDrag(props, monitor, component) {
-		return { index: props.index, path: props.path }
+		return props.self//instead we can use self 
 	},
 }
 

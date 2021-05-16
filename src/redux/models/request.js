@@ -136,6 +136,14 @@ function folderUpload(payload){
     })
 }
 
+function folderMove(payload){
+    return http({
+        url:"/files/move",
+        method:"POST",
+        data: payload,//payload
+    })
+}
+
 function folderDownload(payload){
     throw new Error(" api call folderDownload not implemented")
     return http({
@@ -252,7 +260,8 @@ const Folder = {
     folderRename,
     folderDelete,
     folderDownload,
-    folderUpload
+    folderUpload,
+    folderMove
 } 
 const File = {
     fileCreate,

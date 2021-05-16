@@ -1,5 +1,5 @@
 export class SubTree {
-
+    //TODO from state full to stateless 
     /*
     name :String
     path: String
@@ -39,10 +39,7 @@ export class SubTree {
     getName() { return this.name }
     getPath() { return this.path }
     getIndex() { return this.index }
-    
-    //TODO possibly adding moveat function for local changes
-    
-    
+        
     addChild(subT) { return this.children.push(subT) - 1 }
 
     removeElAt(index) {
