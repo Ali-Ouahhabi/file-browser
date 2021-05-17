@@ -3,7 +3,7 @@ import { User, Folder, File, Tree,Error_log } from "../models/request"
 import { Status, SubTree } from "../models/subTree";
 import SubTreeHelper from "../models/subTreeHelper";
 
-//TODO restructure the Actions minise to necessary  
+//TODO restructure the Actions minimize to necessary  
 
 export default function apiService({getState , dispatch }) {
     console.log("apiMid ", dispatch)
@@ -211,44 +211,19 @@ export default function apiService({getState , dispatch }) {
                                         )
                                     })
                                 return;
-                            case Actions.ACTION.UPLOAD://----------------------------------------------------------------------------------------------------------------------------------
+                            case Actions.ACTION.UPLOAD:
                                 let data = action.payload.data;
                                 let subtree = action.payload.subTree;
-                                // next(
-                                //     setAction(
-                                //         Actions.Tree.ADD,
-                                //         {subTree:subtree}
-                                //     )
-                                // )
-                                //upload folder request
                                 return Folder.folderUpload(data)
                                     .then((data) => {
                                         SubTreeHelper.propStatus(subtree,new Status("sc", "uploaded"))
-                                        let subtreeJs = JSON.stringify(subtree);
-                                        // subtreeSc.setFrom(subtree);
-                                        // TODO upload tree
-                                        
-                                        return Tree.updateTree(getState().fileTree).then(e => console.log("resp Update Tree",e)); /*next(
-                                            setAction(
-                                                Actions.Tree.ADD,
-                                                {subTree:subtreeSc}
+                                        let subtreeJs = JSON.stringify(subtree);                                     
+                                        return Tree.updateTree(getState().fileTree)
+                                        .then((e) => {
+                                                return refreshTree(e,next)}
                                             )
-                                        );*/
-                                    })
-                                    .catch((error) => {
-                                        SubTreeHelper.propStatus(subtree,new Status("er", error))
-                                        // let subtreeEr = new SubTree(subtree.getName());
-                                        // subtreeEr.setFrom(subtree);
-                                        return /*next(
-                                            setAction(
-                                                Actions.Tree.ADD,
-                                                {subTree:subtreeEr}
-                                            )
-                                        );*/
                                     })
                             case Actions.ACTION.MOVE:
-                                //dispatch loading status
-                                console.log("Mid received",action.payload)
                                 let from=action.payload.from
                                 let to = action.payload.to
                                 let tmp = {
@@ -256,19 +231,18 @@ export default function apiService({getState , dispatch }) {
                                     from:from.path,
                                     to:to.path
                                 }
-
                                 return Folder.folderMove(tmp)
                                     .then((data) => {
-                                        let index = from.index
+                                        SubTreeHelper.removeElAt(getState().fileTree,from.index)
                                         to.children=[].concat(to.children,from)
-                                        from.index=[].concat(to.index,to.children.length)
-                                        SubTreeHelper.removeElAt(getState().fileTree,index)
-                                        // getState().fileTree.removeElAt(index)
-                                        console.log("zzzzzz",getState().fileTree)
-                                        //TODO uncomment after fixing sub directory issue 
-                                        // Tree.updateTree(getState().fileTree).then(e => console.log("resp Update Tree",getState().fileTree)).catch((error) => {
-                                        //     console.error(action.type,error)
-                                        // })
+                                        from.index=[].concat(to.index,to.children.length-1)
+                                        return Tree.updateTree(getState().fileTree)
+                                        .then((e) => {
+                                                return refreshTree(e,next)}
+                                            )
+                                        .catch((error) => {
+                                            console.error(action.type,error)
+                                        })
 
                                     })
                                     .catch((error) => {
@@ -281,14 +255,9 @@ export default function apiService({getState , dispatch }) {
                     case Actions.ACTION.TREE:
                         switch(action.type[1]){
                             case Actions.ACTION.FETCH:
-                                console.log("Fetchinig tree")
                                 return Tree.fetchTree(action.payload).then(
                                     (e)=>{
-                                        console.log("received data ",e)
-                                        return next(setAction(
-                                                Actions.Tree.REFRESH,
-                                                e.data
-                                            ))
+                                        return refreshTree(e,next);
                                     }
                                         ).catch(e=>console.log("ERROR FETCHING TREE ",e));
                             default:
@@ -301,5 +270,13 @@ export default function apiService({getState , dispatch }) {
         }
     }
 }
+}
+
+
+function refreshTree(response,next){
+    return next(setAction(
+        Actions.Tree.REFRESH,
+        response.data
+    ))
 }
 

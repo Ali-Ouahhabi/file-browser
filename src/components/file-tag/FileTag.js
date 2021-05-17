@@ -41,16 +41,14 @@ class FileTag extends React.Component {
 
 		} else {
 			let item = monitor.getItem()
-			//FIXME redefine condition for direct sub directory or sub file
-			if (item.index === this.props.index || this.props.path === item.path) return;
+
+			if(this.props.self.children[item.index[item.index.length-1]]===item) return;
 			this.props.dispatch(
 				setAction(
 					Actions.FileManager.FOLDER.MOVE.REMOTE,
 					{ from: item, to: this.props.self }
 				)
 			)
-			console.log("asdasdsadsad")
-
 		}
 
 	}
