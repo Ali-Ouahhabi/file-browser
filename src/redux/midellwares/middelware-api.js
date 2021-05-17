@@ -157,49 +157,41 @@ export default function apiService({getState , dispatch }) {
                                     })
                                 return;
                             case Actions.ACTION.DELETE:
-                                //dispatch loading status
-                                dispatch(
-                                    setAction(
-                                        Actions.FileManager.FOLDER.DELETE.LOCAL.LOADING,
-                                        action.payload
-                                    )
-                                )
-                                //delete folder request
-                                Folder.folderDelete(action.payload)
+                                return Folder.folderDelete({
+                                    isFile:action.payload.isFile,
+                                    path:action.payload.path,
+                                    name:action.payload.name
+                                })
                                     .then((data) => {
-                                        dispatch(
-                                            setAction(
-                                                Actions.FileManager.FOLDER.DELETE.LOCAL.SUCCESS,
-                                                data
-                                            )
-                                        )
+                                        SubTreeHelper.removeElAt(getState().fileTree,action.payload.index)
+                                        return next(setAction(Actions.Tree.UPDATE,getState().fileTree))
                                     })
                                     .catch((error) => {
-                                        dispatch(
-                                            setAction(
-                                                Actions.FileManager.FOLDER.DELETE.LOCAL.ERROR,
-                                                error
-                                            )
-                                        )
+                                        // dispatch(
+                                        //     setAction(
+                                        //         Actions.FileManager.FOLDER.DELETE.LOCAL.ERROR,
+                                        //         error
+                                        //     )
+                                        // )
                                     })
                                 return;
                             case Actions.ACTION.DOWNLOAD:
                                 //dispatch loading status
-                                dispatch(
-                                    setAction(
-                                        Actions.FileManager.FOLDER.DOWNLOAD.LOCAL.LOADING,
-                                        action.payload
-                                    )
-                                )
+                                // dispatch(
+                                //     setAction(
+                                //         Actions.FileManager.FOLDER.DOWNLOAD.LOCAL.LOADING,
+                                //         action.payload
+                                //     )
+                                // )
                                 //download folder request
-                                Folder.folderDownload(action.payload)
+                                return Folder.folderDownload(action.payload)
                                     .then((data) => {
-                                        dispatch(
-                                            setAction(
-                                                Actions.FileManager.FOLDER.DOWNLOAD.LOCAL.SUCCESS,
-                                                data
-                                            )
-                                        )
+                                        // dispatch(
+                                        //     setAction(
+                                        //         Actions.FileManager.FOLDER.DOWNLOAD.LOCAL.SUCCESS,
+                                        //         data
+                                        //     )
+                                        // )
                                     })
                                     .catch((error) => {
                                         dispatch(
@@ -217,10 +209,7 @@ export default function apiService({getState , dispatch }) {
                                     .then((data) => {
                                         SubTreeHelper.propStatus(subtree,new Status("sc", "uploaded"))
                                         let subtreeJs = JSON.stringify(subtree);                                     
-                                        return Tree.updateTree(getState().fileTree)
-                                        .then((e) => {
-                                                return refreshTree(e,next)}
-                                            )
+                                        return next(setAction(Actions.Tree.UPDATE,getState().fileTree))
                                     })
                             case Actions.ACTION.MOVE:
                                 let from=action.payload.from
@@ -235,13 +224,7 @@ export default function apiService({getState , dispatch }) {
                                         SubTreeHelper.removeElAt(getState().fileTree,from.index)
                                         to.children=[].concat(to.children,from)
                                         from.index=[].concat(to.index,to.children.length-1)
-                                        return Tree.updateTree(getState().fileTree)
-                                        .then((e) => {
-                                                return refreshTree(e,next)}
-                                            )
-                                        .catch((error) => {
-                                            console.error(action.type,error)
-                                        })
+                                        return next(setAction(Actions.Tree.UPDATE,getState().fileTree))
 
                                     })
                                     .catch((error) => {

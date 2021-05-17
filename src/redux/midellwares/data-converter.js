@@ -3,6 +3,7 @@ import { Status, SubTree } from "../models/subTree";
 import SubTreeHelper from "../models/subTreeHelper";
 // const MaxBatchSize = ??
 // TODO group by batch size 
+//TODO add OnCreate folder
 
 export default function DataConverter({ getState,dispatch }) {
     return (next) => (action) => {
@@ -38,10 +39,40 @@ export default function DataConverter({ getState,dispatch }) {
                                 { type: 'application/json' }
                             )
                         );
-                        return next(setAction(Actions.FileManager.UPLOAD , { subTree: subtree, data: files }))
+                        return next(setAction(Actions.FileManager.FOLDER.UPLOAD.REMOTE , { subTree: subtree, data: files }))
 
                     })
                 })
+            case Actions.DataConverter.DOWNLOAD:{
+                let branch = getState().branch
+                let payload={
+                    isFile:branch.isFile,
+                    path:branch.path,
+                    name:branch.name
+                };
+                return next(setAction(Actions.FileManager.FOLDER.DOWNLOAD,payload))
+            }
+            case Actions.DataConverter.DELETE:{
+                let branch = getState().branch
+                let payload={
+                    isFile:branch.isFile,
+                    path:branch.path,
+                    name:branch.name,
+                    index:branch.index
+                };
+                return next(setAction(Actions.FileManager.FOLDER.DOWNLOAD,payload))
+            }
+            case Actions.DataConverter.RENAME:{
+                //TODO get the new name
+                let branch = getState().branch
+                let payload={
+                    isFile:branch.isFile,
+                    path:branch.path,
+                    name:branch.name
+                };
+                //return next(setAction(Actions.FileManager.FOLDER.DOWNLOAD,payload))
+                return;
+            }
             case Actions.DataConverter.SELECTED:
                 let self = action.payload.self;
                 let view = action.payload.view;

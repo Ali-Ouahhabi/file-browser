@@ -74,21 +74,29 @@ class FileManager_ extends React.Component {
 
   OnRemove = ()=>{
     this.props.dispatch(
-      setAction(Actions.FileManager.FOLDER.REMOVE)
+      setAction(Actions.DataConverter.DELETE)
     )
   }
 
   OnDownload = ()=>{
     this.props.dispatch(
-      setAction(Actions.FileManager.FOLDER.DOWNLOAD)
+      setAction(Actions.DataConverter.DOWNLOAD)
+    )
+  }
+
+  OnUpload = ()=>{
+    this.props.dispatch(
+      setAction(Actions.DataConverter.UPLOAD)
     )
   }
 
   OnRename = () => {
     this.props.dispatch(
-      setAction(Actions.FileManager.FOLDER.RENAME)
+      setAction(Actions.DataConverter.RENAME)
     )
   }
+
+  //TODO add OnCreate folder
 
   componentDidMount(){
     this.props.dispatch(
@@ -104,7 +112,7 @@ class FileManager_ extends React.Component {
       <div>
         <ActionsBar filtering={this.filtering}
           OnDownload={this.OnDownload}
-          OnUpload={() => console.log("Upload")}
+          OnUpload={this.OnUpload}
           OnRename={this.OnRename}
           OnRemove={this.OnRename}
         />

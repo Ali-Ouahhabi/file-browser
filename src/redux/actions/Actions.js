@@ -19,6 +19,7 @@ const Actions = {
         DOWNLOAD: "DOWNLOAD",
         UPLOAD: "UPLOAD",
         MOVE: "MOVE",
+        REMOVE:"REMOVE",
 
         SELECTED:"SELECTED",
 
