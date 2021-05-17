@@ -28,6 +28,16 @@ div {
     padding: 4px;
   }
 
+  .file-tag-folder-selected,
+  .file-tag-folder-hover-selected,
+  .file-tag-file-selected,
+  .file-tag-file-hover-selected{
+    background-color: $color1;
+    color: $color3;
+    border-style: dashed;
+    border-width: 2px;
+  }
+
   .file-tag-file {
 //    background-color: $color3;
     display: inline-block;

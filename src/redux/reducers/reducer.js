@@ -2,7 +2,12 @@ import { Actions } from "../actions/Actions";
 import {SubTree} from "../models/subTree"
 const initialState = {
     fileTree: new SubTree("root"),
-    connected: false
+    connected: false,
+    selected:{
+        isFile:null,
+        path:null,
+        name:null
+    }
 }
 
 export default function reduce(state = initialState, action) {
@@ -73,8 +78,10 @@ console.log("payload ",action.payload)
                 default:
                     return state;
 
-            } 
-            default:
+            }
+        case Actions.ACTION.SELECTED:
+            return {...state,selected:action.payload} 
+        default:
             return state;
     }
 }

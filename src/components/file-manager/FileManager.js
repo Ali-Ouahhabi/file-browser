@@ -19,7 +19,6 @@ class FileManager_ extends React.Component {
       }
     }
 
-    this.permute = this.permute.bind(this)
     this.filtering = this.filtering.bind(this)
   }
 
@@ -73,8 +72,22 @@ class FileManager_ extends React.Component {
     }
   }
 
-  selected(index) {
-    console.log("selected ", index)
+  OnRemove = ()=>{
+    this.props.dispatch(
+      setAction(Actions.FileManager.FOLDER.REMOVE)
+    )
+  }
+
+  OnDownload = ()=>{
+    this.props.dispatch(
+      setAction(Actions.FileManager.FOLDER.DOWNLOAD)
+    )
+  }
+
+  OnRename = () => {
+    this.props.dispatch(
+      setAction(Actions.FileManager.FOLDER.RENAME)
+    )
   }
 
   componentDidMount(){
@@ -86,13 +99,14 @@ class FileManager_ extends React.Component {
   }
 
   render() {
+    let view = {selected:false}
     return (
       <div>
         <ActionsBar filtering={this.filtering}
-          OnDownload={() => console.log("Download")}
+          OnDownload={this.OnDownload}
           OnUpload={() => console.log("Upload")}
-          OnRename={() => console.log("Rename")}
-          OnRemove={() => console.log("Remove")}
+          OnRename={this.OnRename}
+          OnRemove={this.OnRename}
         />
 
         <DndProvider backend={HTML5Backend}>
@@ -100,8 +114,8 @@ class FileManager_ extends React.Component {
             <FileTag
               self={this.props.fileTree}
               index={[]}
-              selected={this.selected}
               path={"/" + this.props.fileTree.name}
+              view={view}
             />
           </div>
         </DndProvider>

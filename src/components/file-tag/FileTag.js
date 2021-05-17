@@ -10,13 +10,15 @@ import Status from "../status/status";
 class FileTag extends React.Component {
 
 	state = {
-		isToggled: false
+		isToggled: false,
+		selected:false
 	}
 
 	constructor(props) {
 		super(props);
 		this.clicked =this.clicked.bind(this)
 		this.onDrop =this.onDrop.bind(this)
+		this.selected =this.selected.bind(this)
 	}
 
 	getSelf() {
@@ -53,11 +55,6 @@ class FileTag extends React.Component {
 
 	}
 
-	emit(event) {
-		//event.stopPropagation();
-		this.props.selected(this.props.index);
-	}
-
 	getPath() {
 		return (this.props.parent ? this.props.parent.getPath() : "") + (this.props.self.isFile ? "" : this.props.self.name + "/");
 	}
@@ -67,8 +64,17 @@ class FileTag extends React.Component {
 	clicked(e) {
 		e.preventDefault();
 		this.setState({ isToggled: !this.state.isToggled });
-		this.emit(this.props.index)
-		console.log("Selected Tag")
+		this.props.dispatch(
+			setAction(
+				Actions.DataConverter.SELECTED,{
+				self:this.props.self,
+				view:this.selected
+		}))
+
+	}
+
+	selected(){
+		this.setState({ selected: !this.state.selected });
 	}
 
 	retry(){
@@ -83,11 +89,11 @@ class FileTag extends React.Component {
 			if (this.props.self.children && this.state.isToggled) {
 				return this.props.self.children.map((child, index) => {
 					tmp = this.props.index.concat(index)
+					let view = {selected:false}
 					return (
 						<FileTagC key={index + child.name}
 							id={index}
 							index={tmp}
-							selected={this.props.selected}
 							parent={this}
 							self={child}
 							path={this.props.path + "/" + child.name}
@@ -101,7 +107,7 @@ class FileTag extends React.Component {
 		return ([
 			this.props.connectDragSource(this.props.connectDropTarget(
 				<div key="head"
-					className={name + (!this.props.self.isFile && this.props.isOver ? "-hover" : "")}
+					className={name + (!this.props.self.isFile && this.props.isOver ? "-hover" : "") + (this.state.selected?"-selected":'')}
 					onClick={this.clicked}
 				>
 					<div>{this.props.filter || ""}</div>
@@ -109,7 +115,6 @@ class FileTag extends React.Component {
 						{this.props.self.isFile ? <ImFileText2 /> : this.state.isToggled ? <ImFolderOpen /> : <ImFolder />}
 					</span>
 					<span className={"file-tag-name"}> {this.props.self.name}</span>
-					<span > {/* tempo */ this.props.self.index }</span>
 					<Status status={this.props.self.status} retry={this.retry}></Status>
 				</div>
 			)),

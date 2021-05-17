@@ -4,7 +4,7 @@ import SubTreeHelper from "../models/subTreeHelper";
 // const MaxBatchSize = ??
 // TODO group by batch size 
 
-export default function DataConverter({ dispatch }) {
+export default function DataConverter({ getState,dispatch }) {
     return (next) => (action) => {
         console.log("..........",action)
         switch (action.type) {
@@ -42,6 +42,21 @@ export default function DataConverter({ dispatch }) {
 
                     })
                 })
+            case Actions.DataConverter.SELECTED:
+                let self = action.payload.self;
+                let view = action.payload.view;
+              
+                let tmpS=getState()
+                if(tmpS.view) {
+                    tmpS.view();
+                }
+                view.selected=true;
+                tmpS.view=view;
+                tmpS.branch=self;
+                tmpS.view();
+                return;
+                
+
             default:
                 console.log("DataConverter forwarding ",action)
                 return next(action);

@@ -1,6 +1,5 @@
 const Actions = {
-    ACTION: {
-
+    ACTION: {//TODO add remove in actions and file manager
         USER: "USER",
         TREE:"TREE",
         FILE: "FILE",
@@ -20,6 +19,8 @@ const Actions = {
         DOWNLOAD: "DOWNLOAD",
         UPLOAD: "UPLOAD",
         MOVE: "MOVE",
+
+        SELECTED:"SELECTED",
 
         LOCAL: "LOCAL",
         REMOTE: "REMOTE",
@@ -155,16 +156,19 @@ const Actions = {
         MOVE:"MOVE",
         DOWNLOAD: "DOWNLOAD",
         UPLOAD: "UPLOAD",
+        SELECTED:"SELECTED"
     },
 
     Tree:{
         FETCH:["TREE","FETCH", "REMOTE"],
         UPDATE:["TREE","UPDATE", "REMOTE"],
         REFRESH:["TREE","REFRESH", "LOCAL"]
-    }
+    },
+    SELECTED:["SELECTED","","LOCAL"]
 }
 
 function setAction(actionType, payload) {
+    console.log(actionType,payload)
     return payload ? { type: actionType, payload } : { type: actionType, payload: "" }
 };
 
