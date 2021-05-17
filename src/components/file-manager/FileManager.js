@@ -13,7 +13,6 @@ class FileManager_ extends React.Component {
     super(props);
 
     this.state = {
-      //treeV: { ...tree },
       filterData: {
         isFirstCall: true,
         saveData: {}
@@ -25,13 +24,13 @@ class FileManager_ extends React.Component {
   }
 
   setTreeV(v) {
-    this.setState({ treeV: { ...v } })//dispatch newtree for the moment 
+    this.setState({ treeV: { ...v } })//TODO: should be replaced by dispatch refresh but until now it depend on the filtering functionality
   }
   setFilterData(FilterDataObject) {
     this.setState({ filterData: { ...FilterDataObject } })
   }
 
-
+//TODO: adjust 
   filtering(v) {
     if (this.state.filterData.isFirstCall) {
       this.setFilterData({
@@ -74,66 +73,6 @@ class FileManager_ extends React.Component {
     }
   }
 
-  permute(el, toIn) {
-
-    let formData = new FormData();
-    let jsonBodyData = [];
-
-    let newTree = { ...this.props.fileTree }
-    if (el instanceof DataTransferItemList) {
-
-      /* moved to the store midellware*/
-
-      // formedData(el, toIn)
-      // formData.append(
-      //   'metadata',
-      //   new Blob(
-      //     [JSON.stringify(jsonBodyData)],
-      //     { type: 'application/json' }
-      //   )
-      // );
-      // this.props.dispatch(setAction(["FILE", "UPLOAD", "REMOTE"], formData));
-      // addElAt(toIn, getFileStructure(el))
-    } else if (el instanceof Array) {
-
-      // TODO either in the concerned components or here dispatch event so it would set the changes remotely locally
-
-      addElAt(toIn, getElAt(el))
-      removeElAt(el)
-    }
-
-    //TODO after dispatching it won't be needed any more
-    this.setTreeV(newTree)
-
-    // TODO should be delegated to the class subtree or a handler class 
-    function removeElAt(index) {
-      let tmp = newTree
-      let i = 0
-      for (; i < index.length - 1; i++) {
-        tmp = tmp.children[index[i]]
-      }
-      tmp.children = tmp.children.slice(0, index[i]).concat(tmp.children.slice(index[i] + 1))
-    }
-
-    function addElAt(index, el) {
-      let tmp = newTree
-      for (let i = 0; i < index.length; i++)
-        tmp = tmp.children[index[i]]
-      tmp.children = tmp.children.concat(el)
-      return tmp
-    }
-
-    function getElAt(index) {
-      let tmp = newTree
-      let i = 0
-      for (; i < index.length - 1; i++) {
-        tmp = tmp.children[index[i]]
-      }
-      let child = tmp.children[index[i]]
-      return child
-    }
-  }
-
   selected(index) {
     console.log("selected ", index)
   }
@@ -162,7 +101,6 @@ class FileManager_ extends React.Component {
               self={this.props.fileTree}
               index={[]}
               selected={this.selected}
-              reportChange={this.permute}
               path={"/" + this.props.fileTree.name}
             />
           </div>

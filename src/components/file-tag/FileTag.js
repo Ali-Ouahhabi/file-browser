@@ -88,7 +88,6 @@ class FileTag extends React.Component {
 							id={index}
 							index={tmp}
 							selected={this.props.selected}
-							reportChange={this.props.reportChange}
 							parent={this}
 							self={child}
 							path={this.props.path + "/" + child.name}

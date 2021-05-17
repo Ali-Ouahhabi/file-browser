@@ -3,7 +3,6 @@ import { Status, SubTree } from "../models/subTree";
 import SubTreeHelper from "../models/subTreeHelper";
 // const MaxBatchSize = ??
 // TODO group by batch size 
-// TODO clean the old subtree class 
 
 export default function DataConverter({ dispatch }) {
     return (next) => (action) => {
@@ -39,12 +38,12 @@ export default function DataConverter({ dispatch }) {
                                 { type: 'application/json' }
                             )
                         );
-                        return next(setAction(["FOLDER", "UPLOAD", "REMOTE"], { subTree: subtree, data: files }))
+                        return next(setAction(Actions.FileManager.UPLOAD , { subTree: subtree, data: files }))
 
                     })
                 })
             default:
-                console.log("Dataconverter frowarding ",action)
+                console.log("DataConverter forwarding ",action)
                 return next(action);
         }
     }
@@ -54,41 +53,32 @@ const getFileStructure = (items, subtree) => {
 
     return new Promise((R) => R(Array.from(items).map(item => {
         if (item instanceof DataTransferItem) item = item.webkitGetAsEntry();
-        if (item.isFile) {
-            let leaf = new SubTree(item.name)
-            leaf.setFrom({
+        if (item.isFile) { 
+            let leaf = {
                 name: item.name,
                 isFile: item.isFile,
                 children: null,
                 status: new Status("up", "init"),
-                path: subtree.path
-            })
-            //
-            leaf.setIndex(
-                [].concat(subtree.index,/*??*/ SubTreeHelper.addChildTo(subtree,leaf))
-            )
-            //
+                path: subtree.path,
+                index:[].concat(subtree.index, SubTreeHelper.addChildTo(subtree,leaf))
+            }
             return new Promise((resolve) => {
                 item.file((file) => {
-                    leaf.setData(file)
+                    leaf.data=file
                     resolve([leaf])
                 })
             });
         } else if (item.isDirectory) {
 
-            let subTree = new SubTree(item.name);
-            subTree.setFrom({
+            let subTree = {
                 name: item.name,
                 isFile: item.isFile,
                 children: [],
                 status: new Status("up", "init"),
-                path: subtree.path + item.name + "/"
-            })
-            // 
-            SubTreeHelper.setIndex(subTree, 
-                [].concat(subtree.index,
-                SubTreeHelper.addChildTo(subtree, subTree)))
-            // 
+                path: subtree.path + item.name + "/",
+                index:[].concat(subtree.index, SubTreeHelper.addChildTo(subtree, subTree))
+            }
+
             var dirReader = item.createReader();
                 
             return new Promise((resolve) => {

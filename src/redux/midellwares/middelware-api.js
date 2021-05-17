@@ -3,7 +3,6 @@ import { User, Folder, File, Tree,Error_log } from "../models/request"
 import { Status, SubTree } from "../models/subTree";
 import SubTreeHelper from "../models/subTreeHelper";
 
-//TODO restructure the Actions minimize to necessary  
 
 export default function apiService({getState , dispatch }) {
     console.log("apiMid ", dispatch)

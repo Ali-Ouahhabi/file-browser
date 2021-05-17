@@ -1,5 +1,3 @@
-//TODO action move file and folder
-
 const Actions = {
     ACTION: {
 
