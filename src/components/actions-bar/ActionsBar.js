@@ -34,7 +34,7 @@ class ActionsBar_ extends React.Component {
               <span className="menu-title">Upload</span>
             </div>
 
-            <div className="menu-block" onClick={this.props.OnRename}>
+            <div className="menu-block" onClick={this.props.OnCreate}>
               <span className="menu-icon">
                 <ImFolder /></span>
               <span className="menu-title">New</span>

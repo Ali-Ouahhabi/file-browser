@@ -104,31 +104,19 @@ export default function apiService({getState , dispatch }) {
                         switch (action.type[1]) {
                             case Actions.ACTION.CREATE:
                                 //dispatch loading status
-                                dispatch(
-                                    setAction(
-                                        Actions.FileManager.FOLDER.CREATE.LOCAL.LOADING,
-                                        action.payload
-                                    )
-                                )
+                                // dispatch(
+                                //     setAction(
+                                //         Actions.FileManager.FOLDER.CREATE.LOCAL.LOADING,
+                                //         action.payload
+                                //     )
+                                // )
                                 // create folder request
-                                Folder.folderCreate(action.payload)
-                                    .then((data) => {
-                                        dispatch(
-                                            setAction(
-                                                Actions.FileManager.FOLDER.CREATE.LOCAL.SUCCESS,
-                                                data
-                                            )
-                                        )
-                                    })
-                                    .catch((error) => {
-                                        dispatch(
-                                            setAction(
-                                                Actions.FileManager.FOLDER.CREATE.LOCAL.ERROR,
-                                                error
-                                            )
-                                        )
-                                    })
-                                return;
+                                SubTreeHelper.addChildTo(action.payload.branch,{
+                                    name:action.payload.name,
+                                    isFile:false,
+                                    status:new Status("s")
+                                })
+                                return next(setAction(Actions.Tree.UPDATE,getState().fileTree));
                             case Actions.ACTION.RENAME:
                                 //dispatch loading status
                                 // dispatch(

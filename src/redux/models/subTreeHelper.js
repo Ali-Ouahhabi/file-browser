@@ -11,6 +11,7 @@ export default class SubTreeHelper{
     }
 
     static addChildTo(subtree,subT) { 
+        console.log("addChildTo ",subtree)
         let index = subtree.children.push(subT) - 1 
         subT.index = [].concat(subtree.index,index)
         subT.path = subT.isFile?subtree.path:subtree.path+subT.name+"/"

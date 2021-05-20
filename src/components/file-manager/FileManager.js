@@ -96,6 +96,13 @@ class FileManager_ extends React.Component {
       setAction(Actions.DataConverter.RENAME,{newName:newName})
     )
   }
+  
+  OnCreate = () => {
+    var name = prompt("Please enter the folder name");
+    this.props.dispatch(
+      setAction(Actions.DataConverter.CREATE,{name:name})
+    )
+  }
 
   //TODO add OnCreate folder
 
@@ -116,6 +123,7 @@ class FileManager_ extends React.Component {
           OnUpload={this.OnUpload}
           OnRename={this.OnRename}
           OnRemove={this.OnRemove}
+          OnCreate={this.OnCreate}
         />
 
         <DndProvider backend={HTML5Backend}>

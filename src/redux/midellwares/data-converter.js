@@ -89,6 +89,14 @@ export default function DataConverter({ getState,dispatch }) {
                 }
                 return next(setAction(Actions.FileManager.FOLDER.RENAME.REMOTE,payload))
             }
+            case Actions.DataConverter.CREATE:{
+                let payload = {
+                    branch:getState().branch,
+                    name:action.payload.name
+                }
+                console.log(action.type,payload)
+                return next(setAction(Actions.FileManager.FOLDER.CREATE.REMOTE,payload))
+            }
             case Actions.DataConverter.SELECTED:
                 let self = action.payload.self;
                 let view = action.payload.view;
