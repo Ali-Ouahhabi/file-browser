@@ -79,16 +79,15 @@ export default function DataConverter({ getState,dispatch }) {
                 if(branch.isFile){
                 payload.req ={
                     ...payload.req,
-                    name:action.branch.name,
+                    name:branch.name,
                     newName:action.payload.newName
                 }}else{
                 payload.req ={
                     ...payload.req,
-                    newPath:newPath
+                    newPath:branch.path.replace(RegExp("/"+branch.name+"/$"),"/"+action.payload.newName+"/")
                 }
                 }
-                //return next(setAction(Actions.FileManager.FOLDER.DOWNLOAD.REMOTE,payload))
-                return;
+                return next(setAction(Actions.FileManager.FOLDER.RENAME.REMOTE,payload))
             }
             case Actions.DataConverter.SELECTED:
                 let self = action.payload.self;

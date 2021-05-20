@@ -26,7 +26,7 @@ export default class SubTreeHelper{
             subtree.path = newPath;
         }else{
             subtree.path = newPath+subtree.name+"/";
-            for(e in subtree.children){
+            for(let e in subtree.children){
                 SubTreeHelper.setNewPath(e,subtree.path)
             }
         }
@@ -36,11 +36,9 @@ export default class SubTreeHelper{
         if(subtree.isFile){
             subtree.name = newName;
         }else{
-            subtree.path.replace(RegExp("/"+subtree.name+"/$","/"+newName+"/"))
+            subtree.path=subtree.path.replace(RegExp("/"+subtree.name+"/$"),"/"+newName+"/")
             subtree.name= newName;
-            for(e in subtree.children){
-                SubTreeHelper.setNewPath(e,subtree.path)
-            }
+            subtree.children.forEach((e)=> SubTreeHelper.setNewPath(e,subtree.path))
         }
     }
 
