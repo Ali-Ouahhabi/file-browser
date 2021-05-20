@@ -91,8 +91,9 @@ class FileManager_ extends React.Component {
   }
 
   OnRename = () => {
+    var newName = prompt("Please enter a new name");
     this.props.dispatch(
-      setAction(Actions.DataConverter.RENAME)
+      setAction(Actions.DataConverter.RENAME,{newName:newName})
     )
   }
 
@@ -114,7 +115,7 @@ class FileManager_ extends React.Component {
           OnDownload={this.OnDownload}
           OnUpload={this.OnUpload}
           OnRename={this.OnRename}
-          OnRemove={this.OnRename}
+          OnRemove={this.OnRemove}
         />
 
         <DndProvider backend={HTML5Backend}>

@@ -131,21 +131,25 @@ export default function apiService({getState , dispatch }) {
                                 return;
                             case Actions.ACTION.RENAME:
                                 //dispatch loading status
-                                dispatch(
-                                    setAction(
-                                        Actions.FileManager.FOLDER.RENAME.LOCAL.LOADING,
-                                        action.payload
-                                    )
-                                )
+                                // dispatch(
+                                //     setAction(
+                                //         Actions.FileManager.FOLDER.RENAME.LOCAL.LOADING,
+                                //         action.payload
+                                //     )
+                                // )
                                 //rename folder request
-                                Folder.folderRename(action.payload)
+                                let branch = action.payload.branch
+                                if(branch.isFile)
+                                Folder.folderRename({      
+                                    isFile:action.payload.branch.isFile,
+                                    path:action.payload.branch.path,
+                                    name:action.payload.branch.name,
+                                    newName:action.payload.newName
+                                })
                                     .then((data) => {
-                                        dispatch(
-                                            setAction(
-                                                Actions.FileManager.FOLDER.RENAME.LOCAL.SUCCESS,
-                                                data
-                                            )
-                                        )
+                                        //FIXME only file is considered here not folders readjust !!!
+                                        action.payload.branch.name = action.payload.newName
+                                        return next(setAction(Actions.Tree.UPDATE,getState().fileTree))
                                     })
                                     .catch((error) => {
                                         dispatch(
@@ -155,6 +159,28 @@ export default function apiService({getState , dispatch }) {
                                             )
                                         )
                                     })
+                                    let path = action.payload.branch.path;
+                                    let name = action.payload.branch.name;
+                                    let newName = action.payload.newName;
+                                    let newPath = path.replace(new RegExp("/"+name + '/$'), "/"+newName+ '/')
+                                    Folder.folderRename({      
+                                        isFile:action.payload.branch.isFile,
+                                        path:action.payload.branch.path,
+                                        newPath:newPath,
+                                    })
+                                        .then((data) => {
+                                            //FIXME only file is considered here not folders readjust propNewPath||resetPath!!!
+                                            action.payload.branch.name = action.payload.newName
+                                            return next(setAction(Actions.Tree.UPDATE,getState().fileTree))
+                                        })
+                                        .catch((error) => {
+                                            dispatch(
+                                                setAction(
+                                                    Actions.FileManager.FOLDER.RENAME.LOCAL.ERROR,
+                                                    error
+                                                )
+                                            )
+                                        })
                                 return;
                             case Actions.ACTION.DELETE:
                                 return Folder.folderDelete({
@@ -184,6 +210,7 @@ export default function apiService({getState , dispatch }) {
                                 //     )
                                 // )
                                 //download folder request
+                                console.log("Calling download request")
                                 return Folder.folderDownload(action.payload)
                                     .then((data) => {
                                         // dispatch(
@@ -192,6 +219,20 @@ export default function apiService({getState , dispatch }) {
                                         //         data
                                         //     )
                                         // )
+                                        console.log("received Data",data)
+                                        let blb  = new Blob([data.data])
+                                        var objectUrl = URL.createObjectURL(blb);
+                                        const link = document.createElement('a');
+
+                                        link.href = objectUrl;
+                                        console.log("HEADERS",data.headers)
+                                        link.setAttribute('download', data.headers["content-disposition"]); //any other extension
+
+                                        document.body.appendChild(link);
+
+                                        link.click();
+
+                                        link.remove();
                                     })
                                     .catch((error) => {
                                         dispatch(

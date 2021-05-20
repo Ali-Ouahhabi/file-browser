@@ -8,6 +8,7 @@
     "@testing-library/react": "^11.2.5",
     "@testing-library/user-event": "^12.7.3",
     "axios": "^0.21.1",
+    "mime-types": "^2.1.30",
     "node-sass": "^5.0.0",
     "react": "^17.0.1",
     "react-dnd": "^13.1.1",

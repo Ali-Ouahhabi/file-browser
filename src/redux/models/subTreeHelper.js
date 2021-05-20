@@ -1,3 +1,4 @@
+//FIX ME on addnew child the path and the index should be set
 export default class SubTreeHelper{
 
     static removeElAt(subtree,index) {
@@ -22,6 +23,7 @@ export default class SubTreeHelper{
 
     static propStatus(subtree,status) {
         subtree.status=status;
+        if(subtree.isFile) return;
         if(subtree.children.length)subtree.children.forEach(e => SubTreeHelper.propStatus(e,status))
     }
 

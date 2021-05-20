@@ -145,20 +145,12 @@ function folderMove(payload){
 }
 
 function folderDownload(payload){
-    throw new Error(" api call folderDownload not implemented")
     return http({
-        url:"",
-        method:"",
-        params: {},
-        //'PUT', 'POST', 'DELETE , and 'PATCH'
-        data: {},//payload
-        withCredentials: true,
-        //HTTP Basic auth 
-        auth: {
-            username: '',
-            password: ''
-        },
-        responseType: 'json', // default
+        url:"/files/download",
+        method:"POST",
+        data: payload,
+        responseType: 'blob'
+       // headers:{'Content-Type': 'multipart/form-data'}// TODO ??
     })
 }
 
@@ -181,38 +173,18 @@ function folderCreate(payload){
 }
 
 function folderRename(payload){
-    throw new Error(" api call folderRename not implemented")
     return http({
-        url:"",
-        method:"PUT",
-        params: {},
-        //'PUT', 'POST', 'DELETE , and 'PATCH'
-        data: {},//payload
-        withCredentials: true,
-        //HTTP Basic auth 
-        auth: {
-            username: '',
-            password: ''
-        },
-        responseType: 'json', // default
+        url:"/files/rename",
+        method:"POST",
+        data: payload,
     })
 }
 
 function folderDelete(payload){
-    throw new Error(" api call folderDelete not implemented")
     return http({
-        url:"",
-        method:"DELETE",
-        params: {},
-        //'PUT', 'POST', 'DELETE , and 'PATCH'
-        data: {},//payload
-        withCredentials: true,
-        //HTTP Basic auth 
-        auth: {
-            username: '',
-            password: ''
-        },
-        responseType: 'json', // default
+        url:"/files/remove",
+        method:"POST",
+        data: payload,
     })
 }
 
