@@ -11,14 +11,37 @@ export default class SubTreeHelper{
     }
 
     static addChildTo(subtree,subT) { 
-        return subtree.children.push(subT) - 1 
+        let index = subtree.children.push(subT) - 1 
+        subT.index = [].concat(subtree.index,index)
+        subT.path = subT.isFile?subtree.path:subtree.path+subT.name+"/"
+        
     }
 
     static setIndex(subtree,index) { 
-        console.log("SubTreeHelper ","setIndex ")
-        console.log("subTree",subtree)
-        console.log("index ",index)
         subtree.index = index 
+    }
+
+    static setNewPath(subtree, newPath){
+        if(subtree.isFile){
+            subtree.path = newPath;
+        }else{
+            subtree.path = newPath+subtree.name+"/";
+            for(e in subtree.children){
+                SubTreeHelper.setNewPath(e,subtree.path)
+            }
+        }
+    }
+
+    static rename(subtree,newName){
+        if(subtree.isFile){
+            subtree.name = newName;
+        }else{
+            subtree.path.replace(RegExp("/"+subtree.name+"/$","/"+newName+"/"))
+            subtree.name= newName;
+            for(e in subtree.children){
+                SubTreeHelper.setNewPath(e,subtree.path)
+            }
+        }
     }
 
     static propStatus(subtree,status) {

@@ -67,10 +67,26 @@ export default function DataConverter({ getState,dispatch }) {
             }
             case Actions.DataConverter.RENAME:{
                 let branch = getState().branch
-                let payload={
+                let payload={ ref:{
                     branch:branch,
-                    newName:payload.newName
+                    newName:action.payload.newName
+                },
+                req:{
+                    isFile:branch.isFile,
+                    path:branch.path
+                }
                 };
+                if(branch.isFile){
+                payload.req ={
+                    ...payload.req,
+                    name:action.branch.name,
+                    newName:action.payload.newName
+                }}else{
+                payload.req ={
+                    ...payload.req,
+                    newPath:newPath
+                }
+                }
                 //return next(setAction(Actions.FileManager.FOLDER.DOWNLOAD.REMOTE,payload))
                 return;
             }
@@ -106,9 +122,9 @@ const getFileStructure = (items, subtree) => {
                 isFile: item.isFile,
                 children: null,
                 status: new Status("up", "init"),
-                path: subtree.path,
             }
-            leaf.index=[].concat(subtree.index, SubTreeHelper.addChildTo(subtree, leaf))
+            SubTreeHelper.addChildTo(subtree, leaf)
+
             return new Promise((resolve) => {
                 item.file((file) => {
                     leaf.data=file
@@ -121,10 +137,9 @@ const getFileStructure = (items, subtree) => {
                 name: item.name,
                 isFile: item.isFile,
                 children: [],
-                status: new Status("up", "init"),
-                path: subtree.path + item.name + "/"
+                status: new Status("up", "init")
             }
-            subTree.index=[].concat(subtree.index, SubTreeHelper.addChildTo(subtree, subTree))
+           SubTreeHelper.addChildTo(subtree, subTree);
 
             var dirReader = item.createReader();
                 

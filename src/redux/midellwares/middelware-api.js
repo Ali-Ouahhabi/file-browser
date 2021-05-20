@@ -138,17 +138,11 @@ export default function apiService({getState , dispatch }) {
                                 //     )
                                 // )
                                 //rename folder request
-                                let branch = action.payload.branch
-                                if(branch.isFile)
-                                Folder.folderRename({      
-                                    isFile:action.payload.branch.isFile,
-                                    path:action.payload.branch.path,
-                                    name:action.payload.branch.name,
-                                    newName:action.payload.newName
-                                })
+                                Folder.folderRename(      
+                                   action.payload.req
+                                   )
                                     .then((data) => {
-                                        //FIXME only file is considered here not folders readjust !!!
-                                        action.payload.branch.name = action.payload.newName
+                                        SubTreeHelper.rename(action.payload.ref.branch, action.payload.ref.newName)
                                         return next(setAction(Actions.Tree.UPDATE,getState().fileTree))
                                     })
                                     .catch((error) => {
@@ -159,28 +153,6 @@ export default function apiService({getState , dispatch }) {
                                             )
                                         )
                                     })
-                                    let path = action.payload.branch.path;
-                                    let name = action.payload.branch.name;
-                                    let newName = action.payload.newName;
-                                    let newPath = path.replace(new RegExp("/"+name + '/$'), "/"+newName+ '/')
-                                    Folder.folderRename({      
-                                        isFile:action.payload.branch.isFile,
-                                        path:action.payload.branch.path,
-                                        newPath:newPath,
-                                    })
-                                        .then((data) => {
-                                            //FIXME only file is considered here not folders readjust propNewPath||resetPath!!!
-                                            action.payload.branch.name = action.payload.newName
-                                            return next(setAction(Actions.Tree.UPDATE,getState().fileTree))
-                                        })
-                                        .catch((error) => {
-                                            dispatch(
-                                                setAction(
-                                                    Actions.FileManager.FOLDER.RENAME.LOCAL.ERROR,
-                                                    error
-                                                )
-                                            )
-                                        })
                                 return;
                             case Actions.ACTION.DELETE:
                                 return Folder.folderDelete({
