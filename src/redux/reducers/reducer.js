@@ -23,6 +23,7 @@ console.log("payload ",action.payload)
                         case Actions.ACTION.LOADING:
                             return { ...state, LOADING: true };
                         case Actions.ACTION.SUCCESS:
+                            localStorage.setItem("refresh", action.payload.data.refresh)
                             localStorage.setItem("jwt", action.payload.data.jwt)
                             return { ...state, connected: true };
                         case Actions.ACTION.ERROR:
@@ -39,6 +40,7 @@ console.log("payload ",action.payload)
                         case Actions.ACTION.SUCCESS:
                             //success
                             console.log("jwt", action.payload)
+                            localStorage.setItem("refresh", action.payload.data.refresh)
                             localStorage.setItem("jwt", action.payload.data.jwt)
                             return { ...state, connected: true };
                         case Actions.ACTION.ERROR:
