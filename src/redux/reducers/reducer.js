@@ -57,6 +57,7 @@ console.log("payload ",action.payload)
                             return;
                         case Actions.ACTION.SUCCESS:
                             localStorage.setItem("jwt", "")
+                            localStorage.setItem("refresh", action.payload.data.refresh)
                             return null;
                         case Actions.ACTION.ERROR:
                             //error

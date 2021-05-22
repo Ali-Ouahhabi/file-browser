@@ -195,6 +195,7 @@ export default function apiService({getState , dispatch }) {
                                         link.remove();
                                     })
                                     .catch((error) => {
+                                        console.log(action.type,error)
                                         dispatch(
                                             setAction(
                                                 Actions.FileManager.FOLDER.DOWNLOAD.LOCAL.ERROR,

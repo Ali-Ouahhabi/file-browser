@@ -31,18 +31,16 @@ request=>{
 http.interceptors.response.use(
     response=>{console.log("response ",response);return response},
     (error)=>{
-        console.log("ERRRPPRRR interceptor",error)
-        console.log("error.response ",error.response)
         if(error.response.status==403){
-            console.log("intercepted error",error)
-            userRefresh().then((data)=>{
+            return new Promise((resolve,reject)=> userRefresh().then((data)=>{
                 localStorage.setItem("jwt",data.data)
                 console.log("userRefresh Called resp ",data)
-                return http(error.config)
+                return http(error.config).then(resolve).catch(reject)
             }).catch(error=>{
                 localStorage.removeItem("jwt");
-                localStorage.removeItem("refresh")
-            })
+                localStorage.removeItem("refresh");
+                reject(error)
+            }))
         }
     }
 )
