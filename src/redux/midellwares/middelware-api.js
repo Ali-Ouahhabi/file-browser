@@ -42,12 +42,12 @@ export default function apiService({getState , dispatch }) {
                                 return;
                             case Actions.ACTION.SIGN_IN:
                                 //dispatch loading status
-                                next(
-                                    setAction(
-                                        Actions.UserManager.USER.SIGN_IN.LOCAL.LOADING,
-                                        action.payload
-                                    )
-                                )
+                                // next(
+                                //     setAction(
+                                //         Actions.UserManager.USER.SIGN_IN.LOCAL.LOADING,
+                                //         action.payload
+                                //     )
+                                // )
                                 // create file request
                                 User.userSignIn(action.payload)
                                     .then((data) => {
@@ -57,7 +57,7 @@ export default function apiService({getState , dispatch }) {
                                                 data
                                             )
                                         );
-                                        User.initSubtree().then((data)=>console.log("$$$$$$$",data))
+                                        User.initSubtree().then((data)=>console.log("$$$$$$$",data))//TODO recheck 
                                     })
                                     .catch((error) => {
                                         console.log(error)
@@ -71,16 +71,16 @@ export default function apiService({getState , dispatch }) {
                                 return;
                             case Actions.ACTION.LOG_OUT:
                                 //dispatch loading status
-                                dispatch(
-                                    setAction(
-                                        Actions.UserManager.USER.LOG_OUT.LOCAL.LOADING,
-                                        action.payload
-                                    )
-                                )
+                                // dispatch(
+                                //     setAction(
+                                //         Actions.UserManager.USER.LOG_OUT.LOCAL.LOADING,
+                                //         action.payload
+                                //     )
+                                // )
                                 // create file request
-                                User.userLogOut(action.payload)
+                                return User.userLogOut()
                                     .then((data) => {
-                                        dispatch(
+                                        next(
                                             setAction(
                                                 Actions.UserManager.USER.LOG_OUT.LOCAL.SUCCESS,
                                                 data
@@ -88,14 +88,14 @@ export default function apiService({getState , dispatch }) {
                                         )
                                     })
                                     .catch((error) => {
-                                        dispatch(
+                                        next(
                                             setAction(
                                                 Actions.UserManager.USER.LOG_OUT.LOCAL.ERROR,
                                                 error
                                             )
                                         )
                                     })
-                                return;
+                                
                             default:
                                 Error_log(action)
                                 return;
@@ -135,7 +135,7 @@ export default function apiService({getState , dispatch }) {
                                         return next(setAction(Actions.Tree.UPDATE,getState().fileTree))
                                     })
                                     .catch((error) => {
-                                        dispatch(
+                                        return next(
                                             setAction(
                                                 Actions.FileManager.FOLDER.RENAME.LOCAL.ERROR,
                                                 error
@@ -154,12 +154,12 @@ export default function apiService({getState , dispatch }) {
                                         return next(setAction(Actions.Tree.UPDATE,getState().fileTree))
                                     })
                                     .catch((error) => {
-                                        // dispatch(
-                                        //     setAction(
-                                        //         Actions.FileManager.FOLDER.DELETE.LOCAL.ERROR,
-                                        //         error
-                                        //     )
-                                        // )
+                                        return next(
+                                            setAction(
+                                                Actions.FileManager.FOLDER.DELETE.LOCAL.ERROR,
+                                                error
+                                            )
+                                        )
                                     })
                                 return;
                             case Actions.ACTION.DOWNLOAD:
@@ -197,7 +197,7 @@ export default function apiService({getState , dispatch }) {
                                     })
                                     .catch((error) => {
                                         console.log(action.type,error)
-                                        dispatch(
+                                        return next(
                                             setAction(
                                                 Actions.FileManager.FOLDER.DOWNLOAD.LOCAL.ERROR,
                                                 error
@@ -213,6 +213,15 @@ export default function apiService({getState , dispatch }) {
                                         SubTreeHelper.propStatus(subtree,new Status("sc", "uploaded"))
                                         let subtreeJs = JSON.stringify(subtree);                                     
                                         return next(setAction(Actions.Tree.UPDATE,getState().fileTree))
+                                    })
+                                    .catch((error) => {
+                                        console.log(action.type,error)
+                                        dispatch(
+                                            setAction(
+                                                Actions.FileManager.FOLDER.UPLOAD.LOCAL.ERROR,
+                                                error
+                                            )
+                                        )
                                     })
                             case Actions.ACTION.MOVE:
                                 let from=action.payload.from
@@ -231,7 +240,13 @@ export default function apiService({getState , dispatch }) {
 
                                     })
                                     .catch((error) => {
-                                        console.error(action.type,error)
+                                        console.log(action.type,error)
+                                        return next(
+                                            setAction(
+                                                Actions.FileManager.FOLDER.MOVE.LOCAL.ERROR,
+                                                error
+                                            )
+                                        )
                                     })
                             default:
                                 Error_log(action)
@@ -242,9 +257,18 @@ export default function apiService({getState , dispatch }) {
                             case Actions.ACTION.FETCH:
                                 return Tree.fetchTree(action.payload).then(
                                     (e)=>{
-                                        return refreshTree(e,next);
+                                        return next(setAction(
+                                            Actions.Tree.REFRESH.SUCCESS,
+                                            e.data
+                                        ))
                                     }
-                                        ).catch(e=>console.log("ERROR FETCHING TREE ",e));
+                                        )
+                                        .catch((e)=>{
+                                            return next(setAction(
+                                                Actions.Tree.REFRESH.ERROR,
+                                                e
+                                            ))
+                                        });
                             default:
                                 Error_log(action)
                                 return;
@@ -257,11 +281,4 @@ export default function apiService({getState , dispatch }) {
 }
 }
 
-
-function refreshTree(response,next){
-    return next(setAction(
-        Actions.Tree.REFRESH,
-        response.data
-    ))
-}
 

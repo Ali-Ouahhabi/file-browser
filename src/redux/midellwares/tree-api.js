@@ -8,9 +8,11 @@ export default function treeApi({ getState,dispatch }) {
             case Actions.Tree.UPDATE:
                 return Tree.updateTree(action.payload).then(resp=>{
                     return next(setAction(
-                        Actions.Tree.REFRESH,
+                        Actions.Tree.REFRESH.SUCCESS,
                         resp.data
                     ))
+                }).catch(error=>{
+                    return next(setAction(Actions.Tree.REFRESH.ERROR,error))
                 })
             default:
                 return next(action)

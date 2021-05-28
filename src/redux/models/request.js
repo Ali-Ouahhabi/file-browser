@@ -21,8 +21,8 @@ const http = axios.create({
   
 http.interceptors.request.use(
 request=>{
-    console.log("intercepted....."+localStorage.getItem("jwt"))
-    if(request.url.startsWith("/user"))
+    console.log("intercepted..... "+request.url,localStorage.getItem("jwt"))
+    if(request.url.startsWith("/user")&&!request.url.includes("logout"))
         return request
     request.headers["Authorization"]= "Bearer "+localStorage.getItem("jwt")
     return request;
@@ -37,9 +37,7 @@ http.interceptors.response.use(
                 console.log("userRefresh Called resp ",data)
                 return http(error.config).then(resolve).catch(reject)
             }).catch(error=>{
-                localStorage.removeItem("jwt");
-                localStorage.removeItem("refresh");
-                reject(error)
+                reject("logout")
             }))
         }
     }
@@ -53,7 +51,7 @@ function userSignIn(payload){
     })
 }
 
-function userLogOut(payload){
+function userLogOut(){
     return http({
         url:"/user/logout",
         method:"get",

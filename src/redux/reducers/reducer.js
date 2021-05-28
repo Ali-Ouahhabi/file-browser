@@ -56,9 +56,9 @@ console.log("payload ",action.payload)
                             throw new Error(" unimplemented functionality " + action.type.join("/"))
                             return;
                         case Actions.ACTION.SUCCESS:
-                            localStorage.setItem("jwt", "")
-                            localStorage.setItem("refresh", action.payload.data.refresh)
-                            return null;
+                            localStorage.removeItem("jwt")
+                            localStorage.removeItem("refresh")
+                            return { ...state, connected: false };
                         case Actions.ACTION.ERROR:
                             //error
                             throw new Error(" unimplemented functionality " + action.type.join("/"))

@@ -163,7 +163,12 @@ const Actions = {
     Tree:{
         FETCH:["TREE","FETCH", "REMOTE"],
         UPDATE:["TREE","UPDATE", "REMOTE"],
-        REFRESH:["TREE","REFRESH", "LOCAL"]
+        REFRESH:{
+            
+            LOADING: ["TREE","REFRESH", "LOCAL", "LOADING"],
+            SUCCESS: ["TREE","REFRESH", "LOCAL", "SUCCESS"],
+            ERROR: ["TREE","REFRESH", "LOCAL", "ERROR"]
+        }
     },
     SELECTED:["SELECTED","","LOCAL"]
 }
