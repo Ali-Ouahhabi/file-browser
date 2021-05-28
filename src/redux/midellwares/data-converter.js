@@ -4,7 +4,6 @@ import SubTreeHelper from "../models/subTreeHelper";
 import mime from "mime-types"
 // const MaxBatchSize = ??
 // TODO group by batch size 
-//TODO add OnCreate folder
 
 export default function DataConverter({ getState,dispatch }) {
     return (next) => (action) => {
@@ -29,7 +28,7 @@ export default function DataConverter({ getState,dispatch }) {
                                         "index":element.index,
                                         "lastModified":element.data.lastModified,
                                         "size":element.data.size,
-                                        "type":mime.lookup(element.data.type?element.data.type:element.name.split(".").pop())
+                                        "type":mime.lookup(element.data.type?element.data.type:element.name.split(".").pop())||"application/octet-stream"
                                     })
                                 }
                             })

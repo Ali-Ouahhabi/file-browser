@@ -16,7 +16,7 @@ class App_ extends React.Component {
     super(props);
   }
 
-  render() {
+  render() {//TODO huge cleaning || a router with a menu for a home page login/register logout 
     let display = this.props.connected||localStorage.getItem("jwt")?<FileManager/>:<SignInUp/>
     return (
       <div>

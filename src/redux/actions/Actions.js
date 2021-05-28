@@ -1,5 +1,5 @@
 const Actions = {
-    ACTION: {//TODO add remove in actions and file manager
+    ACTION: {
         USER: "USER",
         TREE:"TREE",
         FILE: "FILE",

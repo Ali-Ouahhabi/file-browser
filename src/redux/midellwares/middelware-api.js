@@ -114,6 +114,7 @@ export default function apiService({getState , dispatch }) {
                                 SubTreeHelper.addChildTo(action.payload.branch,{
                                     name:action.payload.name,
                                     isFile:false,
+                                    children:[],
                                     status:new Status("s")
                                 })
                                 return next(setAction(Actions.Tree.UPDATE,getState().fileTree));

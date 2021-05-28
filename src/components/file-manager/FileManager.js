@@ -23,7 +23,7 @@ class FileManager_ extends React.Component {
   }
 
   setTreeV(v) {
-    this.setState({ treeV: { ...v } })//TODO: should be replaced by dispatch refresh but until now it depend on the filtering functionality
+    this.setState({ treeV: { ...v } })
   }
   setFilterData(FilterDataObject) {
     this.setState({ filterData: { ...FilterDataObject } })
@@ -103,8 +103,6 @@ class FileManager_ extends React.Component {
       setAction(Actions.DataConverter.CREATE,{name:name})
     )
   }
-
-  //TODO add OnCreate folder
 
   componentDidMount(){
     this.props.dispatch(
