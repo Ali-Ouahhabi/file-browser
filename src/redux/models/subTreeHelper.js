@@ -1,9 +1,6 @@
 export default class SubTreeHelper{
 
     static removeElAt(subtree,index) {
-        console.log("removeElAt")
-        console.log("subtree ",subtree)
-        console.log("index ",index)
         if(index.length==0||!index) throw new Error("SubTreeHelper.removeElAt param2 can't be null or empty")
         let parent = SubTreeHelper.getSubtreeParentByIndex(subtree,index)
         if(index[index.length-1]==(parent.children.length-1)){
@@ -23,7 +20,7 @@ export default class SubTreeHelper{
         index.slice(0,index.length-1).forEach(i=>cursor=cursor.children[i])
         return cursor;
     }
-    
+
     static addChildTo(subtree,subT) { 
         console.log("addChildTo ",subtree)
         let index = subtree.children.push(subT) - 1 
