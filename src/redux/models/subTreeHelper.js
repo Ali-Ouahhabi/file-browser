@@ -1,15 +1,29 @@
-//FIX ME on addnew child the path and the index should be set
 export default class SubTreeHelper{
 
     static removeElAt(subtree,index) {
-        index.shift();
-        if (index.length > 1) {
-            SubTreeHelper.removeElAt(subtree.children[index[0]],index)
-        } else {
-            subtree.children = [...subtree.children.slice(0, index[0]), ...subtree.children.slice(index[0] + 1)]
+        console.log("removeElAt")
+        console.log("subtree ",subtree)
+        console.log("index ",index)
+        if(index.length==0||!index) throw new Error("SubTreeHelper.removeElAt param2 can't be null or empty")
+        let parent = SubTreeHelper.getSubtreeParentByIndex(subtree,index)
+        if(index[index.length-1]==(parent.children.length-1)){
+            subtree.children = subtree.children.slice(0, subtree.children.length-1);
+            return;
         }
+        subtree.children.slice(index[index.length-1] + 1).forEach(child=>{
+            child.index[index.length-1]=child.index[index.length-1]-1
+        })
+        subtree.children = [...subtree.children.slice(0, index[index.length-1]), ...subtree.children.slice(index[index.length-1] + 1)]
+        return;
     }
 
+    static getSubtreeParentByIndex(subtree,index){
+        if(index.length==0||!index) throw new Error("SubTreeHelper.getSubtreeParentByIndex param2 can't be null or empty")
+        let cursor = subtree;
+        index.slice(0,index.length-1).forEach(i=>cursor=cursor.children[i])
+        return cursor;
+    }
+    
     static addChildTo(subtree,subT) { 
         console.log("addChildTo ",subtree)
         let index = subtree.children.push(subT) - 1 
