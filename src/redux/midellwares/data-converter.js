@@ -9,6 +9,41 @@ export default function DataConverter({ getState,dispatch }) {
     return (next) => (action) => {
         console.log("..........",action)
         switch (action.type) {
+            case Actions.DataConverter.UPLOAD_File_Set:{
+                let items = action.payload.items;
+                let subtree = getState().branch||getState().fileTree;
+                let files = new FormData();
+                let meta = []
+                let size=0;
+                Array.from(items).forEach(element => {
+                    let leaf = {
+                        name: element.name,
+                        isFile: true,
+                        children: null,
+                        status: new Status("up", "init"),
+                        data: element
+                    }
+                    SubTreeHelper.addChildTo(subtree, leaf)
+                    console.log("file ",leaf.data)
+                    files.append("files", leaf.data);
+                    meta.push({
+                        "path": subtree.path,
+                        "name": leaf.name,
+                        "index":leaf.index,
+                        "lastModified":leaf.data.lastModified,
+                        "size":leaf.data.size,
+                        "type":mime.lookup(leaf.data.type?leaf.data.type:leaf.name.split(".").pop())||"application/octet-stream"
+                    })
+                    })
+                files.append(
+                    'metadata',
+                    new Blob(
+                        [JSON.stringify(meta)],
+                        { type: 'application/json' }
+                    )
+                );
+                return next(setAction(Actions.FileManager.FOLDER.UPLOAD.REMOTE , { subTree: subtree, data: files }))   
+                }
             case Actions.DataConverter.UPLOAD:
                 let items = action.payload.items;
                 let subtree = action.payload.subTree;
@@ -104,7 +139,7 @@ export default function DataConverter({ getState,dispatch }) {
                 if(tmpS.view) {
                     tmpS.view();
                 }
-                view.selected=true;
+                //view.selected=true;
                 tmpS.view=view;
                 tmpS.branch=self;
                 tmpS.view();

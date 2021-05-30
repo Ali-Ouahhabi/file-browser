@@ -70,7 +70,6 @@ class FileTag extends React.Component {
 				self:this.props.self,
 				view:this.selected
 		}))
-
 	}
 
 	selected(){

@@ -8,6 +8,12 @@ class ActionsBar_ extends React.Component {
 
   constructor(props){
     super(props);
+    this.input = React.createRef();
+    this.OnUpload = this.OnUpload.bind(this)
+  }
+
+  OnUpload(){
+   this.input.current.click()
   }
 
   render() {
@@ -28,9 +34,10 @@ class ActionsBar_ extends React.Component {
               <span className="menu-title">Download</span>
             </div>
 
-            <div className="menu-block" onClick={this.props.OnUpload}>
+            <div className="menu-block"  >
               <span className="menu-icon">
-                <ImCloudUpload /></span>
+                <ImCloudUpload onClick={this.OnUpload}/>
+                <input type="file" onChange={this.props.OnUpload} ref={this.input} style={{display:"none"}} multiple/></span>
               <span className="menu-title">Upload</span>
             </div>
 

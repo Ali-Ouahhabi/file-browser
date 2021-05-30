@@ -157,7 +157,8 @@ const Actions = {
         MOVE:"MOVE",
         DOWNLOAD: "DOWNLOAD",
         UPLOAD: "UPLOAD",
-        SELECTED:"SELECTED"
+        SELECTED:"SELECTED",
+        UPLOAD_File_Set: "UPLOAD_File_Set",
     },
 
     Tree:{

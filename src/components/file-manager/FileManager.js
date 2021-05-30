@@ -84,9 +84,21 @@ class FileManager_ extends React.Component {
     )
   }
 
-  OnUpload = ()=>{
+  OnUpload = (e)=>{
+    // console.log("target ",e.target.files)
+    // console.log("zzz ",e.target.value)
+    // e.target.webkitEntries.forEach(function(entry) {
+    //   console.log("upload ",entry)
+    // });
+    // e.target.files.forEach(function(entry) {
+    //   console.log("upload ",entry)
+    // });
+    //TODO: set new action type for single file upload in dataconverter set data then forward to midapi
     this.props.dispatch(
-      setAction(Actions.DataConverter.UPLOAD)
+      setAction(
+        Actions.DataConverter.UPLOAD_File_Set,
+        { items: e.target.files}
+      )
     )
   }
 

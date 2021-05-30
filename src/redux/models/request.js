@@ -84,7 +84,10 @@ function fileUpload(payload){
         url:"/files/uploads",
         method:"POST",
         data: payload,//payload
-    })
+        headers:{
+        'Content-Type': 'multipart/form-data'//TODO:!!!!!......TEST.......!!!!
+       }
+})
 }
 
 function fileDownload(payload){
