@@ -1,13 +1,13 @@
 import axios from "axios";
 
-const PORT=":"+8080;
+// const PORT=":"+8080;
 const BASE_URL= "https://dscp.herokuapp.com/api/v1";
 
 export default function isOfStructure(object, structure){
     let tmp = object;
 
     for(let i=0; i<structure.length; i++)
-        if(tmp[structure[i]]==undefined)
+        if(tmp[structure[i]]===undefined)
             return false;
 
     return true;
@@ -31,7 +31,7 @@ request=>{
 http.interceptors.response.use(
     response=>{console.log("response ",response);return response},
     (error)=>{
-        if(error.response.status==403){
+        if(error.response.status===403){
             return new Promise((resolve,reject)=> userRefresh().then((data)=>{
                 localStorage.setItem("jwt",data.data)
                 console.log("userRefresh Called resp ",data)
@@ -85,7 +85,7 @@ function fileUpload(payload){
         method:"POST",
         data: payload,//payload
         headers:{
-        'Content-Type': 'multipart/form-data'//TODO:!!!!!......TEST.......!!!!
+        'Content-Type': 'multipart/form-data'
        }
 })
 }
@@ -99,59 +99,59 @@ function fileDownload(payload){
     })
 }
 
-function fileCreate(payload){
-    throw new Error(" api call fileCreate not implemented")
-    return http({
-        url:"",
-        method:"",
-        params: {},
-        //'PUT', 'POST', 'DELETE , and 'PATCH'
-        data: {},//payload
-        withCredentials: true,
-        //HTTP Basic auth 
-        auth: {
-            username: '',
-            password: ''
-        },
-        responseType: 'json', // default
-    })
-}
+// function fileCreate(payload){
+//     throw new Error(" api call fileCreate not implemented")
+//     return http({
+//         url:"",
+//         method:"",
+//         params: {},
+//         //'PUT', 'POST', 'DELETE , and 'PATCH'
+//         data: {},//payload
+//         withCredentials: true,
+//         //HTTP Basic auth 
+//         auth: {
+//             username: '',
+//             password: ''
+//         },
+//         responseType: 'json', // default
+//     })
+// }
 
-function fileRename(payload){
-    throw new Error(" api call fileRename not implemented")
-    return http({
-        url:"",
-        method:"PUT",
-        params: {},
-        //'PUT', 'POST', 'DELETE , and 'PATCH'
-        data: {},//payload
-        withCredentials: true,
-        //HTTP Basic auth 
-        auth: {
-            username: '',
-            password: ''
-        },
-        responseType: 'json', // default
-    })
-}
+// function fileRename(payload){
+//     throw new Error(" api call fileRename not implemented")
+//     return http({
+//         url:"",
+//         method:"PUT",
+//         params: {},
+//         //'PUT', 'POST', 'DELETE , and 'PATCH'
+//         data: {},//payload
+//         withCredentials: true,
+//         //HTTP Basic auth 
+//         auth: {
+//             username: '',
+//             password: ''
+//         },
+//         responseType: 'json', // default
+//     })
+// }
 
-function fileDelete(payload){
-    throw new Error(" api call fileDelete not implemented")
-    return http({
-        url:"",
-        method:"DELETE",
-        params: {},
-        //'PUT', 'POST', 'DELETE , and 'PATCH'
-        data: {},//payload
-        withCredentials: true,
-        //HTTP Basic auth 
-        auth: {
-            username: '',
-            password: ''
-        },
-        responseType: 'json', // default
-    })
-}
+// function fileDelete(payload){
+//     throw new Error(" api call fileDelete not implemented")
+//     return http({
+//         url:"",
+//         method:"DELETE",
+//         params: {},
+//         //'PUT', 'POST', 'DELETE , and 'PATCH'
+//         data: {},//payload
+//         withCredentials: true,
+//         //HTTP Basic auth 
+//         auth: {
+//             username: '',
+//             password: ''
+//         },
+//         responseType: 'json', // default
+//     })
+// }
 
 function folderUpload(payload){
     return http({
@@ -179,23 +179,23 @@ function folderDownload(payload){
     })
 }
 
-function folderCreate(payload){
-    throw new Error(" api call folderCreate not implemented")
-    return http({
-        url:"",
-        method:"",
-        params: {},
-        //'PUT', 'POST', 'DELETE , and 'PATCH'
-        data: {},//payload
-        withCredentials: true,
-        //HTTP Basic auth 
-        auth: {
-            username: '',
-            password: ''
-        },
-        responseType: 'json', // default
-    })
-}
+// function folderCreate(payload){
+//     throw new Error(" api call folderCreate not implemented")
+//     return http({
+//         url:"",
+//         method:"",
+//         params: {},
+//         //'PUT', 'POST', 'DELETE , and 'PATCH'
+//         data: {},//payload
+//         withCredentials: true,
+//         //HTTP Basic auth 
+//         auth: {
+//             username: '',
+//             password: ''
+//         },
+//         responseType: 'json', // default
+//     })
+// }
 
 function folderRename(payload){
     return http({
@@ -214,21 +214,21 @@ function folderDelete(payload){
 }
 
 function Error_log(action){
-    throw new Error(" api call folderDelete not implemented")
-    return http({
-        url:"",
-        method:"POST",
-        params: {},
-        //'PUT', 'POST', 'DELETE , and 'PATCH'
-        data: {},//payload
-        withCredentials: true,
-        //HTTP Basic auth 
-        auth: {
-            username: '',
-            password: ''
-        },
-        responseType: 'json', // default
-    })
+    // throw new Error(" api call folderDelete not implemented")
+    // return http({
+    //     url:"",
+    //     method:"POST",
+    //     params: {},
+    //     //'PUT', 'POST', 'DELETE , and 'PATCH'
+    //     data: {},//payload
+    //     withCredentials: true,
+    //     //HTTP Basic auth 
+    //     auth: {
+    //         username: '',
+    //         password: ''
+    //     },
+    //     responseType: 'json', // default
+    // })
 }
 
 function fetchTree(payload){
@@ -253,7 +253,7 @@ const User = {
     initSubtree
 }
 const Folder = {
-    folderCreate,
+    // folderCreate,
     folderRename,
     folderDelete,
     folderDownload,
@@ -261,9 +261,9 @@ const Folder = {
     folderMove
 } 
 const File = {
-    fileCreate,
-    fileRename,
-    fileDelete,
+    // fileCreate,
+    // fileRename,
+    // fileDelete,
     fileDownload,
     fileUpload
 }

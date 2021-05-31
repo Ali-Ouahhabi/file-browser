@@ -6,7 +6,6 @@ import {
     Link,
     TextField,
 } from "@material-ui/core";
-import {User} from "../../redux/models/request";
 
 class Register extends React.Component {
     constructor(props) {

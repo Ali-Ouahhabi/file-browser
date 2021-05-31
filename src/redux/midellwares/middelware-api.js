@@ -1,6 +1,6 @@
 import { Actions, setAction } from "../actions/Actions"
-import { User, Folder, File, Tree,Error_log } from "../models/request"
-import { Status, SubTree } from "../models/subTree";
+import { User, Folder, Tree,Error_log } from "../models/request"
+import { Status } from "../models/subTree";
 import SubTreeHelper from "../models/subTreeHelper";
 
 
@@ -161,7 +161,6 @@ export default function apiService({getState , dispatch }) {
                                             )
                                         )
                                     })
-                                return;
                             case Actions.ACTION.DOWNLOAD:
                                 //dispatch loading status
                                 // dispatch(
@@ -204,14 +203,12 @@ export default function apiService({getState , dispatch }) {
                                             )
                                         )
                                     })
-                                return;
                             case Actions.ACTION.UPLOAD:
                                 let data = action.payload.data;
                                 let subtree = action.payload.subTree;
                                 return Folder.folderUpload(data)
                                     .then((data) => {
                                         SubTreeHelper.propStatus(subtree,new Status("sc", "uploaded"))
-                                        let subtreeJs = JSON.stringify(subtree);                                     
                                         return next(setAction(Actions.Tree.UPDATE,getState().fileTree))
                                     })
                                     .catch((error) => {
@@ -277,6 +274,8 @@ export default function apiService({getState , dispatch }) {
                 Error_log(action)
                 return;
         }
+        default:
+            return;
     }
 }
 }

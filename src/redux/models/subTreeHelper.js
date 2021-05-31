@@ -1,9 +1,9 @@
 export default class SubTreeHelper{
 
     static removeElAt(subtree,index) {
-        if(index.length==0||!index) throw new Error("SubTreeHelper.removeElAt param2 can't be null or empty")
+        if(index.length===0||!index) throw new Error("SubTreeHelper.removeElAt param2 can't be null or empty")
         let parent = SubTreeHelper.getSubtreeParentByIndex(subtree,index)
-        if(index[index.length-1]==(parent.children.length-1)){
+        if(index[index.length-1]===(parent.children.length-1)){
             subtree.children = subtree.children.slice(0, subtree.children.length-1);
             return;
         }
@@ -15,7 +15,7 @@ export default class SubTreeHelper{
     }
 
     static getSubtreeParentByIndex(subtree,index){
-        if(index.length==0||!index) throw new Error("SubTreeHelper.getSubtreeParentByIndex param2 can't be null or empty")
+        if(index.length===0||!index) throw new Error("SubTreeHelper.getSubtreeParentByIndex param2 can't be null or empty")
         let cursor = subtree;
         index.slice(0,index.length-1).forEach(i=>cursor=cursor.children[i])
         return cursor;

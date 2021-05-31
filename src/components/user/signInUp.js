@@ -1,7 +1,6 @@
 import React from "react";
 import LogIn from "./login";
 import Register from "./register";
-import {User} from "../../redux/models/request";
 import { Actions, setAction } from "../../redux/actions/Actions"
 import { connect } from "react-redux";
 function mapDispatchToProps(dispatch) {
@@ -24,14 +23,9 @@ class SignInUp_ extends React.Component {
     }
 
     request(user){
-        let request_ = this.state.signInUp?User.userSignIn:User.userRegister;
-        // let action = this.state.signInUp?Actions.UserManager.USER.SIGN_IN.REMOTE
         let path = this.state.signInUp?Actions.ACTION.SIGN_IN:Actions.ACTION.REGISTER
         let action = Actions.UserManager.USER[path].REMOTE
         this.props.dispatch(setAction(action,user));
-        // request_(user)
-        // .then(e=>console.log("then -> ",e.data.jwt))
-        // .catch(e=>console.log("then -> ",e));
     }
 
     render(){

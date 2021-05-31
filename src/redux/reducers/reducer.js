@@ -12,9 +12,8 @@ const initialState = {
 
 export default function reduce(state = initialState, action) {
 
-    if (action.type[2] == Actions.ACTION.REMOTE)
+    if (action.type[2] === Actions.ACTION.REMOTE)
         throw new Error("Reducer invalid actions " + action.type.join('/'))
-console.log("payload ",action.payload)
     switch (action.type[0]) {
         case Actions.ACTION.USER:
             switch (action.type[1]) {
@@ -29,9 +28,10 @@ console.log("payload ",action.payload)
                         case Actions.ACTION.ERROR:
                             //error
                             throw new Error(" unimplemented functionality " + action.type.join("/"))
-                            return;
+                            // return;
+                        default:
+                            return{state};                            
                     }
-                    return;
                 case Actions.ACTION.SIGN_IN:
                     switch (action.type[3]) {
                         case Actions.ACTION.LOADING:
@@ -46,15 +46,16 @@ console.log("payload ",action.payload)
                         case Actions.ACTION.ERROR:
                             //error
                             throw new Error(" unimplemented functionality " + action.type.join("/"))
-                            return;
+                            // return;
+                        default:
+                            return{state};
                     }
-                    return;
                 case Actions.ACTION.LOG_OUT:
                     switch (action.type[3]) {
                         case Actions.ACTION.LOADING:
                             //loading
                             throw new Error(" unimplemented functionality " + action.type.join("/"))
-                            return;
+                            // return;
                         case Actions.ACTION.SUCCESS:
                             localStorage.removeItem("jwt")
                             localStorage.removeItem("refresh")
@@ -62,9 +63,10 @@ console.log("payload ",action.payload)
                         case Actions.ACTION.ERROR:
                             //error
                             throw new Error(" unimplemented functionality " + action.type.join("/"))
-                            return;
+                            // return;
+                        default:
+                            return{state};
                     }
-                    return;
                 default:
                     return{state};
                 }
@@ -73,7 +75,7 @@ console.log("payload ",action.payload)
             switch (action.type[1]) {
                 case Actions.ACTION.REFRESH:
                     console.log(action.type,action.payload)
-                    if(action.payload!='')
+                    if(action.payload!=='')
                         return {...state,fileTree:action.payload};
                     else return state
                 case Actions.ACTION.UPDATE:
