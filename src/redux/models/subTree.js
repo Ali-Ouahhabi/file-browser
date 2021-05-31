@@ -21,7 +21,7 @@ export class SubTree {
 
     setFrom(dict) {
         if (dict["path"]) this.path = dict["path"];
-        if (dict["children"]) this.children = this.children;
+        if (dict["children"]) this.children = dict["children"];
         if (dict["name"]) this.name = dict["name"];
         if (dict["parent"]) this.parent = dict["parent"];
         if (dict["isFile"]) this.isFile = dict["isFile"];

@@ -1,5 +1,5 @@
 import { Actions, setAction } from "../actions/Actions"
-import { Status, SubTree } from "../models/subTree";
+import { Status } from "../models/subTree";
 import SubTreeHelper from "../models/subTreeHelper";
 import mime from "mime-types"
 // const MaxBatchSize = ??
@@ -14,7 +14,7 @@ export default function DataConverter({ getState,dispatch }) {
                 let subtree = getState().branch||getState().fileTree;
                 let files = new FormData();
                 let meta = []
-                let size=0;
+                //let size=0;
                 Array.from(items).forEach(element => {
                     let leaf = {
                         name: element.name,
@@ -51,7 +51,7 @@ export default function DataConverter({ getState,dispatch }) {
                     return Promise.all(e).then(leafs => {
                         let files = new FormData();
                         let meta = []
-                        let size=0;
+                        //let size=0;
                         Array.from(leafs).forEach(elements => {
                             Array.from(elements).forEach(element => {
                                 console.log("file ",element.data)

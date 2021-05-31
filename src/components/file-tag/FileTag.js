@@ -88,7 +88,6 @@ class FileTag extends React.Component {
 			if (this.props.self.children && this.state.isToggled) {
 				return this.props.self.children.map((child, index) => {
 					tmp = this.props.index.concat(index)
-					let view = {selected:false}
 					return (
 						<FileTagC key={index + child.name}
 							id={index}
@@ -138,29 +137,10 @@ const dropCall = {
 	},
 
 }
-function _typeof(obj) {
-	"@babel/helpers - typeof";
-	if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") {
-	  _typeof = function _typeof(obj) {
-		return typeof obj;
-	  };
-	} else {
-	  _typeof = function _typeof(obj) {
-		return obj &&
-		  typeof Symbol === "function" &&
-		  obj.constructor === Symbol &&
-		  obj !== Symbol.prototype
-		  ? "symbol"
-		  : typeof obj;
-	  };
-	}
-	return _typeof(obj);
-  }
+
 const dragContent = {
 	beginDrag(props, monitor, component) {
-		console.log("beginDrag _typeof ",_typeof(props.self))
-		console.log("beginDrag _typeof ", typeof props.self)
-		return props.self//instead we can use self 
+		return props.self; 
 	},
 }
 
