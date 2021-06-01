@@ -13,21 +13,68 @@ class Register extends React.Component {
         this.handleChange = this.handleChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
         this.state = {
-            firstName: "",
-            lastName: "",
-            email: "",
-            password: "",
+            data:{
+                firstName: "",
+                lastName: "",
+                email: "",
+                password: ""
+            },
+            error:{
+                firstName: {
+                    is:false,
+                    msg:"",
+                    check:()=>{}
+                },
+                lastName: {
+                    is:false,
+                    msg:"",
+                    check:()=>{}
+                },
+                email: {
+                    is:false,
+                    msg:"",
+                    check:(state)=>{
+                        if(/\S+@\S+\.\S+/.test(state.data.email))
+                        this.setState({error:{...state.error,email:{...state.error.email,
+                            is:false,
+                            msg:""
+                        }}})
+                        else
+                        this.setState({error:{...state.error,email:{...state.error.email,
+                            is:true,
+                            msg:"invalid email address"
+                        }}})
+
+                    }
+                },
+                password: {
+                    is:false,
+                    msg:"",
+                    check:(state)=>{
+                        if(state.data.password.length>=8)
+                        this.setState({error:{...state.error,password:{...state.error.password,
+                            is:false,
+                            msg:""
+                        }}})
+                        else
+                        this.setState({error:{...state.error,password:{...state.error.password,
+                            is:true,
+                            msg:"password should be at least 8 character"
+                        }}})
+                    }
+                },
+            }
         };
     }
 
     handleChange(event) {
-        this.setState({
-            [event.target.name]: event.target.value,
-        });
+        this.setState((state,props)=>{
+            return {...state, data:{ ...state.data, [event.target.name]: event.target.value }}
+        },this.state.error[event.target.name].check(this.state))
     }
 
     handleSubmit(){
-        this.props.request(this.state);
+        this.props.request(this.state.data);
     }
 
     render() {
@@ -48,6 +95,8 @@ class Register extends React.Component {
                                 autoFocus
                                 onChange={this.handleChange}
                                 value={this.state.firstName}
+                                helperText={this.state.error.firstName.msg}
+                                error={this.state.error.firstName.is}
                             />
                         </Grid>
                         <Grid item xs={12} sm={6}>
@@ -61,6 +110,8 @@ class Register extends React.Component {
                                 autoComplete="lname"
                                 onChange={this.handleChange}
                                 value={this.state.lastName}
+                                helperText={this.state.error.lastName.msg}
+                                error={this.state.error.lastName.is}
                             />
                         </Grid>
                         <Grid item xs={12}>
@@ -74,6 +125,8 @@ class Register extends React.Component {
                                 autoComplete="email"
                                 onChange={this.handleChange}
                                 value={this.state.email}
+                                helperText={this.state.error.email.msg}
+                                error={this.state.error.email.is}
                             />
                         </Grid>
                         <Grid item xs={12}>
@@ -88,6 +141,8 @@ class Register extends React.Component {
                                 autoComplete="current-password"
                                 onChange={this.handleChange}
                                 value={this.state.password}
+                                helperText={this.state.error.password.msg}
+                                error={this.state.error.password.is}
                             />
                         </Grid>
                     </Grid>
