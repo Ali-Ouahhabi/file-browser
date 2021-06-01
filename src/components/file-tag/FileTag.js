@@ -8,7 +8,7 @@ import { connect } from "react-redux";
 import Status from "../status/status";
 
 class FileTag extends React.Component {
-
+//TODO add size date maybe type sorting would be nice
 	state = {
 		isToggled: false,
 		selected:false
