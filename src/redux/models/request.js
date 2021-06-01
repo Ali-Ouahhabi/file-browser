@@ -1,7 +1,8 @@
 import axios from "axios";
 
-// const PORT=":"+8080;
-const BASE_URL= "https://dscp.herokuapp.com/api/v1";
+const PORT=":"+8080;
+// const BASE_URL= "https://dscp.herokuapp.com/api/v1";
+const BASE_URL= "http://localhost"+PORT+"/api/v1";
 
 export default function isOfStructure(object, structure){
     let tmp = object;
@@ -15,31 +16,34 @@ export default function isOfStructure(object, structure){
 
 const http = axios.create({
     baseURL: BASE_URL,
-    // timeout: 1000,
-    // headers: {'X-Custom-Header': 'foobar'}
+    validateStatus: function (status) {
+        return status >= 200 && status < 300;
+    },
   });
   
 http.interceptors.request.use(
 request=>{
-    console.log("intercepted..... "+request.url,localStorage.getItem("jwt"))
     if(request.url.startsWith("/user")&&!request.url.includes("logout"))
         return request
-    request.headers["Authorization"]= "Bearer "+localStorage.getItem("jwt")
+    if(localStorage.getItem("jwt"))
+        request.headers["Authorization"]= "Bearer "+localStorage.getItem("jwt")
+    else
+        request.headers["Authorization"]="";
     return request;
 })
 
 http.interceptors.response.use(
-    response=>{console.log("response ",response);return response},
+    response=>{return response},
     (error)=>{
         if(error.response.status===403){
             return new Promise((resolve,reject)=> userRefresh().then((data)=>{
                 localStorage.setItem("jwt",data.data)
-                console.log("userRefresh Called resp ",data)
                 return http(error.config).then(resolve).catch(reject)
             }).catch(error=>{
                 reject("logout")
             }))
         }
+        return new Promise((resolve,reject)=>reject(error))
     }
 )
 

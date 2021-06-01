@@ -3,6 +3,7 @@ import { Actions, setAction } from "../actions/Actions"
 
 export default function errorHandler({ getState,dispatch }) {
     return (next) => (action) => {
+
         if(action.type[3]===Actions.ACTION.ERROR)
         {
             if(action.payload ==="logout"){

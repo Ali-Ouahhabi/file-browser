@@ -8,7 +8,12 @@ function mapDispatchToProps(dispatch) {
       dispatch: todo => dispatch(todo)
     };
   }
-  
+
+const mapStateToProps = state => {
+    return {
+        signInUp: state.signInUp
+    };
+  };
 class SignInUp_ extends React.Component {
 
     constructor(props){
@@ -29,7 +34,19 @@ class SignInUp_ extends React.Component {
     }
 
     render(){
-        let display = this.state.signInUp?<LogIn request={this.request} revert={this.signInUp}/>:<Register request={this.request} revert={this.signInUp}/>
+        //TODO: add store props to access login and add an error display
+        // ( two case redirected refresh token expires in login or duplicate email address register ) 
+        let display = this.state.signInUp?<LogIn 
+                                                request={this.request} 
+                                                revert={this.signInUp}
+                                                error = {this.props.signInUp.logIn.error}
+                                                />
+                                        :
+                                        <Register 
+                                        request={this.request} 
+                                        revert={this.signInUp}
+                                        error = {this.props.signInUp.register.error}
+                                        />
         return (
             <div>{display}</div>
         )
@@ -37,7 +54,7 @@ class SignInUp_ extends React.Component {
 }
 
 const SignInUp = connect(
-    null,
+    mapStateToProps,
     mapDispatchToProps
   )( SignInUp_);
 

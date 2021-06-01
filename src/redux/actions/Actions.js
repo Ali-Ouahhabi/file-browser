@@ -175,7 +175,6 @@ const Actions = {
 }
 
 function setAction(actionType, payload) {
-    console.log(actionType,payload)
     return payload ? { type: actionType, payload } : { type: actionType, payload: "" }
 };
 

@@ -74,14 +74,17 @@ class Register extends React.Component {
     }
 
     handleSubmit(){
+        if(this.state.data.password.length>=8&&/\S+@\S+\.\S+/.test(this.state.data.email)&&this.state.data.firstName!=""&&this.state.data.lastName!="")
         this.props.request(this.state.data);
     }
 
     render() {
+        console.log("Register props error val",this.props);
         return (
             <Container component="main" maxWidth="xs">
                 <div>
                     <h1> Sign up </h1>
+                    <h4 style={{color:"#f44336","text-align":"center",padding:"1px"}}>{this.props.error}</h4>
                     <Grid container spacing={2}>
                         <Grid item xs={12} sm={6}>
                             <TextField
@@ -94,7 +97,7 @@ class Register extends React.Component {
                                 label="First Name"
                                 autoFocus
                                 onChange={this.handleChange}
-                                value={this.state.firstName}
+                                value={this.state.data.firstName}
                                 helperText={this.state.error.firstName.msg}
                                 error={this.state.error.firstName.is}
                             />
@@ -109,7 +112,7 @@ class Register extends React.Component {
                                 name="lastName"
                                 autoComplete="lname"
                                 onChange={this.handleChange}
-                                value={this.state.lastName}
+                                value={this.state.data.lastName}
                                 helperText={this.state.error.lastName.msg}
                                 error={this.state.error.lastName.is}
                             />
@@ -124,7 +127,7 @@ class Register extends React.Component {
                                 name="email"
                                 autoComplete="email"
                                 onChange={this.handleChange}
-                                value={this.state.email}
+                                value={this.state.data.email}
                                 helperText={this.state.error.email.msg}
                                 error={this.state.error.email.is}
                             />
@@ -140,7 +143,7 @@ class Register extends React.Component {
                                 id="password"
                                 autoComplete="current-password"
                                 onChange={this.handleChange}
-                                value={this.state.password}
+                                value={this.state.data.password}
                                 helperText={this.state.error.password.msg}
                                 error={this.state.error.password.is}
                             />

@@ -13,19 +13,57 @@ class LogIn extends React.Component {
          this.handleChange = this.handleChange.bind(this);
          this.handleSubmit = this.handleSubmit.bind(this);
          this.state = {
-         email:"",
-         password:""
-         }
+            data:{
+                email: "",
+                password: ""
+            },
+            error:{
+                email: {
+                    is:false,
+                    msg:"",
+                    check:(state)=>{
+                        if(/\S+@\S+\.\S+/.test(state.data.email))
+                        this.setState({error:{...state.error,email:{...state.error.email,
+                            is:false,
+                            msg:""
+                        }}})
+                        else
+                        this.setState({error:{...state.error,email:{...state.error.email,
+                            is:true,
+                            msg:"invalid email address"
+                        }}})
+
+                    }
+                },
+                password: {
+                    is:false,
+                    msg:"",
+                    check:(state)=>{
+                        if(state.data.password.length>=8)
+                        this.setState({error:{...state.error,password:{...state.error.password,
+                            is:false,
+                            msg:""
+                        }}})
+                        else
+                        this.setState({error:{...state.error,password:{...state.error.password,
+                            is:true,
+                            msg:"password should be at least 8 character"
+                        }}})
+                    }
+                },
+            }
+        };
    }
  
      handleChange(event){
-         this.setState({
-         [event.target.name]: event.target.value
-         });
+        this.setState((state,props)=>{
+            return {...state, data:{ ...state.data, [event.target.name]: event.target.value }}
+        },this.state.error[event.target.name].check(this.state))
      }
    
      handleSubmit(){
-         this.props.request(this.state);
+         if(this.state.data.password.length>=8&&/\S+@\S+\.\S+/.test(this.state.data.email))
+         this.props.request(this.state.data);
      }
 
      render(){
@@ -33,6 +71,7 @@ class LogIn extends React.Component {
             <Container component="main" maxWidth="xs">
             <div>
                 <h1> Log In </h1>
+                <h4 style={{color:"#f44336","text-align":"center",padding:"1px"}}>{this.props.error}</h4>
                 <Grid container spacing={2}>
                     <Grid item xs={12}>
                         <TextField
@@ -44,7 +83,9 @@ class LogIn extends React.Component {
                             name="email"
                             autoComplete="email"
                             onChange={this.handleChange}
-                            value={this.state.email}
+                            value={this.state.data.email}
+                            helperText={this.state.error.email.msg}
+                            error={this.state.error.email.is}
                         />
                     </Grid>
                     <Grid item xs={12}>
@@ -58,7 +99,9 @@ class LogIn extends React.Component {
                             id="password"
                             autoComplete="current-password"
                             onChange={this.handleChange}
-                            value={this.state.password}
+                            value={this.state.data.password}
+                            helperText={this.state.error.password.msg}
+                            error={this.state.error.password.is}
                         />
                     </Grid>
                 </Grid>

@@ -35,7 +35,7 @@ export default function apiService({getState , dispatch }) {
                                         next(
                                             setAction(
                                                 Actions.UserManager.USER.REGISTER.LOCAL.ERROR,
-                                                error
+                                                error.response
                                             )
                                         )
                                     })

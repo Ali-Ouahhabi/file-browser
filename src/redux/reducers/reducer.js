@@ -7,6 +7,14 @@ const initialState = {
         isFile:null,
         path:null,
         name:null
+    },
+    signInUp:{
+        logIn:{
+            error:""
+        },
+        register:{
+            error:""
+        }
     }
 }
 
@@ -26,9 +34,15 @@ export default function reduce(state = initialState, action) {
                             localStorage.setItem("jwt", action.payload.data.jwt)
                             return { ...state, connected: true };
                         case Actions.ACTION.ERROR:
-                            //error
-                            throw new Error(" unimplemented functionality " + action.type.join("/"))
-                            // return;
+                            console.log("register ",action.payload)
+                            if(action.payload.data.msg==="dupKey")
+                                return { ...state, 
+                                    signInUp:{ 
+                                        ...state.signInUp,
+                                        register:{
+                                            error:"Email address already in use"
+                                        }
+                                    } } ;
                         default:
                             return{state};                            
                     }
@@ -44,9 +58,13 @@ export default function reduce(state = initialState, action) {
                             localStorage.setItem("jwt", action.payload.data.jwt)
                             return { ...state, connected: true };
                         case Actions.ACTION.ERROR:
-                            //error
-                            throw new Error(" unimplemented functionality " + action.type.join("/"))
-                            // return;
+                            return { ...state, 
+                                signInUp:{ 
+                                    ...state.signInUp,
+                                    logIn:{
+                                        error:"Bad credentials"
+                                    }
+                                } } ;
                         default:
                             return{state};
                     }
@@ -59,11 +77,25 @@ export default function reduce(state = initialState, action) {
                         case Actions.ACTION.SUCCESS:
                             localStorage.removeItem("jwt")
                             localStorage.removeItem("refresh")
-                            return { ...state, connected: false };
+                            return { ...state, 
+                                connected: false, 
+                                signInUp:{ 
+                                    ...state.signInUp,
+                                    logIn:{
+                                        error:"You've been logged out"
+                                    }
+                                } };
                         case Actions.ACTION.ERROR:
-                            //error
-                            throw new Error(" unimplemented functionality " + action.type.join("/"))
-                            // return;
+                            if(localStorage.getItem("jwt"))localStorage.removeItem("jwt")
+                            if(localStorage.getItem("refresh"))localStorage.removeItem("refresh")
+                            return { ...state, 
+                                connected: false, 
+                                signInUp:{ 
+                                    ...state.signInUp,
+                                    logIn:{
+                                        error:"you've been unexpectedly logged out"
+                                    }
+                                } };
                         default:
                             return{state};
                     }
