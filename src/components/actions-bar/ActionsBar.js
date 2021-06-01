@@ -34,9 +34,9 @@ class ActionsBar_ extends React.Component {
               <span className="menu-title">Download</span>
             </div>
 
-            <div className="menu-block"  >
+            <div className="menu-block" onClick={this.OnUpload} >
               <span className="menu-icon">
-                <ImCloudUpload onClick={this.OnUpload}/>
+                <ImCloudUpload/>
                 <input type="file" onChange={this.props.OnUpload} ref={this.input} style={{display:"none"}} multiple/></span>
               <span className="menu-title">Upload</span>
             </div>
