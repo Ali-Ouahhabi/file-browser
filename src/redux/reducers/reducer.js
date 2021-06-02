@@ -15,11 +15,15 @@ const initialState = {
         register:{
             error:""
         }
+    },
+    notification:{
+        type:"",
+        message:""
     }
 }
 
 export default function reduce(state = initialState, action) {
-
+console.log("REDUCER <=",action);
     if (action.type[2] === Actions.ACTION.REMOTE)
         throw new Error("Reducer invalid actions " + action.type.join('/'))
     switch (action.type[0]) {
@@ -118,7 +122,47 @@ export default function reduce(state = initialState, action) {
             }
         case Actions.ACTION.SELECTED:
             return {...state,selected:action.payload} 
+        case Actions.ACTION.FOLDER:
+            switch (action.type[1]) {
+                case Actions.ACTION.CREATE:{
+                    return triggerNotifier(state,action.type[3],action.payload)
+                }
+                case Actions.ACTION.RENAME:{
+                    return triggerNotifier(state,action.type[3],action.payload)
+                }
+                case Actions.ACTION.DELETE:{
+                    console.log("DELETE",action.type)
+                    return triggerNotifier(state,action.type[3],action.payload)
+                }
+                case Actions.ACTION.DOWNLOAD:{
+                    return triggerNotifier(state,action.type[3],action.payload)
+                }
+                case Actions.ACTION.UPLOAD:{
+                    return triggerNotifier(state,action.type[3],action.payload)
+                }
+                case Actions.ACTION.MOVE:{
+                    return triggerNotifier(state,action.type[3],action.payload)
+                }    
+            }
         default:
             return state;
     }
+}
+
+function triggerNotifier(state,type,message){
+    console.log("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+    console.log("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+    console.log("triggerNotifier !!!!!!!!!!!!!!!!!!11");
+    console.log("type ",type);
+    console.log("message",message)
+    console.log("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+    console.log("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+
+    return {
+        ...state,    
+        notification:{
+            type:type,
+            message:message
+    }
+}
 }

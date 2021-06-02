@@ -3,6 +3,7 @@ import React from 'react';
 import FileManager from './components/file-manager/FileManager';
 import SignInUp from './components/user/signInUp';
 import { connect } from 'react-redux';
+import Notifier from './components/notifier/notifier';
 
 const mapStateToProps = state => {
   return { 
@@ -17,6 +18,7 @@ class App_ extends React.Component {
     return (
       <div>
         {display}
+        <Notifier/>
       </div>
     );
   }

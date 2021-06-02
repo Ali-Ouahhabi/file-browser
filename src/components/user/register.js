@@ -74,7 +74,7 @@ class Register extends React.Component {
     }
 
     handleSubmit(){
-        if(this.state.data.password.length>=8&&/\S+@\S+\.\S+/.test(this.state.data.email)&&this.state.data.firstName!=""&&this.state.data.lastName!="")
+        if(this.state.data.password.length>=8&&/\S+@\S+\.\S+/.test(this.state.data.email)&&this.state.data.firstName!==""&&this.state.data.lastName!=="")
         this.props.request(this.state.data);
     }
 

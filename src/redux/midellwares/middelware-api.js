@@ -22,7 +22,7 @@ export default function apiService({getState , dispatch }) {
                                     )
                                 )
                                 // create file request
-                                User.userRegister(action.payload)
+                                return User.userRegister(action.payload)
                                     .then((data) => {
                                         next(
                                             setAction(
@@ -39,17 +39,14 @@ export default function apiService({getState , dispatch }) {
                                             )
                                         )
                                     })
-                                return;
                             case Actions.ACTION.SIGN_IN:
-                                //dispatch loading status
-                                // next(
-                                //     setAction(
-                                //         Actions.UserManager.USER.SIGN_IN.LOCAL.LOADING,
-                                //         action.payload
-                                //     )
-                                // )
-                                // create file request
-                                User.userSignIn(action.payload)
+                                next(
+                                    setAction(
+                                        Actions.UserManager.USER.SIGN_IN.LOCAL.LOADING,
+                                        action.payload
+                                    )
+                                )
+                                return User.userSignIn(action.payload)
                                     .then((data) => {
                                         next(
                                             setAction(
@@ -68,16 +65,13 @@ export default function apiService({getState , dispatch }) {
                                             )
                                         )
                                     })
-                                return;
                             case Actions.ACTION.LOG_OUT:
-                                //dispatch loading status
-                                // dispatch(
-                                //     setAction(
-                                //         Actions.UserManager.USER.LOG_OUT.LOCAL.LOADING,
-                                //         action.payload
-                                //     )
-                                // )
-                                // create file request
+                                next(
+                                    setAction(
+                                        Actions.UserManager.USER.LOG_OUT.LOCAL.LOADING,
+                                        action.payload
+                                    )
+                                )
                                 return User.userLogOut()
                                     .then((data) => {
                                         next(
@@ -103,14 +97,12 @@ export default function apiService({getState , dispatch }) {
                     case Actions.ACTION.FOLDER:
                         switch (action.type[1]) {
                             case Actions.ACTION.CREATE:
-                                //dispatch loading status
-                                // dispatch(
-                                //     setAction(
-                                //         Actions.FileManager.FOLDER.CREATE.LOCAL.LOADING,
-                                //         action.payload
-                                //     )
-                                // )
-                                // create folder request
+                                next(
+                                    setAction(
+                                        Actions.FileManager.FOLDER.CREATE.LOCAL.LOADING,
+                                        action.payload
+                                    )
+                                )
                                 SubTreeHelper.addChildTo(action.payload.branch,{
                                     name:action.payload.name,
                                     isFile:false,
@@ -119,15 +111,13 @@ export default function apiService({getState , dispatch }) {
                                 })
                                 return next(setAction(Actions.Tree.UPDATE,getState().fileTree));
                             case Actions.ACTION.RENAME:
-                                //dispatch loading status
-                                // dispatch(
-                                //     setAction(
-                                //         Actions.FileManager.FOLDER.RENAME.LOCAL.LOADING,
-                                //         action.payload
-                                //     )
-                                // )
-                                //rename folder request
-                                Folder.folderRename(      
+                                next(
+                                    setAction(
+                                        Actions.FileManager.FOLDER.RENAME.LOCAL.LOADING,
+                                        action.payload
+                                    )
+                                )
+                                return Folder.folderRename(      
                                    action.payload.req
                                    )
                                     .then((data) => {
@@ -142,8 +132,13 @@ export default function apiService({getState , dispatch }) {
                                             )
                                         )
                                     })
-                                return;
                             case Actions.ACTION.DELETE:
+                                next(
+                                    setAction(
+                                        Actions.FileManager.FOLDER.DELETE.LOCAL.LOADING,
+                                        action.payload
+                                    )
+                                )
                                 return Folder.folderDelete({
                                     isFile:action.payload.isFile,
                                     path:action.payload.path,
@@ -162,15 +157,12 @@ export default function apiService({getState , dispatch }) {
                                         )
                                     })
                             case Actions.ACTION.DOWNLOAD:
-                                //dispatch loading status
-                                // dispatch(
-                                //     setAction(
-                                //         Actions.FileManager.FOLDER.DOWNLOAD.LOCAL.LOADING,
-                                //         action.payload
-                                //     )
-                                // )
-                                //download folder request
-                                console.log("Calling download request")
+                                next(
+                                    setAction(
+                                        Actions.FileManager.FOLDER.DOWNLOAD.LOCAL.LOADING,
+                                        action.payload
+                                    )
+                                )
                                 return Folder.folderDownload(action.payload)
                                     .then((data) => {
                                         // dispatch(
@@ -206,6 +198,12 @@ export default function apiService({getState , dispatch }) {
                             case Actions.ACTION.UPLOAD:
                                 let data = action.payload.data;
                                 let subtree = action.payload.subTree;
+                                next(
+                                    setAction(
+                                        Actions.FileManager.FOLDER.UPLOAD.LOCAL.LOADING,
+                                        action.payload
+                                    )
+                                )
                                 return Folder.folderUpload(data)
                                     .then((data) => {
                                         SubTreeHelper.propStatus(subtree,new Status("sc", "uploaded"))
@@ -228,6 +226,12 @@ export default function apiService({getState , dispatch }) {
                                     from:from.path,
                                     to:to.path
                                 }
+                                next(
+                                    setAction(
+                                        Actions.FileManager.FOLDER.MOVE.LOCAL.LOADING,
+                                        action.payload
+                                    )
+                                )
                                 return Folder.folderMove(tmp)
                                     .then((data) => {
                                         SubTreeHelper.removeElAt(getState().fileTree,from.index)
