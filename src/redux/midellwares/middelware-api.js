@@ -116,7 +116,6 @@ export default function apiService({getState , dispatch }) {
                                             Actions.FileManager.FOLDER.CREATE.LOCAL.ERROR,resp)
                                         )
                                 });
-                                return next(setAction(Actions.Tree.UPDATE,getState().fileTree));
                             case Actions.ACTION.RENAME:
                                 next(
                                     setAction(
