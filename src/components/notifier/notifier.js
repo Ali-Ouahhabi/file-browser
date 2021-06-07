@@ -27,36 +27,36 @@ class Notifier_ extends React.Component {
   componentDidUpdate(){
     console.log("NOTIFIER!!!!!!!!!!!!!!!!")
     console.log(this.props.notification)
-    this.show()
+     this.show()
   }
 
 
   render() {
     let display;
-    if (this.props.notification.msg) {
+    if (this.props.notification.message) {
       if (this.props.notification.type === Actions.ACTION.ERROR) {
         display = (
           <div className="notifier-error">
             <div className="icon"><BiErrorAlt /></div>
-            <div className="text">{this.props.notification.msg}</div>
+            <div className="text">{this.props.notification.message}</div>
           </div>
         )
       } else if (this.props.notification.type === Actions.ACTION.LOADING) {
         display = (<div className="notifier-loading">
           <div className="icon"> <PuffLoader></PuffLoader> </div>
-          <div className="text">{this.props.notification.msg}</div>
+          <div className="text">{this.props.notification.message}</div>
         </div>)
       } else if (this.props.notification.type === Actions.ACTION.SUCCESS) {
         display = (<div className="notifier-success">
           <div className="icon"><AiOutlineNotification /></div>
-          <div className="text">{this.props.notification.msg}</div>
+          <div className="text">{this.props.notification.message}</div>
         </div>)
       }
 
     }
   //   display = (<div className="notifier-loading">
   //   <div className="icon"> <PuffLoader></PuffLoader> </div>
-  //   <div className="text">{this.props.notification.msg}</div>
+  //   <div className="text">{"Loading something"}</div>
   // </div>);
 
 

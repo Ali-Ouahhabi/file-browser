@@ -109,13 +109,37 @@ console.log("REDUCER <=",action);
  
         case Actions.ACTION.TREE:
             switch (action.type[1]) {
-                case Actions.ACTION.REFRESH:
-                    console.log(action.type,action.payload)
-                    if(action.payload!=='')
-                        return {...state,fileTree:action.payload};
-                    else return state
-                case Actions.ACTION.UPDATE:
-                    return {...state,fileTree:action.payload};                
+                case Actions.ACTION.REFRESH:{
+                    switch (action.type[3]){
+                        case Actions.ACTION.LOADING:{
+                            return triggerNotifier(state,action.type[3],"Creating ...")
+                        }
+                        case Actions.ACTION.SUCCESS:{
+                            return {...state,fileTree:action.payload};
+                        }
+                        case Actions.ACTION.ERROR:{
+                            return triggerNotifier(state,action.type[3],"Error occurred while creating ...")
+                        }
+                        default:
+                            return;
+                    } 
+                }
+
+                case Actions.ACTION.UPDATE:{
+                    switch (action.type[3]){
+                        case Actions.ACTION.LOADING:{
+                            return triggerNotifier(state,action.type[3],"Creating ...")
+                        }
+                        case Actions.ACTION.SUCCESS:{
+                            return {...state,fileTree:action.payload};
+                        }
+                        case Actions.ACTION.ERROR:{
+                            return triggerNotifier(state,action.type[3],"Error occurred while creating ...")
+                        }
+                        default:
+                            return;
+                    } 
+                }            
                 default:
                     return state;
 
@@ -125,23 +149,95 @@ console.log("REDUCER <=",action);
         case Actions.ACTION.FOLDER:
             switch (action.type[1]) {
                 case Actions.ACTION.CREATE:{
-                    return triggerNotifier(state,action.type[3],action.payload)
+                    switch (action.type[3]){
+                        case Actions.ACTION.LOADING:{
+                            return triggerNotifier(state,action.type[3],"Creating ...")
+                        }
+                        case Actions.ACTION.SUCCESS:{
+                            return triggerNotifier(state,action.type[3],"... created successfully")
+                        }
+                        case Actions.ACTION.ERROR:{
+                            return triggerNotifier(state,action.type[3],"Error occurred while creating ...")
+                        }
+                        default:
+                            return;
+                    }           
                 }
                 case Actions.ACTION.RENAME:{
-                    return triggerNotifier(state,action.type[3],action.payload)
+                    switch (action.type[3]){
+                        case Actions.ACTION.LOADING:{
+                            return triggerNotifier(state,action.type[3],"Renaming ...")
+                        }
+                        case Actions.ACTION.SUCCESS:{
+                            return triggerNotifier(state,action.type[3],"... renamed successfully")
+                        }
+                        case Actions.ACTION.ERROR:{
+                            return triggerNotifier(state,action.type[3],"Error occurred while renaming ...")
+                        }
+                        default:
+                            return;
+                    }
                 }
                 case Actions.ACTION.DELETE:{
                     console.log("DELETE",action.type)
-                    return triggerNotifier(state,action.type[3],action.payload)
+                    switch (action.type[3]){
+                        case Actions.ACTION.LOADING:{
+                            return triggerNotifier(state,action.type[3],"Deleting ...")
+                        }
+                        case Actions.ACTION.SUCCESS:{
+                            return triggerNotifier(state,action.type[3],"... deleted successfully")
+                        }
+                        case Actions.ACTION.ERROR:{
+                            return triggerNotifier(state,action.type[3],"Error occurred while deleting ...")
+                        }
+                        default:
+                            return;
+                    }
                 }
                 case Actions.ACTION.DOWNLOAD:{
-                    return triggerNotifier(state,action.type[3],action.payload)
+                    switch (action.type[3]){
+                        case Actions.ACTION.LOADING:{
+                            return triggerNotifier(state,action.type[3],"Downloading ...")
+                        }
+                        case Actions.ACTION.SUCCESS:{
+                            return triggerNotifier(state,action.type[3],"... Downloaded successfully")
+                        }
+                        case Actions.ACTION.ERROR:{
+                            return triggerNotifier(state,action.type[3],"Error occurred while downloading ...")
+                        }
+                        default:
+                            return;
+                    }
                 }
                 case Actions.ACTION.UPLOAD:{
-                    return triggerNotifier(state,action.type[3],action.payload)
+                    switch (action.type[3]){
+                        case Actions.ACTION.LOADING:{
+                            return triggerNotifier(state,action.type[3],"Uploading ...")
+                        }
+                        case Actions.ACTION.SUCCESS:{
+                            return triggerNotifier(state,action.type[3],"... uploaded successfully")
+                        }
+                        case Actions.ACTION.ERROR:{
+                            return triggerNotifier(state,action.type[3],"Error occurred while uploading ...")
+                        }
+                        default:
+                            return;
+                    }
                 }
                 case Actions.ACTION.MOVE:{
-                    return triggerNotifier(state,action.type[3],action.payload)
+                    switch (action.type[3]){
+                        case Actions.ACTION.LOADING:{
+                            return triggerNotifier(state,action.type[3],"Moving ...")
+                        }
+                        case Actions.ACTION.SUCCESS:{
+                            return triggerNotifier(state,action.type[3],"... moved successfully")
+                        }
+                        case Actions.ACTION.ERROR:{
+                            return triggerNotifier(state,action.type[3],"Error occurred while")
+                        }
+                        default:
+                            return;
+                    }
                 }    
             }
         default:
@@ -150,13 +246,13 @@ console.log("REDUCER <=",action);
 }
 
 function triggerNotifier(state,type,message){
-    console.log("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
-    console.log("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
-    console.log("triggerNotifier !!!!!!!!!!!!!!!!!!11");
-    console.log("type ",type);
-    console.log("message",message)
-    console.log("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
-    console.log("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+    // console.log("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+    // console.log("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+    // console.log("triggerNotifier !!!!!!!!!!!!!!!!!!11");
+    // console.log("type ",type);
+    // console.log("message",message)
+    // console.log("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+    // console.log("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
 
     return {
         ...state,    

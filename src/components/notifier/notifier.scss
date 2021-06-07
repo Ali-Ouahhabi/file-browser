@@ -10,7 +10,7 @@
         width: fit-content;
         margin: auto;
         margin-top: 30%;
-        background-color: #b5bcca;
+        border-color: #b5bcca;
         display:inline-block;
         border-radius: 3px;
         border-color: #001e35;
@@ -19,6 +19,7 @@
         box-shadow: 4px 5px 5px 0px #000000;
         div{
             display:inline-block;
+            width: fit-content;
         }
     }
 }

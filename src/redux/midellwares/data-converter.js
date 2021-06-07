@@ -145,7 +145,6 @@ export default function DataConverter({ getState,dispatch }) {
                 tmpS.view();
                 return;
                 
-
             default:
                 console.log("DataConverter forwarding ",action)
                 return next(action);
