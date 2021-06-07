@@ -151,12 +151,14 @@ console.log("REDUCER <=",action);
                 case Actions.ACTION.CREATE:{
                     switch (action.type[3]){
                         case Actions.ACTION.LOADING:{
+                            console.log("Payload ",action.payload)
                             return triggerNotifier(state,action.type[3],"Creating ...")
                         }
                         case Actions.ACTION.SUCCESS:{
                             return triggerNotifier(state,action.type[3],"... created successfully")
                         }
                         case Actions.ACTION.ERROR:{
+                            console.log("Payload !",action.payload)
                             return triggerNotifier(state,action.type[3],"Error occurred while creating ...")
                         }
                         default:

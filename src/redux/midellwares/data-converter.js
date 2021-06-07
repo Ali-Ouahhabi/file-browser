@@ -5,6 +5,7 @@ import mime from "mime-types"
 // const MaxBatchSize = ??
 // TODO group by batch size 
 
+//TODO: check if folder is selected in the dependent actions 
 export default function DataConverter({ getState,dispatch }) {
     return (next) => (action) => {
         console.log("..........",action)
@@ -12,6 +13,7 @@ export default function DataConverter({ getState,dispatch }) {
             case Actions.DataConverter.UPLOAD_File_Set:{
                 let items = action.payload.items;
                 let subtree = getState().branch||getState().fileTree;
+                let reference = subtree.children.length
                 let files = new FormData();
                 let meta = []
                 //let size=0;
@@ -42,11 +44,12 @@ export default function DataConverter({ getState,dispatch }) {
                         { type: 'application/json' }
                     )
                 );
-                return next(setAction(Actions.FileManager.FOLDER.UPLOAD.REMOTE , { subTree: subtree, data: files }))   
+                return next(setAction(Actions.FileManager.FOLDER.UPLOAD.REMOTE , { subTree: subtree, data: files, reference: reference }))   
                 }
             case Actions.DataConverter.UPLOAD:
                 let items = action.payload.items;
                 let subtree = action.payload.subTree;
+                let reference =subtree.children.length;
                 return getFileStructure(items, subtree).then(e => {//TODO catch .......
                     return Promise.all(e).then(leafs => {
                         let files = new FormData();
@@ -75,8 +78,7 @@ export default function DataConverter({ getState,dispatch }) {
                                 { type: 'application/json' }
                             )
                         );
-                        return next(setAction(Actions.FileManager.FOLDER.UPLOAD.REMOTE , { subTree: subtree, data: files }))
-
+                        return next(setAction(Actions.FileManager.FOLDER.UPLOAD.REMOTE , { subTree: subtree, data: files, reference:reference })) 
                     })
                 })
             case Actions.DataConverter.DOWNLOAD:{

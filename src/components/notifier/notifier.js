@@ -21,7 +21,7 @@ class Notifier_ extends React.Component {
 
   show() {
     this.myRef.current.style.display = 'block'
-    setTimeout(this.hide,2000)
+    // setTimeout(this.hide,2000)
   }
 
   componentDidUpdate(){
@@ -54,10 +54,10 @@ class Notifier_ extends React.Component {
       }
 
     }
-  //   display = (<div className="notifier-loading">
-  //   <div className="icon"> <PuffLoader></PuffLoader> </div>
-  //   <div className="text">{"Loading something"}</div>
-  // </div>);
+    display = (<div className="notifier-loading">
+    <div className="icon"> <PuffLoader></PuffLoader> </div>
+    <div className="text">{"Loading something"}</div>
+  </div>);
 
 
     return (

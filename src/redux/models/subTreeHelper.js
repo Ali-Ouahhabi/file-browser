@@ -29,7 +29,7 @@ export default class SubTreeHelper{
         let index = subtree.children.push(subT) - 1 
         subT.index = [].concat(subtree.index,index)
         subT.path = subT.isFile?subtree.path:subtree.path+subT.name+"/"
-        
+        return subT;
     }
 
     static setIndex(subtree,index) { 

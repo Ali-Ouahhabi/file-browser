@@ -103,12 +103,19 @@ export default function apiService({getState , dispatch }) {
                                         action.payload
                                     )
                                 )
-                                SubTreeHelper.addChildTo(action.payload.branch,{
+                                let child = SubTreeHelper.addChildTo(action.payload.branch,{
                                     name:action.payload.name,
                                     isFile:false,
                                     children:[],
                                     status:new Status("s")
                                 })
+                                return Tree.updateTree(getState().fileTree).then().catch(resp=>{
+                                    SubTreeHelper.removeElAt(getState().fileTree,child.index);
+                                    return next(
+                                        setAction(
+                                            Actions.FileManager.FOLDER.CREATE.LOCAL.ERROR,resp)
+                                        )
+                                });
                                 return next(setAction(Actions.Tree.UPDATE,getState().fileTree));
                             case Actions.ACTION.RENAME:
                                 next(
@@ -197,7 +204,8 @@ export default function apiService({getState , dispatch }) {
                                     })
                             case Actions.ACTION.UPLOAD:
                                 let data = action.payload.data;
-                                let subtree = action.payload.subTree;
+                                let subtree = action.payload.subTree; 
+                                let reference = action.payload.reference;
                                 next(
                                     setAction(
                                         Actions.FileManager.FOLDER.UPLOAD.LOCAL.LOADING,
@@ -211,6 +219,7 @@ export default function apiService({getState , dispatch }) {
                                     })
                                     .catch((error) => {
                                         console.log(action.type,error)
+                                        subtree.children = subtree.children.slice(0,reference)
                                         dispatch(
                                             setAction(
                                                 Actions.FileManager.FOLDER.UPLOAD.LOCAL.ERROR,
