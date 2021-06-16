@@ -4,22 +4,58 @@
     height: 100%;
     top:0;
     left: 0;
-    text-align:center;
 
-    .notification{
-        width: fit-content;
-        margin: auto;
-        margin-top: 30%;
-        border-color: #b5bcca;
-        display:inline-block;
-        border-radius: 3px;
-        border-color: #001e35;
-        padding: 10px 30px;
-        -webkit-box-shadow: 4px 5px 5px 0px #000000; 
-        box-shadow: 4px 5px 5px 0px #000000;
-        div{
-            display:inline-block;
-            width: fit-content;
+
+        .notifier-error, .notifier-loading,.notifier-success{
+            margin: auto;
+
+            width: 300px;
+            margin-top: 30%;
+
+            border-color: #001e35;
+            border-width: 10px;
+            -webkit-box-shadow: 4px 5px 5px 0px #000000; 
+            box-shadow: 4px 5px 5px 0px #000000;
+            border-radius: 3px;
+
+            padding: 10px;
+            padding-left: 0;
+            display:flex;
+            align-items: center;
+            text-align: center;
+            .icon{
+                flex-grow: 1;
+                text-align: start;
+                max-width: 50px;
+                span{
+                    border-color: white;
+                }
+                svg{
+                    color: white;
+                    display: block;
+                    margin: auto;
+                }
+
+            }
+            .text{
+                flex-grow: 9;
+                font-size: smaller;
+                color: white;
+                border-left-style: solid ;
+                border-left-color: white ;
+                border-width: 1px;
+                padding: 4px;
+            }
         }
-    }
+
+        .notifier-error{
+            background-color: #820c0c;
+        }
+        .notifier-loading{
+            background-color: #18223b;;
+        }
+        .notifier-success{
+            background-color: #10a810;
+        }
+    
 }

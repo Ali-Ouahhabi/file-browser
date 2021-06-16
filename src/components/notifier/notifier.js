@@ -21,7 +21,7 @@ class Notifier_ extends React.Component {
 
   show() {
     this.myRef.current.style.display = 'block'
-    // setTimeout(this.hide,2000)
+    setTimeout(this.hide,2000)
   }
 
   componentDidUpdate(){
@@ -37,32 +37,27 @@ class Notifier_ extends React.Component {
       if (this.props.notification.type === Actions.ACTION.ERROR) {
         display = (
           <div className="notifier-error">
-            <div className="icon"><BiErrorAlt /></div>
+            <div className="icon"><BiErrorAlt size={25}/></div>
             <div className="text">{this.props.notification.message}</div>
           </div>
         )
       } else if (this.props.notification.type === Actions.ACTION.LOADING) {
         display = (<div className="notifier-loading">
-          <div className="icon"> <PuffLoader></PuffLoader> </div>
+          <div className="icon"> <PuffLoader size={25} ></PuffLoader> </div>
           <div className="text">{this.props.notification.message}</div>
         </div>)
       } else if (this.props.notification.type === Actions.ACTION.SUCCESS) {
         display = (<div className="notifier-success">
-          <div className="icon"><AiOutlineNotification /></div>
+          <div className="icon"><AiOutlineNotification size={25} /></div>
           <div className="text">{this.props.notification.message}</div>
         </div>)
       }
 
     }
-    display = (<div className="notifier-loading">
-    <div className="icon"> <PuffLoader></PuffLoader> </div>
-    <div className="text">{"Loading something"}</div>
-  </div>);
-
 
     return (
       <div className="notifier-container" ref={this.myRef} onClick={this.hide}>
-        <div className="notification">{display}</div>
+       {display}
       </div>
     );
   }
