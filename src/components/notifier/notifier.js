@@ -54,7 +54,7 @@ class Notifier_ extends React.Component {
       }
 
     }
-
+ 
     return (
       <div className="notifier-container" ref={this.myRef} onClick={this.hide}>
        {display}
