@@ -76,8 +76,7 @@ console.log("REDUCER <=",action);
                     switch (action.type[3]) {
                         case Actions.ACTION.LOADING:
                             //loading
-                            throw new Error(" unimplemented functionality " + action.type.join("/"))
-                            // return;
+                            return triggerNotifier(state,action.type[3],"Logging off ...")
                         case Actions.ACTION.SUCCESS:
                             localStorage.removeItem("jwt")
                             localStorage.removeItem("refresh")

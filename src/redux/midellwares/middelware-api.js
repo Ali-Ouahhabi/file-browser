@@ -109,7 +109,13 @@ export default function apiService({getState , dispatch }) {
                                     children:[],
                                     status:new Status("s")
                                 })
-                                return Tree.updateTree(getState().fileTree).then().catch(resp=>{
+                                return Tree.updateTree(getState().fileTree).then((resp)=>{
+                                    return next(
+                                        setAction(
+                                            Actions.FileManager.FOLDER.CREATE.LOCAL.SUCCESS,resp)
+                                        )
+                                    }
+                                ).catch(resp=>{
                                     SubTreeHelper.removeElAt(getState().fileTree,child.index);
                                     return next(
                                         setAction(
