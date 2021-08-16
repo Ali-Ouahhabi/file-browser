@@ -53,6 +53,8 @@ class Notifier_ extends React.Component {
         </div>)
       }
 
+    }else{
+      display =""
     }
  
     return (

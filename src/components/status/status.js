@@ -5,7 +5,11 @@ import PulseLoader from "react-spinners/PulseLoader"
 class Status extends React.Component {
 
   render() {
+
+    if(this.props.status == undefined) return "";
+
     console.log("this.props.status ",this.props.status)
+
     if(this.props.status.state==='up')
     return <PulseLoader class="loader"></PulseLoader>
     if(this.props.status.state==='er')

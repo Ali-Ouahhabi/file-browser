@@ -1,24 +1,36 @@
 import React from 'react';
-import { ImCloudUpload, ImCloudDownload, ImBin ,ImFolder} from "react-icons/im";
+import { ImCloudUpload, ImCloudDownload, ImBin, ImFolder } from "react-icons/im";
+import { RiLogoutCircleRLine } from "react-icons/ri";
 import { BiRename } from "react-icons/bi"
 import './ActionsBar.scss';
 import { connect } from 'react-redux';
 
 class ActionsBar_ extends React.Component {
 
-  constructor(props){
+  constructor(props) {
     super(props);
     this.input = React.createRef();
     this.OnUpload = this.OnUpload.bind(this)
   }
 
-  OnUpload(){
-   this.input.current.click()
+  OnUpload() {
+    this.input.current.click()
   }
 
   render() {
     return (
       <div className="ActionsBar">
+        <div className="gear">
+          <div className="logout-block" onClick={this.props.LogOut}>
+          <span class="logout-icon">
+              <RiLogoutCircleRLine />
+            </span>
+            <span class="logout-title">
+              logout
+            </span>
+
+          </div>
+        </div>
         <div className="header">
 
           <div className="logo">
@@ -36,8 +48,8 @@ class ActionsBar_ extends React.Component {
 
             <div className="menu-block" onClick={this.OnUpload} >
               <span className="menu-icon">
-                <ImCloudUpload/>
-                <input type="file" onChange={this.props.OnUpload} ref={this.input} style={{display:"none"}} multiple/></span>
+                <ImCloudUpload />
+                <input type="file" onChange={this.props.OnUpload} ref={this.input} style={{ display: "none" }} multiple /></span>
               <span className="menu-title">Upload</span>
             </div>
 
@@ -46,7 +58,7 @@ class ActionsBar_ extends React.Component {
                 <ImFolder /></span>
               <span className="menu-title">New</span>
             </div>
-            
+
             <div className="menu-block" onClick={this.props.OnRename}>
               <span className="menu-icon">
                 <BiRename /></span>
@@ -78,6 +90,6 @@ function mapDispatchToProps(dispatch) {
 const ActionsBar = connect(
   null,
   mapDispatchToProps
-)( ActionsBar_);
+)(ActionsBar_);
 
 export default ActionsBar;

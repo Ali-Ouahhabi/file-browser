@@ -87,7 +87,12 @@ console.log("REDUCER <=",action);
                                     logIn:{
                                         error:"You've been logged out"
                                     }
-                                } };
+                                }, 
+                                notification:{
+                                    type:action.type[3],
+                                    message:false
+                            }
+                            };
                         case Actions.ACTION.ERROR:
                             if(localStorage.getItem("jwt"))localStorage.removeItem("jwt")
                             if(localStorage.getItem("refresh"))localStorage.removeItem("refresh")

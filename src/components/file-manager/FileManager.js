@@ -107,6 +107,12 @@ class FileManager_ extends React.Component {
     )
   }
 
+  LogOut = () => {
+    this.props.dispatch(
+      setAction(Actions.UserManager.USER.LOG_OUT.REMOTE)
+    )
+  }
+
   componentDidMount(){
     this.props.dispatch(
       setAction(
@@ -125,6 +131,7 @@ class FileManager_ extends React.Component {
           OnRename={this.OnRename}
           OnRemove={this.OnRemove}
           OnCreate={this.OnCreate}
+          LogOut={this.LogOut}
         />
 
         <DndProvider backend={HTML5Backend}>

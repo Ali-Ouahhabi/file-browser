@@ -24,6 +24,31 @@ $color5: #03070d;
       }
     }
   }
+
+  .gear{
+    align-content: stretch;
+    display: flex;
+    flex-wrap: wrap;
+    .logout-block{
+      display: flex;
+      justify-content: flex-end;
+      span{
+        padding: 2px 2px;
+        font-size: 15px;
+      }
+     
+    }
+
+    .logout-block:hover{
+      span{
+        font-size: 16px;
+        text-decoration: underline;
+        cursor: pointer;
+      }
+    }
+
+  }
+
   .header {
 
     display: flex;

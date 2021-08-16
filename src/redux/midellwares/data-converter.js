@@ -2,6 +2,10 @@ import { Actions, setAction } from "../actions/Actions"
 import { Status } from "../models/subTree";
 import SubTreeHelper from "../models/subTreeHelper";
 import mime from "mime-types"
+
+	//TODO: check for duplicate name or path
+
+
 // const MaxBatchSize = ??
 // TODO group by batch size 
 

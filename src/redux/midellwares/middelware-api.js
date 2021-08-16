@@ -54,7 +54,6 @@ export default function apiService({getState , dispatch }) {
                                                 data
                                             )
                                         );
-                                        User.initSubtree().then((data)=>console.log("$$$$$$$",data))//TODO recheck 
                                     })
                                     .catch((error) => {
                                         console.log(error)
