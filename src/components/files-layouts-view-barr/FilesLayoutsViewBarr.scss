@@ -1,0 +1,25 @@
+$color1: #001e35; //#001e35
+$color2: #536073;
+$color3: #ffffff;
+$color4: #536073;
+$color5: #03070d;
+
+.FilesLayouts {
+    display: flex;
+    justify-content: flex-end;
+
+    .menu-block {
+        margin-bottom: 3px;
+        padding: 5px 8px;
+        display: inline-block;
+        flex-direction: column;
+        align-items: center;
+        width: min-content;
+        cursor: pointer;
+    }
+
+    .menu-block:hover {
+        background-color: $color1;
+        color: $color3;
+    }
+}

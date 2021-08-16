@@ -6,6 +6,7 @@ import { DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
 import { connect } from 'react-redux';
 import { Actions, setAction } from '../../redux/actions/Actions';
+import FilesLayoutsViewBarr from '../files-layouts-view-barr/FilesLayoutsViewBarr';
 
 class FileManager_ extends React.Component {
 
@@ -133,7 +134,7 @@ class FileManager_ extends React.Component {
           OnCreate={this.OnCreate}
           LogOut={this.LogOut}
         />
-
+        <FilesLayoutsViewBarr/>
         <DndProvider backend={HTML5Backend}>
           <div className="App" >
             <FileTag
