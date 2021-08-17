@@ -101,6 +101,9 @@ class FileTag extends React.Component {
 			}
 
 		}
+		
+		this.props.self.path = this.props.path
+		this.props.self.index = this.props.index
 
 		return ([
 			this.props.connectDragSource(this.props.connectDropTarget(
