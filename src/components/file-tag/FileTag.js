@@ -8,7 +8,7 @@ import { connect } from "react-redux";
 import Status from "../status/status";
 
 class FileTag extends React.Component {
-//TODO add size date maybe type sorting would be nice
+
 	state = {
 		isToggled: false,
 		selected:false
@@ -20,12 +20,6 @@ class FileTag extends React.Component {
 		this.onDrop =this.onDrop.bind(this)
 		this.selected =this.selected.bind(this)
 	}
-
-	getSelf() {
-		return this.props.self;
-	}
-
-
 
 	onDrop(props, monitor, component) {
 
@@ -55,12 +49,6 @@ class FileTag extends React.Component {
 
 	}
 
-	getPath() {
-		return (this.props.parent ? this.props.parent.getPath() : "") + (this.props.self.isFile ? "" : this.props.self.name + "/");
-	}
-
-	sortBy() { }
-
 	clicked(e) {
 		e.preventDefault();
 		this.setState({ isToggled: !this.state.isToggled });
@@ -76,9 +64,6 @@ class FileTag extends React.Component {
 		this.setState({ selected: !this.state.selected });
 	}
 
-	retry(){
-		
-	}
 
 	//add status
 	render() {
@@ -101,7 +86,7 @@ class FileTag extends React.Component {
 			}
 
 		}
-		
+
 		this.props.self.path = this.props.path
 		this.props.self.index = this.props.index
 
@@ -128,6 +113,7 @@ class FileTag extends React.Component {
 		])
 
 	}
+
 
 }
 
