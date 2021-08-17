@@ -150,7 +150,7 @@ export default function DataConverter({ getState,dispatch }) {
                 tmpS.view=view;
                 tmpS.branch=self;
                 tmpS.view();
-                return;
+                return next(setAction(Actions.SELECTED, {branch:tmpS.branch,view:tmpS.view}));
                 
             default:
                 console.log("DataConverter forwarding ",action)

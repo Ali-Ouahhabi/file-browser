@@ -5,8 +5,8 @@ import SubTreeHelper from "../models/subTreeHelper";
 
 
 export default function apiService({getState , dispatch }) {
-    console.log("apiMid ", dispatch)
     return (next) => (action) => {
+        console.log("apiMid ", action)
 
         switch (action.type[2]) {
             case Actions.ACTION.REMOTE:
@@ -288,12 +288,12 @@ export default function apiService({getState , dispatch }) {
                                 return;
                 }
             default:
-                Error_log(action)
-                return;
+                return next(action);
         }
         default:
-            return;
+            return next(action);
     }
+    
 }
 }
 

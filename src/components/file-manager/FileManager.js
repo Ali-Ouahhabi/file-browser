@@ -134,8 +134,9 @@ class FileManager_ extends React.Component {
 
   render() { //TODO try multi backend
     let panel = () => {
-      console.log("FM props.brance ",this.props.branch)
-        let element =this.state.layout == Layout.TREE? this.props.fileTree : this.props.branch || this.props.fileTree;
+      console.log("FM props.branch ",this.props.branch)
+      console.log("FM props.fileTree ",this.props.fileTree)
+        let element =((this.state.layout == Layout.TREE )? this.props.fileTree : (this.props.branch || this.props.fileTree));
         return <FileTag
           self={element}
           parent={null}

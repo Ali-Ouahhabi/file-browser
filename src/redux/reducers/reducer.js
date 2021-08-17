@@ -2,6 +2,7 @@ import { Actions } from "../actions/Actions";
 import {SubTree} from "../models/subTree"
 const initialState = {
     fileTree: new SubTree("root"),
+    branch:{},
     connected: false,
     selected:{
         isFile:null,
@@ -20,11 +21,10 @@ const initialState = {
         type:"",
         message:""
     },
-    branch:null
 }
 
 export default function reduce(state = initialState, action) {
-console.log("REDUCER <=",action);
+console.log("REDUCER ",action);
     if (action.type[2] === Actions.ACTION.REMOTE)
         throw new Error("Reducer invalid actions " + action.type.join('/'))
     switch (action.type[0]) {
@@ -150,7 +150,8 @@ console.log("REDUCER <=",action);
 
             }
         case Actions.ACTION.SELECTED:
-            return {...state,selected:action.payload} 
+            console.log("Reducer SELECTED ",action.payload)
+            return {...state,branch:action.payload.branch,view:action.payload.view} 
         case Actions.ACTION.FOLDER:
             switch (action.type[1]) {
                 case Actions.ACTION.CREATE:{
