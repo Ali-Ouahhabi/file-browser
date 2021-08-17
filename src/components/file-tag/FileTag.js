@@ -6,19 +6,20 @@ import { NativeTypes } from "react-dnd-html5-backend";
 import { Actions, setAction } from "../../redux/actions/Actions";
 import { connect } from "react-redux";
 import Status from "../status/status";
+import { Layout } from "../util/layout";
 
 class FileTag extends React.Component {
 
 	state = {
 		isToggled: false,
-		selected:false
+		selected: false
 	}
 
 	constructor(props) {
 		super(props);
-		this.clicked =this.clicked.bind(this)
-		this.onDrop =this.onDrop.bind(this)
-		this.selected =this.selected.bind(this)
+		this.clicked = this.clicked.bind(this)
+		this.onDrop = this.onDrop.bind(this)
+		this.selected = this.selected.bind(this)
 	}
 
 	onDrop(props, monitor, component) {
@@ -38,7 +39,7 @@ class FileTag extends React.Component {
 		} else {
 			let item = monitor.getItem()
 
-			if(this.props.self.children[item.index[item.index.length-1]]===item) return;
+			if (this.props.self.children[item.index[item.index.length - 1]] === item) return;
 			this.props.dispatch(
 				setAction(
 					Actions.FileManager.FOLDER.MOVE.REMOTE,
@@ -54,32 +55,47 @@ class FileTag extends React.Component {
 		this.setState({ isToggled: !this.state.isToggled });
 		this.props.dispatch(
 			setAction(
-				Actions.DataConverter.SELECTED,{
-				self:this.props.self,
-				view:this.selected
-		}))
+				Actions.DataConverter.SELECTED, {
+				self: this.props.self,
+				view: this.selected
+			}))
 	}
 
-	selected(){
+	selected() {
 		this.setState({ selected: !this.state.selected });
 	}
 
 
 	//add status
 	render() {
+		console.log("FileTag layout", this.props.layout)
+		if (this.props.layout == Layout.TREE)
+			return this.renderChildTreeView();
+		else if (this.props.layout == Layout.LIST)
+			return this.renderChildListView();
+		else if (this.props.layout == Layout.GRID)
+			return (<div>Not Done Yet!</div>);
+		else
+			return (<div>OPss</div>)
+
+	}
+
+	renderChildTreeView() {
 		let name = "file-tag-" + (this.props.self.isFile ? "file" : "folder")
 		let children = () => {
 			let tmp = []
 			if (this.props.self.children && this.state.isToggled) {
 				return this.props.self.children.map((child, index) => {
-					tmp = this.props.index.concat(index)
+
+					child.path = this.props.self.path + "/" + child.name
+					child.index = this.props.self.index.concat(index)
 					return (
-						<FileTagC key={index + child.name}
-							id={index}
-							index={tmp}
+						<FileTagC
+							key={child.index.join("")}
+							id={child.index.join("") + child.name}
 							parent={this}
 							self={child}
-							path={this.props.path + "/" + child.name}
+							layout={this.props.layout}
 						/>
 					)
 				})
@@ -87,13 +103,10 @@ class FileTag extends React.Component {
 
 		}
 
-		this.props.self.path = this.props.path
-		this.props.self.index = this.props.index
-
 		return ([
 			this.props.connectDragSource(this.props.connectDropTarget(
 				<div key="head"
-					className={name + (!this.props.self.isFile && this.props.isOver ? "-hover" : "") + (this.state.selected?"-selected":'')}
+					className={name + (!this.props.self.isFile && this.props.isOver ? "-hover" : "") + (this.state.selected ? "-selected" : '')}
 					onClick={this.clicked}
 				>
 					<div>{this.props.filter || ""}</div>
@@ -114,7 +127,71 @@ class FileTag extends React.Component {
 
 	}
 
+	renderChildListView() {
+		let children = () => {
+			let tmp = []
+			if (this.props.self.children && this.state.isToggled) {
+				return this.props.self.children.map((child, index) => {
+					child.path = this.props.self.path + "/" + child.name
+					child.index = this.props.self.index.concat(index);
+					if (child.isFile)
+						return (
+							this.props.connectDragSource(
+								<tr key={child.index.join("")}
+									id={child.index.join("")+child.name}
+									>
+									<th>
+										<span className={"file-tag-icon"}>
+											<ImFileText2 />
+										</span>
+									</th>
+									<th>{child.name}</th>
+									<th>{child.lastModified}</th>
+									<th>{child.type}</th>
+									<th>{child.size}</th>
+								</tr>
+							));
+					return (
+						this.props.connectDragSource(this.props.connectDropTarget(
+							<tr>
+								<th>
+									<span className={"file-tag-icon"}>
+										<ImFolder />
+									</span>
+								</th>
+								<th>{child.name}</th>
+								<th>{child.lastModified}</th>
+								<th>{child.type}</th>
+								<th>{child.size}</th>
+							</tr>
+						)))
+				});
+			}
 
+		}
+
+		this.props.self.path = this.props.self.path
+		this.props.self.index = this.props.self.index
+		return this.props.connectDropTarget((
+			<div className="rootListView">
+				<table>
+					<thead>
+						<tr>
+							<th></th>
+							<th>name</th>
+							<th>lastModified</th>
+							<th>type</th>
+							<th>size</th>
+						</tr>
+					</thead>
+					<tbody>
+						{children()}
+					</tbody>
+				</table>
+			</div>
+		))
+
+	}
 }
 
 const dropCall = {
@@ -129,7 +206,7 @@ const dropCall = {
 
 const dragContent = {
 	beginDrag(props, monitor, component) {
-		return props.self; 
+		return props.self;
 	},
 }
 

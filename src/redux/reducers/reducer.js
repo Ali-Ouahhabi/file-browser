@@ -19,7 +19,8 @@ const initialState = {
     notification:{
         type:"",
         message:""
-    }
+    },
+    branch:null
 }
 
 export default function reduce(state = initialState, action) {

@@ -7,6 +7,7 @@ import { HTML5Backend } from 'react-dnd-html5-backend';
 import { connect } from 'react-redux';
 import { Actions, setAction } from '../../redux/actions/Actions';
 import FilesLayoutsViewBarr from '../files-layouts-view-barr/FilesLayoutsViewBarr';
+import { Layout } from '../util/layout';
 
 class FileManager_ extends React.Component {
 
@@ -17,10 +18,12 @@ class FileManager_ extends React.Component {
       filterData: {
         isFirstCall: true,
         saveData: {}
-      }
+      },
+      layout: Layout.TREE
     }
 
     this.filtering = this.filtering.bind(this)
+    this.SetLayout = this.SetLayout.bind(this)
   }
 
   setTreeV(v) {
@@ -30,7 +33,7 @@ class FileManager_ extends React.Component {
     this.setState({ filterData: { ...FilterDataObject } })
   }
 
-//TODO: adjust 
+  //TODO: adjust 
   filtering(v) {
     if (this.state.filterData.isFirstCall) {
       this.setFilterData({
@@ -73,23 +76,23 @@ class FileManager_ extends React.Component {
     }
   }
 
-  OnRemove = ()=>{
+  OnRemove = () => {
     this.props.dispatch(
       setAction(Actions.DataConverter.DELETE)
     )
   }
 
-  OnDownload = ()=>{
+  OnDownload = () => {
     this.props.dispatch(
       setAction(Actions.DataConverter.DOWNLOAD)
     )
   }
 
-  OnUpload = (e)=>{
+  OnUpload = (e) => {
     this.props.dispatch(
       setAction(
         Actions.DataConverter.UPLOAD_File_Set,
-        { items: e.target.files}
+        { items: e.target.files }
       )
     )
   }
@@ -97,14 +100,14 @@ class FileManager_ extends React.Component {
   OnRename = () => {
     var newName = prompt("Please enter a new name");
     this.props.dispatch(
-      setAction(Actions.DataConverter.RENAME,{newName:newName})
+      setAction(Actions.DataConverter.RENAME, { newName: newName })
     )
   }
-  
+
   OnCreate = () => {
     var name = prompt("Please enter the folder name");
     this.props.dispatch(
-      setAction(Actions.DataConverter.CREATE,{name:name})
+      setAction(Actions.DataConverter.CREATE, { name: name })
     )
   }
 
@@ -114,7 +117,14 @@ class FileManager_ extends React.Component {
     )
   }
 
-  componentDidMount(){
+  SetLayout = (n) => {
+    console.log("FileM SetLayout",n)
+    if (n <= 2 && n >= 0) {
+      this.setState({ layout: n })
+    }
+  }
+
+  componentDidMount() {
     this.props.dispatch(
       setAction(
         Actions.Tree.FETCH
@@ -123,7 +133,19 @@ class FileManager_ extends React.Component {
   }
 
   render() { //TODO try multi backend
-    let view = {selected:false}
+    let panel = () => {
+      console.log("FM props.brance ",this.props.branch)
+        let element =this.state.layout == Layout.TREE? this.props.fileTree : this.props.branch || this.props.fileTree;
+        return <FileTag
+          self={element}
+          parent={null}
+          key={this.props.fileTree.index.join("")}
+          id={this.props.fileTree.index.join("")+this.props.fileTree.name}
+          layout = {this.state.layout}
+
+        />
+    }
+
     return (
       <div>
         <ActionsBar filtering={this.filtering}
@@ -134,15 +156,10 @@ class FileManager_ extends React.Component {
           OnCreate={this.OnCreate}
           LogOut={this.LogOut}
         />
-        <FilesLayoutsViewBarr/>
+        <FilesLayoutsViewBarr SetLayout={this.SetLayout} />
         <DndProvider backend={HTML5Backend}>
           <div className="App" >
-            <FileTag
-              self={this.props.fileTree}
-              index={[]}
-              path={"/" + this.props.fileTree.name}
-              view={view}
-            />
+            {panel()}
           </div>
         </DndProvider>
       </div>
@@ -153,7 +170,8 @@ class FileManager_ extends React.Component {
 
 const mapStateToProps = state => {
   return {
-    fileTree: state.fileTree
+    fileTree: state.fileTree,
+    branch: state.branch 
   };
 };
 

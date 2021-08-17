@@ -10,7 +10,7 @@ import mime from "mime-types"
 // TODO group by batch size 
 
 //TODO: check if folder is selected in the dependent actions 
-//TODO: sort files by name
+//TODO: move is not sort inserting !!!! Primary
 export default function DataConverter({ getState,dispatch }) {
     return (next) => (action) => {
         console.log("..........",action)
