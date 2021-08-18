@@ -74,7 +74,7 @@ class FileTag extends React.Component {
 		else if (this.props.layout == Layout.LIST)
 			return this.renderChildListView();
 		else if (this.props.layout == Layout.GRID)
-			return (<div>Not Done Yet!</div>);
+			return this.renderChildGridView();
 		else
 			return (<div>OPss</div>)
 
@@ -126,17 +126,18 @@ class FileTag extends React.Component {
 		])
 
 	}
-getDate(timestamp){
-	let date = new Date();
-	date.setTime(timestamp);
-	return date.toUTCString();
-}
-bytesToSize(bytes) {
-	var sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB'];
-	if (bytes == 0) return '0 Byte';
-	var i = parseInt(Math.floor(Math.log(bytes) / Math.log(1024)));
-	return Math.round(bytes / Math.pow(1024, i), 2) + ' ' + sizes[i];
- }
+	getDate(timestamp) {
+		let date = new Date();
+		date.setTime(timestamp);
+		return date.toUTCString();
+	}
+	bytesToSize(bytes) {
+		var sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB'];
+		if (bytes == 0) return '0 Byte';
+		var i = parseInt(Math.floor(Math.log(bytes) / Math.log(1024)));
+		return Math.round(bytes / Math.pow(1024, i), 2) + ' ' + sizes[i];
+	}
+	//TODO: check draggable and add pagination also the branch ref structure is not handlled in all function dataconverter  
 	renderChildListView() {
 		let children = () => {
 			let tmp = []
@@ -148,16 +149,16 @@ bytesToSize(bytes) {
 						return (
 							this.props.connectDragSource(
 								<tr key={child.index.join("")}
-									id={child.index.join("")+child.name}
-									>
+									id={child.index.join("") + child.name}
+								>
 									<td>
 										<span className={"file-tag-icon"}>
 											<ImFileText2 />
 										</span>
 									</td>
-									<td>{child.name.length>20?child.name.substring(0,20)+"...":child.name}</td>
+									<td>{child.name.length > 20 ? child.name.substring(0, 20) + "..." : child.name}</td>
 									<td>{this.getDate(child.meta.lastModified)}</td>
-									<td>{child.meta.type.length>20?child.meta.type.substring(0,20)+"...":child.meta.type}</td>
+									<td>{child.meta.type.length > 20 ? child.meta.type.substring(0, 20) + "..." : child.meta.type}</td>
 									<td>{this.bytesToSize(child.meta.size)}</td>
 								</tr>
 							));
@@ -169,7 +170,7 @@ bytesToSize(bytes) {
 										<ImFolder />
 									</span>
 								</td>
-								<td>{child.name.length>20?child.name.substring(0,20)+"...":child.name}</td>
+								<td>{child.name.length > 20 ? child.name.substring(0, 20) + "..." : child.name}</td>
 								<td>{"..."}</td>
 								<td>{"..."}</td>
 								<td>{"..."}</td>
@@ -198,6 +199,49 @@ bytesToSize(bytes) {
 						{children()}
 					</tbody>
 				</table>
+			</div>
+		))
+
+	}
+
+	renderChildGridView() {
+		let children = () => {
+			let tmp = []
+			if (this.props.self.children && this.state.isToggled) {
+				return this.props.self.children.map((child, index) => {
+					child.path = this.props.self.path + "/" + child.name
+					child.index = this.props.self.index.concat(index);
+					if (child.isFile)
+						return (
+							this.props.connectDragSource(
+								<div className="grid-file">
+									<span className={"file-tag-icon"}>
+										<ImFileText2 />
+									</span>
+									<span className={"file-tag-title"}>{child.name.length > 11 ? child.name.substring(0, 11) + ".." : child.name}</span>	
+								</div>
+							));
+					return (
+						this.props.connectDragSource(this.props.connectDropTarget(
+							<div className="grid-folder">
+								<span className={"file-tag-icon"}>
+									<ImFolder />
+								</span>
+								<span className={"file-tag-title"}>{child.name.length > 11 ? child.name.substring(0, 11) + ".." : child.name}</span>
+
+							</div>
+
+						)))
+				});
+			}
+
+		}
+
+		this.props.self.path = this.props.self.path
+		this.props.self.index = this.props.self.index
+		return this.props.connectDropTarget((
+			<div className="rootGridView">
+				{children()}
 			</div>
 		))
 

@@ -81,40 +81,41 @@ div {
   margin: auto;
   .list-view-table {
     border-collapse: separate;
-    border-spacing: 0 10px;
+    border-spacing: 0 5px;
     margin: 0 auto;
     thead {
+
       th {
         padding-left: 10px;
-        text-align: left;
-        background-color: $color1;
-        color: $color3;
-
+        text-align: center;
+        // background-color: $color1;
+        // color: $color3;
+        border-top: $color5 solid 2px;
       }
-      :first-child{
+      :first-child {
         border-radius: 5px 0 0 0;
+        border-left: $color5 solid 2px;
+        
       }
 
-      :last-child{
+      :last-child {
         border-radius: 0 5px 0 0;
+        border-right: $color5 solid 2px;
       }
-
     }
     tbody {
       text-align: left;
       table-layout: fixed;
+      padding:0px;
       tr {
         // line-height: 10px;
         height: 40px;
         margin-bottom: 100px;
-
-
-
       }
       tr:hover {
         background-color: $color1;
         color: $color3;
-        span{
+        span {
           border-left: solid 0px;
           height: 100%;
           margin-right: 2px;
@@ -122,21 +123,23 @@ div {
         }
       }
       td {
-        padding: 0px 10px 0px 0px;
+        padding: 0px 10px 0px 10px;
         max-width: 200px;
         min-width: 150px;
         line-clamp: 1;
         text-overflow: 123;
         text-align: center;
         // border-bottom: solid 1px;
-
       }
 
       :nth-child(1) {
+
         max-width: 20px;
         min-width: 20px;
-        span{
-          border-left: solid 5px;
+        border-left: solid 5px;
+
+        span {
+          border:none;
           height: 100%;
           margin-right: 2px;
           padding-bottom: 5px;
@@ -147,23 +150,69 @@ div {
         min-width: 150px;
         padding-left: 5px;
         text-align: left;
+        border-right: $color5 solid 1px;
+
       }
       :nth-child(3) {
         max-width: 205px;
         min-width: 155px;
+        border-right: $color5 solid 1px;
+
       }
       :nth-child(4) {
         max-width: 100px;
         min-width: 100px;
         word-break: break-all;
         max-height: 40px;
+        border-right: $color5 solid 1px;
+
       }
       :nth-child(5) {
         max-width: 150px;
         min-width: 30px;
-        padding: 0px 5px 0px 1px;
-
+        // padding: 0px 5px 0px 1px;
+        border-right: solid 5px;
       }
     }
+  }
+}
+
+.rootGridView {
+  display: inline-block;
+  margin: 10px;
+  div {
+    display: inline-block;
+    align-content: center;
+    min-width: 120px;
+    max-width: 120px;
+    min-height: 110px;
+    max-height: 110px;
+    margin: 0 auto;
+
+    span {
+      display: block;
+      position: relative;
+      text-align: center;
+    }
+    .file-tag-icon {
+      font-size: 50px;
+    }
+    .file-tag-title {
+      // width:100px;
+    }
+  }
+
+  div.grid-file:hover {
+    background-color: $color1;
+    color: $color3;
+    // border: 3px inset #18223b;
+    border-radius: 10px;
+  }
+  div.grid-folder:hover {
+    background-color: $color1;
+    color: $color3;
+    // border: 3px inset #18223b;
+    border-radius: 10px;
+
   }
 }
