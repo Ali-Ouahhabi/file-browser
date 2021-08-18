@@ -1,6 +1,7 @@
 import React from 'react';
 import './FilesLayoutsViewBarr.scss';
-import { CgDisplayGrid, CgListTree } from "react-icons/cg";
+import {CgListTree } from "react-icons/cg";
+import {BsGridFill} from "react-icons/bs"
 import { ImList } from "react-icons/im";
 import { Layout } from '../util/layout';
 
@@ -34,7 +35,7 @@ class FilesLayoutsViewBarr extends React.Component {
         </div>
         <div className="menu-block" onClick={(e)=>this.setLayout(e,Layout.GRID)}>
           <span className="menu-icon">
-            <CgDisplayGrid />
+            <BsGridFill />
           </span>
         </div>
       </div>

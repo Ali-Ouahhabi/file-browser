@@ -28,19 +28,20 @@ export default function DataConverter({ getState,dispatch }) {
                         isFile: true,
                         children: null,
                         status: new Status("up", "init"),
-                        data: element
+                        data: element,
+                        meta:{
+                            "path": subtree.path,
+                            "name": leaf.name,
+                            "index":leaf.index,
+                            "lastModified":leaf.data.lastModified,
+                            "size":leaf.data.size,
+                            "type":mime.lookup(leaf.data.type?leaf.data.type:leaf.name.split(".").pop())||"application/octet-stream"
+                        }
                     }
                     SubTreeHelper.addChildTo(subtree, leaf)
                     console.log("file ",leaf.data)
                     files.append("files", leaf.data);
-                    meta.push({
-                        "path": subtree.path,
-                        "name": leaf.name,
-                        "index":leaf.index,
-                        "lastModified":leaf.data.lastModified,
-                        "size":leaf.data.size,
-                        "type":mime.lookup(leaf.data.type?leaf.data.type:leaf.name.split(".").pop())||"application/octet-stream"
-                    })
+                    meta.push(leaf.meta)
                     })
                 files.append(
                     'metadata',
@@ -65,14 +66,15 @@ export default function DataConverter({ getState,dispatch }) {
                                 console.log("file ",element.data)
                                 if (element.isFile) {
                                     files.append("files", element.data);
-                                    meta.push({
+                                    element.meta = {
                                         "path": element.path,
                                         "name": element.name,
                                         "index":element.index,
                                         "lastModified":element.data.lastModified,
                                         "size":element.data.size,
                                         "type":mime.lookup(element.data.type?element.data.type:element.name.split(".").pop())||"application/octet-stream"
-                                    })
+                                    }
+                                    meta.push(element.meta)
                                 }
                             })
                         });

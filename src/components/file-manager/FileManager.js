@@ -19,7 +19,7 @@ class FileManager_ extends React.Component {
         isFirstCall: true,
         saveData: {}
       },
-      layout: Layout.TREE
+      layout: Layout.LIST
     }
 
     this.filtering = this.filtering.bind(this)

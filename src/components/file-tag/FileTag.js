@@ -126,7 +126,17 @@ class FileTag extends React.Component {
 		])
 
 	}
-
+getDate(timestamp){
+	let date = new Date();
+	date.setTime(timestamp);
+	return date.toUTCString();
+}
+bytesToSize(bytes) {
+	var sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB'];
+	if (bytes == 0) return '0 Byte';
+	var i = parseInt(Math.floor(Math.log(bytes) / Math.log(1024)));
+	return Math.round(bytes / Math.pow(1024, i), 2) + ' ' + sizes[i];
+ }
 	renderChildListView() {
 		let children = () => {
 			let tmp = []
@@ -140,29 +150,29 @@ class FileTag extends React.Component {
 								<tr key={child.index.join("")}
 									id={child.index.join("")+child.name}
 									>
-									<th>
+									<td>
 										<span className={"file-tag-icon"}>
 											<ImFileText2 />
 										</span>
-									</th>
-									<th>{child.name}</th>
-									<th>{child.lastModified}</th>
-									<th>{child.type}</th>
-									<th>{child.size}</th>
+									</td>
+									<td>{child.name.length>20?child.name.substring(0,20)+"...":child.name}</td>
+									<td>{this.getDate(child.meta.lastModified)}</td>
+									<td>{child.meta.type.length>20?child.meta.type.substring(0,20)+"...":child.meta.type}</td>
+									<td>{this.bytesToSize(child.meta.size)}</td>
 								</tr>
 							));
 					return (
 						this.props.connectDragSource(this.props.connectDropTarget(
 							<tr>
-								<th>
+								<td>
 									<span className={"file-tag-icon"}>
 										<ImFolder />
 									</span>
-								</th>
-								<th>{child.name}</th>
-								<th>{child.lastModified}</th>
-								<th>{child.type}</th>
-								<th>{child.size}</th>
+								</td>
+								<td>{child.name.length>20?child.name.substring(0,20)+"...":child.name}</td>
+								<td>{"..."}</td>
+								<td>{"..."}</td>
+								<td>{"..."}</td>
 							</tr>
 						)))
 				});
@@ -174,7 +184,7 @@ class FileTag extends React.Component {
 		this.props.self.index = this.props.self.index
 		return this.props.connectDropTarget((
 			<div className="rootListView">
-				<table>
+				<table className="list-view-table">
 					<thead>
 						<tr>
 							<th></th>

@@ -1,14 +1,14 @@
-$color1: #18223b;//#001e35; //#001e35
+$color1: #18223b; //#001e35; //#001e35
 $color2: #536073;
 $color3: #ffffff;
 $color4: #536073;
-$color5:#03070d;
+$color5: #03070d;
 div {
   color: $color1;
   width: 100%;
   border-color: $color3;
   .file-tag-folder {
-//    background-color: $color3;
+    //    background-color: $color3;
     display: inline-block;
     width: 100%;
     border: solid 1px;
@@ -18,7 +18,7 @@ div {
     padding: 1px;
   }
 
-  .file-tag-folder-hover{
+  .file-tag-folder-hover {
     background-color: $color1;
     color: $color3;
     border-color: $color3;
@@ -31,7 +31,7 @@ div {
   .file-tag-folder-selected,
   .file-tag-folder-hover-selected,
   .file-tag-file-selected,
-  .file-tag-file-hover-selected{
+  .file-tag-file-hover-selected {
     background-color: $color1;
     color: $color3;
     border-style: dashed;
@@ -39,7 +39,7 @@ div {
   }
 
   .file-tag-file {
-//    background-color: $color3;
+    //    background-color: $color3;
     display: inline-block;
     width: 100%;
     border-bottom: solid 1px;
@@ -74,5 +74,96 @@ div {
   .file-tag-name {
     padding-left: 5px;
   }
+}
 
+.rootListView {
+  // width: 900px;
+  margin: auto;
+  .list-view-table {
+    border-collapse: separate;
+    border-spacing: 0 10px;
+    margin: 0 auto;
+    thead {
+      th {
+        padding-left: 10px;
+        text-align: left;
+        background-color: $color1;
+        color: $color3;
+
+      }
+      :first-child{
+        border-radius: 5px 0 0 0;
+      }
+
+      :last-child{
+        border-radius: 0 5px 0 0;
+      }
+
+    }
+    tbody {
+      text-align: left;
+      table-layout: fixed;
+      tr {
+        // line-height: 10px;
+        height: 40px;
+        margin-bottom: 100px;
+
+
+
+      }
+      tr:hover {
+        background-color: $color1;
+        color: $color3;
+        span{
+          border-left: solid 0px;
+          height: 100%;
+          margin-right: 2px;
+          // padding-bottom: 1ex;
+        }
+      }
+      td {
+        padding: 0px 10px 0px 0px;
+        max-width: 200px;
+        min-width: 150px;
+        line-clamp: 1;
+        text-overflow: 123;
+        text-align: center;
+        // border-bottom: solid 1px;
+
+      }
+
+      :nth-child(1) {
+        max-width: 20px;
+        min-width: 20px;
+        span{
+          border-left: solid 5px;
+          height: 100%;
+          margin-right: 2px;
+          padding-bottom: 5px;
+        }
+      }
+      :nth-child(2) {
+        max-width: 200px;
+        min-width: 150px;
+        padding-left: 5px;
+        text-align: left;
+      }
+      :nth-child(3) {
+        max-width: 205px;
+        min-width: 155px;
+      }
+      :nth-child(4) {
+        max-width: 100px;
+        min-width: 100px;
+        word-break: break-all;
+        max-height: 40px;
+      }
+      :nth-child(5) {
+        max-width: 150px;
+        min-width: 30px;
+        padding: 0px 5px 0px 1px;
+
+      }
+    }
+  }
 }
