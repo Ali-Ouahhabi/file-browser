@@ -8,6 +8,7 @@ import { connect } from "react-redux";
 import Status from "../status/status";
 import { Layout } from "../util/layout";
 
+
 class FileTag extends React.Component {
 
 	state = {
@@ -246,6 +247,8 @@ class FileTag extends React.Component {
 		))
 
 	}
+
+
 }
 
 const dropCall = {

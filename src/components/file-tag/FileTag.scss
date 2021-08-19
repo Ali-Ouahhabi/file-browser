@@ -115,12 +115,7 @@ div {
       tr:hover {
         background-color: $color1;
         color: $color3;
-        span {
-          border-left: solid 0px;
-          height: 100%;
-          margin-right: 2px;
-          // padding-bottom: 1ex;
-        }
+
       }
       td {
         padding: 0px 10px 0px 10px;
@@ -129,20 +124,22 @@ div {
         line-clamp: 1;
         text-overflow: 123;
         text-align: center;
-        // border-bottom: solid 1px;
       }
 
       :nth-child(1) {
 
         max-width: 20px;
         min-width: 20px;
-        border-left: solid 5px;
+        border-left: solid 2px;
 
         span {
           border:none;
           height: 100%;
           margin-right: 2px;
           padding-bottom: 5px;
+          svg{
+            border:none;
+          }
         }
       }
       :nth-child(2) {
@@ -171,7 +168,7 @@ div {
         max-width: 150px;
         min-width: 30px;
         // padding: 0px 5px 0px 1px;
-        border-right: solid 5px;
+        border-right: solid 2px;
       }
     }
   }
@@ -180,7 +177,7 @@ div {
 .rootGridView {
   display: inline-block;
   margin: 10px;
-  div {
+  div.grid-file, div.grid-folder {
     display: inline-block;
     align-content: center;
     min-width: 120px;
@@ -197,22 +194,15 @@ div {
     .file-tag-icon {
       font-size: 50px;
     }
-    .file-tag-title {
-      // width:100px;
-    }
+
   }
 
-  div.grid-file:hover {
-    background-color: $color1;
-    color: $color3;
-    // border: 3px inset #18223b;
-    border-radius: 10px;
-  }
-  div.grid-folder:hover {
-    background-color: $color1;
-    color: $color3;
-    // border: 3px inset #18223b;
-    border-radius: 10px;
-
+  div.grid-file:hover, div.grid-folder:hover  {
+    // background-color: $color1;
+    background-image: radial-gradient(circle, #dcdce1, #e2e2e6, #e8e8ec, #efeff1, #f5f5f7);
+    cursor: pointer;
   }
 }
+
+
+

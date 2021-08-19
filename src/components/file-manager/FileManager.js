@@ -9,6 +9,14 @@ import { Actions, setAction } from '../../redux/actions/Actions';
 import FilesLayoutsViewBarr from '../files-layouts-view-barr/FilesLayoutsViewBarr';
 import { Layout } from '../util/layout';
 
+
+//TODO: we have selected branche and displayed or curent branch
+// in the init state the root brache is the curent branch the selected branch is also the root 
+// at curenet branch on subtree
+// the selected branch can only be the sub of the sub tree so??
+// you define curenet and selected branch whe nothin is selected point to the curent by default
+// also at init the root branch is the curent view.
+// need also to defin a pointer to the structure to check if ther is already a curent branch pointed to it !!!!
 class FileManager_ extends React.Component {
 
   constructor(props) {
@@ -133,10 +141,11 @@ class FileManager_ extends React.Component {
   }
 
   render() { //TODO try multi backend
+ 
+    let element =((this.state.layout == Layout.TREE )? this.props.fileTree : (this.props.branch || this.props.fileTree));
     let panel = () => {
-      console.log("FM props.branch ",this.props.branch)
-      console.log("FM props.fileTree ",this.props.fileTree)
-        let element =((this.state.layout == Layout.TREE )? this.props.fileTree : (this.props.branch || this.props.fileTree));
+      // console.log("FM props.branch ",this.props.branch)
+      // console.log("FM props.fileTree ",this.props.fileTree)
         return <FileTag
           self={element}
           parent={null}
@@ -157,7 +166,7 @@ class FileManager_ extends React.Component {
           OnCreate={this.OnCreate}
           LogOut={this.LogOut}
         />
-        <FilesLayoutsViewBarr SetLayout={this.SetLayout} />
+        <FilesLayoutsViewBarr SetLayout={this.SetLayout} breadCrumb={this.state.layout!=Layout.TREE?element.path:null} />
         <DndProvider backend={HTML5Backend}>
           <div className="App" >
             {panel()}

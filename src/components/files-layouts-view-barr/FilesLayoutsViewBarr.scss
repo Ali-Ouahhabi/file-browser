@@ -22,4 +22,27 @@ $color5: #03070d;
         background-color: $color1;
         color: $color3;
     }
+
+    .breadcrumb {
+        /* Content is centered vertically */
+        align-items: flex-start;
+        display: flex;
+        justify-content: flex-start;
+        justify-self: flex-start;
+      
+        a{
+          color: rgb(4, 4, 123);
+          font-weight: bold;
+        }
+        a:hover{
+          color: rgb(4, 4, 123);
+          text-decoration-line: underline;
+          cursor: pointer;
+        }
+        .breadcrumb__separator {
+          margin: 0 2px;
+          width: auto;
+        }
+        
+      }
 }
