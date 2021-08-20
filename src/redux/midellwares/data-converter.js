@@ -17,7 +17,7 @@ export default function DataConverter({ getState,dispatch }) {
         switch (action.type) {
             case Actions.DataConverter.UPLOAD_File_Set:{
                 let items = action.payload.items;
-                let subtree = getState().branch||getState().fileTree;
+                let subtree = getState().selectedV.self||getState().fileTree;
                 let reference = subtree.children.length
                 let files = new FormData();
                 let meta = []
@@ -90,7 +90,7 @@ export default function DataConverter({ getState,dispatch }) {
                 })
             case Actions.DataConverter.DOWNLOAD:{
                 console.log("Download......")
-                let branch = getState().branch
+                let branch = getState().selectedV.self
                 let payload={
                     isFile:branch.isFile?"true":"false",
                     path:branch.path,
@@ -99,17 +99,18 @@ export default function DataConverter({ getState,dispatch }) {
                 return next(setAction(Actions.FileManager.FOLDER.DOWNLOAD.REMOTE,payload))
             }
             case Actions.DataConverter.DELETE:{
-                let branch = getState().branch
+                let branch = getState().selectedV.self
                 let payload={
                     isFile:branch.isFile,
                     path:branch.path,
                     name:branch.name,
-                    index:branch.index
+                    index:branch.index//TODO: trace..??
                 };
                 return next(setAction(Actions.FileManager.FOLDER.DELETE.REMOTE,payload))
             }
             case Actions.DataConverter.RENAME:{
-                let branch = getState().branch
+                let branch = getState().selectedV.self
+                console.log("DC b",branch)
                 let payload={ ref:{
                     branch:branch,
                     newName:action.payload.newName
@@ -134,25 +135,25 @@ export default function DataConverter({ getState,dispatch }) {
             }
             case Actions.DataConverter.CREATE:{
                 let payload = {
-                    branch:getState().branch,
+                    selectedV:getState().selectedV,
                     name:action.payload.name
                 }
                 console.log(action.type,payload)
                 return next(setAction(Actions.FileManager.FOLDER.CREATE.REMOTE,payload))
             }
             case Actions.DataConverter.SELECTED:
-                let self = action.payload.self;
-                let view = action.payload.view;
-              
+                // let {self , view}  = action.payload.selectedV;
+                // let view = action.payload.view;
+                console.log("state ",getState())
                 let tmpS=getState()
-                if(tmpS.view) {
-                    tmpS.view();
+                console.log("tmpS ",tmpS)
+                if("selectedV" in tmpS && typeof tmpS.selectedV.view === 'function') {
+                    tmpS.selectedV.view();
                 }
                 //view.selected=true;
-                tmpS.view=view;
-                tmpS.branch=self;
-                tmpS.view();
-                return next(setAction(Actions.SELECTED, {branch:tmpS.branch,view:tmpS.view}));
+                tmpS.selectedV=action.payload.selectedV;
+                tmpS.selectedV.view();
+                return next(setAction(Actions.SELECTED, {selectedV:tmpS.selectedV}));
                 
             default:
                 console.log("DataConverter forwarding ",action)

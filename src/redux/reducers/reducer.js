@@ -2,12 +2,17 @@ import { Actions } from "../actions/Actions";
 import {SubTree} from "../models/subTree"
 const initialState = {
     fileTree: new SubTree("root"),
-    branch:{},
+    branch:{index:[]},
+    current: new SubTree("root"),
     connected: false,
     selected:{
         isFile:null,
         path:null,
         name:null
+    },				
+    selectedV: {
+        self: new Object(),
+        view: new Object()
     },
     signInUp:{
         logIn:{
@@ -144,14 +149,19 @@ console.log("REDUCER ",action);
                         default:
                             return;
                     } 
-                }            
+                }
+                
+                case Actions.ACTION.CURRENT:{
+
+                    return{ ...state, branch:{index:action.payload}}
+                }
                 default:
                     return state;
 
             }
         case Actions.ACTION.SELECTED:
             console.log("Reducer SELECTED ",action.payload)
-            return {...state,branch:action.payload.branch,view:action.payload.view} 
+            return {...state,selectedV:action.payload.selectedV} 
         case Actions.ACTION.FOLDER:
             switch (action.type[1]) {
                 case Actions.ACTION.CREATE:{

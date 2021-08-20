@@ -24,6 +24,18 @@ export default class SubTreeHelper{
         return cursor;
     }
 
+    static getSubtreeAt(tree,index){
+        console.log("SubtreeHelper.getSubtree ",tree,index)
+        if(index == undefined || tree==undefined) return tree;
+        let tmp=tree;
+        for(let i=0;i<index.length;i++){
+            console.log("  -> at",index[i]," for ",tmp)
+            if(tmp.children&&tmp.children.length>i)tmp = tmp.children[index[i]];
+
+        }
+        return tmp;
+    }
+
     static addChildTo(subtree,subT) { 
         console.log("addChildTo ",subtree)
         // if we assume that subtree it's nodes per layer are sorted by file type and name 

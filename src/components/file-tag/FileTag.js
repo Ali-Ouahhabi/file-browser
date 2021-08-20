@@ -7,6 +7,7 @@ import { Actions, setAction } from "../../redux/actions/Actions";
 import { connect } from "react-redux";
 import Status from "../status/status";
 import { Layout } from "../util/layout";
+import { DragContent, DropCall } from "./DnDUtil";
 
 
 class FileTag extends React.Component {
@@ -21,6 +22,8 @@ class FileTag extends React.Component {
 		this.clicked = this.clicked.bind(this)
 		this.onDrop = this.onDrop.bind(this)
 		this.selected = this.selected.bind(this)
+		this.doubleClick = this.doubleClick.bind(this)
+
 	}
 
 	onDrop(props, monitor, component) {
@@ -57,9 +60,25 @@ class FileTag extends React.Component {
 		this.props.dispatch(
 			setAction(
 				Actions.DataConverter.SELECTED, {
-				self: this.props.self,
-				view: this.selected
+				selectedV: {
+					self: this.props.self,
+					view: this.selected
+				}
+
 			}))
+	}
+
+	doubleClick(e) {
+		console.log("target",e.currentTarget)
+		this.props.dispatch(
+			setAction(
+				Actions.Tree.CURRENT,
+				this.props.self.index
+			)
+		)
+		e.preventDefault();
+
+
 	}
 
 	selected() {
@@ -70,14 +89,8 @@ class FileTag extends React.Component {
 	//add status
 	render() {
 		console.log("FileTag layout", this.props.layout)
-		if (this.props.layout == Layout.TREE)
 			return this.renderChildTreeView();
-		else if (this.props.layout == Layout.LIST)
-			return this.renderChildListView();
-		else if (this.props.layout == Layout.GRID)
-			return this.renderChildGridView();
-		else
-			return (<div>OPss</div>)
+	
 
 	}
 
@@ -108,7 +121,9 @@ class FileTag extends React.Component {
 			this.props.connectDragSource(this.props.connectDropTarget(
 				<div key="head"
 					className={name + (!this.props.self.isFile && this.props.isOver ? "-hover" : "") + (this.state.selected ? "-selected" : '')}
+					index = {this.props.self.index}
 					onClick={this.clicked}
+					onDoubleClick={(e,t=this.props.self.index)=>this.doubleClick(t)}
 				>
 					<div>{this.props.filter || ""}</div>
 					<span className={"file-tag-icon"}>
@@ -127,22 +142,12 @@ class FileTag extends React.Component {
 		])
 
 	}
-	getDate(timestamp) {
-		let date = new Date();
-		date.setTime(timestamp);
-		return date.toUTCString();
-	}
-	bytesToSize(bytes) {
-		var sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB'];
-		if (bytes == 0) return '0 Byte';
-		var i = parseInt(Math.floor(Math.log(bytes) / Math.log(1024)));
-		return Math.round(bytes / Math.pow(1024, i), 2) + ' ' + sizes[i];
-	}
+
 	//TODO: check draggable and add pagination also the branch ref structure is not handlled in all function dataconverter  
 	renderChildListView() {
 		let children = () => {
 			let tmp = []
-			if (this.props.self.children && this.state.isToggled) {
+			if (this.props.self.children) {
 				return this.props.self.children.map((child, index) => {
 					child.path = this.props.self.path + "/" + child.name
 					child.index = this.props.self.index.concat(index);
@@ -151,6 +156,9 @@ class FileTag extends React.Component {
 							this.props.connectDragSource(
 								<tr key={child.index.join("")}
 									id={child.index.join("") + child.name}
+									index={child.index}
+									onClick={this.clicked}
+									onDoubleClick={this.doubleClick}
 								>
 									<td>
 										<span className={"file-tag-icon"}>
@@ -165,7 +173,13 @@ class FileTag extends React.Component {
 							));
 					return (
 						this.props.connectDragSource(this.props.connectDropTarget(
-							<tr>
+							<tr
+							key={child.index.join("")}
+								index={child.index}
+								onClick={this.clicked}
+								onDoubleClick={this.doubleClick}
+							>
+
 								<td>
 									<span className={"file-tag-icon"}>
 										<ImFolder />
@@ -208,23 +222,29 @@ class FileTag extends React.Component {
 	renderChildGridView() {
 		let children = () => {
 			let tmp = []
-			if (this.props.self.children && this.state.isToggled) {
+			if (this.props.self.children ) {
 				return this.props.self.children.map((child, index) => {
 					child.path = this.props.self.path + "/" + child.name
 					child.index = this.props.self.index.concat(index);
 					if (child.isFile)
 						return (
 							this.props.connectDragSource(
-								<div className="grid-file">
+								<div className="grid-file"
+									index={child.index}
+									onClick={this.clicked}
+									onDoubleClick={this.doubleClick}>
 									<span className={"file-tag-icon"}>
 										<ImFileText2 />
 									</span>
-									<span className={"file-tag-title"}>{child.name.length > 11 ? child.name.substring(0, 11) + ".." : child.name}</span>	
+									<span className={"file-tag-title"}>{child.name.length > 11 ? child.name.substring(0, 11) + ".." : child.name}</span>
 								</div>
 							));
 					return (
 						this.props.connectDragSource(this.props.connectDropTarget(
-							<div className="grid-folder">
+							<div className="grid-folder"
+								index={child.index}
+								onClick={this.clicked}
+								onDoubleClick={this.doubleClick}>
 								<span className={"file-tag-icon"}>
 									<ImFolder />
 								</span>
@@ -267,11 +287,11 @@ const dragContent = {
 	},
 }
 
-const FileTagT = DragSource('FT', dragContent, (connect, monitor) => ({
+const FileTagT = DragSource('FT', DragContent, (connect, monitor) => ({
 	connectDragSource: connect.dragSource(),
 	isDragging: monitor.isDragging()
 }))(
-	DropTarget(['FT', NativeTypes.FILE], dropCall, (connect, monitor) => ({
+	DropTarget(['FT', NativeTypes.FILE], DropCall, (connect, monitor) => ({
 		connectDropTarget: connect.dropTarget(),
 		isOver: monitor.isOver()
 	}))(FileTag)

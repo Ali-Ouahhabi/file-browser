@@ -11,6 +11,7 @@ const Actions = {
 
         FETCH:"FETCH",
         UPDATE:"UPDATE",
+        CURRENT:"CURRENT",
         REFRESH:"REFRESH",
 
         CREATE: "CREATE",
@@ -164,6 +165,7 @@ const Actions = {
     Tree:{
         FETCH:["TREE","FETCH", "REMOTE"],
         UPDATE:["TREE","UPDATE", "REMOTE"],
+        CURRENT:["TREE","CURRENT", "LOCAL"],
         REFRESH:{
             
             LOADING: ["TREE","REFRESH", "LOCAL", "LOADING"],
