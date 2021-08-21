@@ -4,7 +4,6 @@ import { Actions, setAction } from '../../../../redux/actions/Actions';
 import './lFileTag.scss';
 import { DragSource, DropTarget } from "react-dnd";
 import { NativeTypes } from 'react-dnd-html5-backend';
-import { DragContent, DropCall } from '../../DnDUtil';
 
 class LFileTag_ extends React.Component {
   
@@ -93,11 +92,28 @@ constructor(props) {
   }
 }
 
-const LFileTag = DragSource('FT', DragContent, (connect, monitor) => ({
+const dropCall = {
+	drop(props, monitor, component) {
+		if (component instanceof LFileTag_) {
+			component.onDrop(props, monitor, component)
+			return
+		}
+	},
+
+}
+
+const dragContent = {
+	beginDrag(props, monitor, component) {
+		console.log("LFileT drag call")
+		return props.self;
+	},
+}
+
+const LFileTag = DragSource('FT', dragContent, (connect, monitor) => ({
 	connectDragSource: connect.dragSource(),
 	isDragging: monitor.isDragging()
 }))(
-	DropTarget(['FT', NativeTypes.FILE], DropCall, (connect, monitor) => ({
+	DropTarget(['FT', NativeTypes.FILE], dropCall, (connect, monitor) => ({
 		connectDropTarget: connect.dropTarget(),
 		isOver: monitor.isOver()
 	}))(LFileTag_)

@@ -27,6 +27,7 @@ class FileTag extends React.Component {
 	}
 
 	onDrop(props, monitor, component) {
+		console.log("File Tag Drop ",component)
 
 		if (this.props.self.isFile)
 			return this.props.parent.onDrop(props, monitor, component)
@@ -88,10 +89,7 @@ class FileTag extends React.Component {
 
 	//add status
 	render() {
-		console.log("FileTag layout", this.props.layout)
 			return this.renderChildTreeView();
-	
-
 	}
 
 	renderChildTreeView() {
@@ -143,136 +141,11 @@ class FileTag extends React.Component {
 
 	}
 
-	//TODO: check draggable and add pagination also the branch ref structure is not handlled in all function dataconverter  
-	renderChildListView() {
-		let children = () => {
-			let tmp = []
-			if (this.props.self.children) {
-				return this.props.self.children.map((child, index) => {
-					child.path = this.props.self.path + "/" + child.name
-					child.index = this.props.self.index.concat(index);
-					if (child.isFile)
-						return (
-							this.props.connectDragSource(
-								<tr key={child.index.join("")}
-									id={child.index.join("") + child.name}
-									index={child.index}
-									onClick={this.clicked}
-									onDoubleClick={this.doubleClick}
-								>
-									<td>
-										<span className={"file-tag-icon"}>
-											<ImFileText2 />
-										</span>
-									</td>
-									<td>{child.name.length > 20 ? child.name.substring(0, 20) + "..." : child.name}</td>
-									<td>{this.getDate(child.meta.lastModified)}</td>
-									<td>{child.meta.type.length > 20 ? child.meta.type.substring(0, 20) + "..." : child.meta.type}</td>
-									<td>{this.bytesToSize(child.meta.size)}</td>
-								</tr>
-							));
-					return (
-						this.props.connectDragSource(this.props.connectDropTarget(
-							<tr
-							key={child.index.join("")}
-								index={child.index}
-								onClick={this.clicked}
-								onDoubleClick={this.doubleClick}
-							>
-
-								<td>
-									<span className={"file-tag-icon"}>
-										<ImFolder />
-									</span>
-								</td>
-								<td>{child.name.length > 20 ? child.name.substring(0, 20) + "..." : child.name}</td>
-								<td>{"..."}</td>
-								<td>{"..."}</td>
-								<td>{"..."}</td>
-							</tr>
-						)))
-				});
-			}
-
-		}
-
-		this.props.self.path = this.props.self.path
-		this.props.self.index = this.props.self.index
-		return this.props.connectDropTarget((
-			<div className="rootListView">
-				<table className="list-view-table">
-					<thead>
-						<tr>
-							<th></th>
-							<th>name</th>
-							<th>lastModified</th>
-							<th>type</th>
-							<th>size</th>
-						</tr>
-					</thead>
-					<tbody>
-						{children()}
-					</tbody>
-				</table>
-			</div>
-		))
-
-	}
-
-	renderChildGridView() {
-		let children = () => {
-			let tmp = []
-			if (this.props.self.children ) {
-				return this.props.self.children.map((child, index) => {
-					child.path = this.props.self.path + "/" + child.name
-					child.index = this.props.self.index.concat(index);
-					if (child.isFile)
-						return (
-							this.props.connectDragSource(
-								<div className="grid-file"
-									index={child.index}
-									onClick={this.clicked}
-									onDoubleClick={this.doubleClick}>
-									<span className={"file-tag-icon"}>
-										<ImFileText2 />
-									</span>
-									<span className={"file-tag-title"}>{child.name.length > 11 ? child.name.substring(0, 11) + ".." : child.name}</span>
-								</div>
-							));
-					return (
-						this.props.connectDragSource(this.props.connectDropTarget(
-							<div className="grid-folder"
-								index={child.index}
-								onClick={this.clicked}
-								onDoubleClick={this.doubleClick}>
-								<span className={"file-tag-icon"}>
-									<ImFolder />
-								</span>
-								<span className={"file-tag-title"}>{child.name.length > 11 ? child.name.substring(0, 11) + ".." : child.name}</span>
-
-							</div>
-
-						)))
-				});
-			}
-
-		}
-
-		this.props.self.path = this.props.self.path
-		this.props.self.index = this.props.self.index
-		return this.props.connectDropTarget((
-			<div className="rootGridView">
-				{children()}
-			</div>
-		))
-
-	}
-
-
 }
 
 const dropCall = {
 	drop(props, monitor, component) {
+		console.log("drop CALL \n cndq",(component instanceof FileTag));
 		if (component instanceof FileTag) {
 			component.onDrop(props, monitor, component)
 			return
@@ -283,15 +156,16 @@ const dropCall = {
 
 const dragContent = {
 	beginDrag(props, monitor, component) {
+		console.log("beginDrag")
 		return props.self;
 	},
 }
 
-const FileTagT = DragSource('FT', DragContent, (connect, monitor) => ({
+const FileTagT = DragSource('FT', dragContent, (connect, monitor) => ({
 	connectDragSource: connect.dragSource(),
 	isDragging: monitor.isDragging()
 }))(
-	DropTarget(['FT', NativeTypes.FILE], DropCall, (connect, monitor) => ({
+	DropTarget(['FT', NativeTypes.FILE], dropCall, (connect, monitor) => ({
 		connectDropTarget: connect.dropTarget(),
 		isOver: monitor.isOver()
 	}))(FileTag)

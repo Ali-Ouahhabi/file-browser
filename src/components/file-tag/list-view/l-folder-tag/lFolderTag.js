@@ -5,6 +5,7 @@ import { Actions, setAction } from '../../../../redux/actions/Actions';
 import './lFolderTag.scss';
 import { DragSource, DropTarget } from "react-dnd";
 import { DragContent, DropCall } from '../../DnDUtil';
+import LFileTag from '../l-file-tag/lFileTag';
 
 class LFolderTag_ extends React.Component {
 
@@ -23,8 +24,10 @@ constructor(props) {
 		this.setState({ selected: !this.state.selected });
 	}
   onDrop(props, monitor, component) {
-
+		console.log("LFolderT droping ");
 		if (monitor.getItemType() === NativeTypes.FILE) {
+			console.log("                 file systems ");
+
 			let items = monitor.getItem().items
 			this.props.dispatch(
 				setAction(
@@ -35,6 +38,7 @@ constructor(props) {
 
 		} else {
 			let item = monitor.getItem()
+			console.log("                 sub files ");
 
 			if (this.props.self.children[item.index[item.index.length - 1]] === item) return;
 			this.props.dispatch(
@@ -98,11 +102,28 @@ constructor(props) {
   }
 }
 
-const LFolderTag = DragSource('FT', DragContent, (connect, monitor) => ({
+const dropCall = {
+	drop(props, monitor, component) {
+		
+		if (component instanceof LFolderTag_) {
+			component.onDrop(props, monitor, component)
+			return
+		}
+	},
+
+}
+
+const dragContent = {
+	beginDrag(props, monitor, component) {
+		return props.self;
+	},
+}
+
+const LFolderTag = DragSource('FT', dragContent, (connect, monitor) => ({
 	connectDragSource: connect.dragSource(),
 	isDragging: monitor.isDragging()
 }))(
-	DropTarget(['FT', NativeTypes.FILE], DropCall, (connect, monitor) => ({
+	DropTarget(['FT', NativeTypes.FILE], dropCall, (connect, monitor) => ({
 		connectDropTarget: connect.dropTarget(),
 		isOver: monitor.isOver()
 	}))(LFolderTag_)

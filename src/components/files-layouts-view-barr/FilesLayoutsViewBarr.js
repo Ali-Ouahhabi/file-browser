@@ -31,7 +31,6 @@ class FilesLayoutsViewBarr extends React.Component {
 				p
 			)
 		)
-		e.preventDefault();
   }
 
   render() {

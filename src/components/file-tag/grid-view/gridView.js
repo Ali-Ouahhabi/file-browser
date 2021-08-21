@@ -1,7 +1,7 @@
 import React from 'react';
 import { NativeTypes } from 'react-dnd-html5-backend';
 import { Actions, setAction } from '../../../redux/actions/Actions';
-import GFileTag from './g-file-tag/GFileTag';
+import {GFileTag} from './g-file-tag/GFileTag';
 import GFolderTag from './g-folder-tag/GFolderTag';
 import { DragSource, DropTarget } from "react-dnd";
 
@@ -19,7 +19,7 @@ constructor(props) {
   }
 
   onDrop(props, monitor, component) {
-
+    console.log("DROP ON GRIDE")
 		if (monitor.getItemType() === NativeTypes.FILE) {//mostly
 			let items = monitor.getItem().items
 			this.props.dispatch(
@@ -74,11 +74,22 @@ constructor(props) {
   }
 }
 
+const dropCall = {
+	drop(props, monitor, component) {
+
+		if (component instanceof GridView_) {
+			component.onDrop(props, monitor, component)
+			return
+		}
+	},
+
+}
+
 const GridView__ = DragSource('FT', DragContent, (connect, monitor) => ({
 	connectDragSource: connect.dragSource(),
 	isDragging: monitor.isDragging()
 }))(
-	DropTarget(['FT', NativeTypes.FILE], DropCall, (connect, monitor) => ({
+	DropTarget(['FT', NativeTypes.FILE], dropCall, (connect, monitor) => ({
 		connectDropTarget: connect.dropTarget(),
 		isOver: monitor.isOver()
 	}))(GridView_)

@@ -17,8 +17,7 @@ export default function DataConverter({ getState,dispatch }) {
         switch (action.type) {
             case Actions.DataConverter.UPLOAD_File_Set:{
                 let items = action.payload.items;
-                let subtree = getState().selectedV.self||getState().fileTree;
-                let reference = subtree.children.length
+                let subtree = SubTreeHelper.getSubtreeAt(getState().fileTree,getState().branch.index);                let reference = subtree.children.length
                 let files = new FormData();
                 let meta = []
                 //let size=0;
@@ -29,14 +28,15 @@ export default function DataConverter({ getState,dispatch }) {
                         children: null,
                         status: new Status("up", "init"),
                         data: element,
-                        meta:{
-                            "path": subtree.path,
-                            "name": leaf.name,
-                            "index":leaf.index,
-                            "lastModified":leaf.data.lastModified,
-                            "size":leaf.data.size,
-                            "type":mime.lookup(leaf.data.type?leaf.data.type:leaf.name.split(".").pop())||"application/octet-stream"
-                        }
+
+                    }
+                    leaf.meta = {
+                        "path": subtree.path,
+                        "name": leaf.name,
+                        "index":leaf.index,
+                        "lastModified":leaf.data.lastModified,
+                        "size":leaf.data.size,
+                        "type":mime.lookup(leaf.data.type?leaf.data.type:leaf.name.split(".").pop())||"application/octet-stream"
                     }
                     SubTreeHelper.addChildTo(subtree, leaf)
                     console.log("file ",leaf.data)

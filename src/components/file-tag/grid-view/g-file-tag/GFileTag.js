@@ -74,15 +74,31 @@ class GFileTag_ extends React.Component {
   }
 }
 
-const GFileTag = DragSource('FT', DragContent, (connect, monitor) => ({
+const dropCall = {
+	drop(props, monitor, component) {
+		if (component instanceof GFileTag) {
+			component.onDrop(props, monitor, component)
+			return
+		}
+	},
+
+}
+
+const dragContent = {
+	beginDrag(props, monitor, component) {
+		return props.self;
+	},
+}
+
+const GFileTag = DragSource('FT', dragContent, (connect, monitor) => ({
 	connectDragSource: connect.dragSource(),
 	isDragging: monitor.isDragging()
 }))(
-	DropTarget(['FT', NativeTypes.FILE], DropCall, (connect, monitor) => ({
+	DropTarget(['FT', NativeTypes.FILE], dropCall, (connect, monitor) => ({
 		connectDropTarget: connect.dropTarget(),
 		isOver: monitor.isOver()
 	}))(GFileTag_)
 );
 
 
-export default GFileTag;
+export {GFileTag,GFileTag_};

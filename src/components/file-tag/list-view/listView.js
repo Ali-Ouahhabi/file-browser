@@ -18,6 +18,8 @@ class ListView_ extends React.Component {
 
   onDrop(props, monitor, component) {
 
+    console.log("list onDrop")
+
 		if (monitor.getItemType() === NativeTypes.FILE) {
 			let items = monitor.getItem().items
 			this.props.dispatch(
@@ -85,15 +87,28 @@ class ListView_ extends React.Component {
   }
 }
 
-const ListView__ = DragSource('FT', DragContent, (connect, monitor) => ({
-	connectDragSource: connect.dragSource(),
-	isDragging: monitor.isDragging()
-}))(
-	DropTarget(['FT', NativeTypes.FILE], DropCall, (connect, monitor) => ({
+const dropCall = {
+	drop(props, monitor, component) {
+    console.log("list drop call ",component)
+		if (component instanceof ListView_) {
+			component.onDrop(props, monitor, component)
+			return
+		}
+	},
+
+}
+
+const dragContent = {
+	beginDrag(props, monitor, component) {
+		return props.self;
+	},
+}
+
+const ListView__ = DropTarget(['FT', NativeTypes.FILE], dropCall, (connect, monitor) => ({
 		connectDropTarget: connect.dropTarget(),
 		isOver: monitor.isOver()
 	}))(ListView_)
-);
+
 
 function mapDispatchToProps(dispatch) {
 	return {
