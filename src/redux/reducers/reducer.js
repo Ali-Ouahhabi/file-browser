@@ -91,7 +91,7 @@ export default function reduce(state = initialState, action) {
                             localStorage.removeItem("jwt")
                             localStorage.removeItem("refresh")
                             return {
-                                // ...state,
+                                ...state,
                                 connected: false,
                                 signInUp: {
                                     ...state.signInUp,
