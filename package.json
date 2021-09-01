@@ -9,14 +9,13 @@
     "@testing-library/user-event": "^12.8.3",
     "axios": "^0.21.1",
     "mime-types": "^2.1.31",
-    "node-sass": "^5.0.0",
     "react": "^17.0.2",
     "react-dnd": "^13.1.1",
     "react-dnd-html5-backend": "^12.1.1",
     "react-dom": "^17.0.2",
     "react-icons": "^4.2.0",
     "react-redux": "^7.2.4",
-    "react-scripts": "4.0.3",
+    "react-scripts": "^4.0.3",
     "react-spinners": "^0.11.0",
     "web-vitals": "^1.1.2"
   },
@@ -43,5 +42,8 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "devDependencies": {
+    "node-sass": "npm:sass@^1.38.2"
   }
 }

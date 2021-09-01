@@ -48,7 +48,6 @@ class ListView_ extends React.Component {
       let tmp = []
       if (this.props.self.children) {
         return this.props.self.children.map((child, index) => {
-          child.path = this.props.self.path + "/" + child.name
           child.index = this.props.self.index.concat(index);
           if (child.isFile)
             return (

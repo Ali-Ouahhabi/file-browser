@@ -1,7 +1,7 @@
 import React from 'react';
 import { NativeTypes } from 'react-dnd-html5-backend';
 import { Actions, setAction } from '../../../redux/actions/Actions';
-import {GFileTag} from './g-file-tag/GFileTag';
+import { GFileTag } from './g-file-tag/GFileTag';
 import GFolderTag from './g-folder-tag/GFolderTag';
 import { DragSource, DropTarget } from "react-dnd";
 
@@ -11,15 +11,11 @@ import { connect } from 'react-redux';
 
 class GridView_ extends React.Component {
 
-constructor(props) {
-    super(props);
+	constructor(props) {
+		super(props);
+	}
 
-    console.log("GRIDE VIEW CONSTRUCT rpops.",props)
-
-  }
-
-  onDrop(props, monitor, component) {
-    console.log("DROP ON GRIDE")
+	onDrop(props, monitor, component) {
 		if (monitor.getItemType() === NativeTypes.FILE) {//mostly
 			let items = monitor.getItem().items
 			this.props.dispatch(
@@ -43,35 +39,29 @@ constructor(props) {
 
 	}
 
-  render() {
-    let renderChildGridView=()=> {
-      console.log("GRIDE VIEW ",this.props.self)
-      let children = () => {
-        let tmp = []
-        if (this.props.self.children) {
-          return this.props.self.children.map((child, index) => {
-            child.path = this.props.self.path + "/" + child.name
-            child.index = this.props.self.index.concat(index);
-            if (child.isFile)
-              return  (<GFileTag self={child} dispatch={this.props.dispatch}/>);
-            else
-              return (<GFolderTag self={child}dispatch={this.props.dispatch}/>);
-          });
-        }
-    
-      }
-    
-      this.props.self.path = this.props.self.path
-      this.props.self.index = this.props.self.index
-      return this.props.connectDropTarget((
-        <div className="rootGridView">
-          {children()}
-        </div>
-      ))
-    
-    }
-   return renderChildGridView();
-  }
+	render() {
+		let renderChildGridView = () => {
+			let children = () => {
+				if (this.props.self.children) {
+					return this.props.self.children.map((child, index) => {
+						child.index = this.props.self.index.concat(index);
+						if (child.isFile)
+							return (<GFileTag self={child} dispatch={this.props.dispatch} />);
+						else
+							return (<GFolderTag self={child} dispatch={this.props.dispatch} />);
+					});
+				}
+
+			}
+			return this.props.connectDropTarget((
+				<div className="rootGridView">
+					{children()}
+				</div>
+			))
+
+		}
+		return renderChildGridView();
+	}
 }
 
 const dropCall = {

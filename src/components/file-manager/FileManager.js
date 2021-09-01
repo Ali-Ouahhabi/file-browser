@@ -9,8 +9,6 @@ import { Actions, setAction } from '../../redux/actions/Actions';
 import FilesLayoutsViewBarr from '../files-layouts-view-barr/FilesLayoutsViewBarr';
 import { Layout } from '../util/layout';
 import SubTreeHelper from '../../redux/models/subTreeHelper';
-import gridView from '../file-tag/grid-view/gridView';
-import listView from '../file-tag/list-view/listView';
 import GridView from '../file-tag/grid-view/gridView';
 import ListView from '../file-tag/list-view/listView';
 
@@ -131,14 +129,12 @@ class FileManager_ extends React.Component {
   }
 
   SetLayout = (n) => {
-    console.log("FileM SetLayout",n)
     if (n <= 2 && n >= 0) {
       this.setState({ layout: n })
     }
   }
 
   componentDidMount() {
-    console.log("DID MOUNT!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!1")
     this.props.dispatch(
       setAction(
         Actions.Tree.FETCH
@@ -146,33 +142,31 @@ class FileManager_ extends React.Component {
     )
   }
 
-  render() { //TODO try multi backend
-    console.log("FM index",this.props.branch.index);
-    console.log("FM tree",this.props.fileTree);
-    let subtree = SubTreeHelper.getSubtreeAt(this.props.fileTree,this.props.branch.index);
-     console.log("FM ",subtree,"display ",this.state.layout)
-    if(subtree == undefined) return "";
-    console.log("..still")
-    let panel = () => {
-      console.log("panelFM ",subtree,"display ",this.state.layout)
+  render() { 
+    let subtree;
+    if (this.props.branch.index != undefined)
+      subtree = SubTreeHelper.getSubtreeAt(this.props.fileTree, this.props.branch.index);
+    else
+      subtree = this.props.fileTree;
 
-      if(this.state.layout == Layout.GRID)
-        {console.log(Layout.GRID);
-        return (<GridView self={subtree}/>);}
-      else if(this.state.layout == Layout.LIST){
-        return (<ListView self={subtree}/>);
-      }else if(this.state.layout==Layout.TREE){
-        return (<FileTag
-        self={subtree}
-        parent={null}
-        key={this.props.fileTree.index.join("")}
-        id={this.props.fileTree.index.join("")+this.props.fileTree.name}
-        layout = {this.state.layout}
-      />)
+    let panel = () => {
+      switch (this.state.layout) {
+        case Layout.GRID:
+          return (<GridView self={subtree} />);
+        case Layout.LIST:
+          return (<ListView self={subtree} />);
+        case Layout.TREE:
+          return (
+            <FileTag
+              self={subtree}
+              parent={null}
+              key={subtree.index.join("")}
+              id={subtree.index.join("") + subtree.name}
+              layout={this.state.layout}
+            />)
       }
     }
 
-    console.log("panel<<<--",panel())
     return (
       <div>
         <ActionsBar filtering={this.filtering}
@@ -183,7 +177,11 @@ class FileManager_ extends React.Component {
           OnCreate={this.OnCreate}
           LogOut={this.LogOut}
         />
-        <FilesLayoutsViewBarr SetLayout={this.SetLayout} breadCrumb={subtree.path} index = {subtree.index} dispatch={this.props.dispatch}/>
+        <FilesLayoutsViewBarr SetLayout={this.SetLayout}
+          breadCrumb={subtree.path}
+          index={subtree.index}
+          dispatch={this.props.dispatch}
+        />
         <DndProvider backend={HTML5Backend}>
           <div className="App" >
             {panel()}
@@ -192,13 +190,12 @@ class FileManager_ extends React.Component {
       </div>
     );
   }
-
 };
 
 const mapStateToProps = state => {
   return {
     fileTree: state.fileTree,
-    branch: state.branch 
+    branch: state.branch
   };
 };
 

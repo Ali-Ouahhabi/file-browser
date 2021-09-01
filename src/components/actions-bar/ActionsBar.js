@@ -5,7 +5,6 @@ import { BiRename } from "react-icons/bi"
 import './ActionsBar.scss';
 import { connect } from 'react-redux';
 
-//CgDisplayGrid, CgListTree, ImList 
 
 class ActionsBar_ extends React.Component {
 

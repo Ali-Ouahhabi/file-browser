@@ -1,16 +1,8 @@
 export class SubTree {
-    //TODO might need to be removed
-    /*
-    name :String
-    path: String
-    parent:SubTree
-    children:Subtree[]
-    status:FileStatus    
-    */
 
     constructor(name) {
         this.name = name?name:null;
-        this.path = "/";
+        this.path = name;
         this.index = [];
         this.parent = null;
         this.children = [];

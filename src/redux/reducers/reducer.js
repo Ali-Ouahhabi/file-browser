@@ -1,35 +1,35 @@
 import { Actions } from "../actions/Actions";
-import {SubTree} from "../models/subTree"
+import { SubTree } from "../models/subTree"
 const initialState = {
     fileTree: new SubTree("root"),
-    branch:{index:[]},
+    branch: { index: [] },
     current: new SubTree("root"),
     connected: false,
-    selected:{
-        isFile:null,
-        path:null,
-        name:null
-    },				
+    selected: {
+        isFile: null,
+        path: null,
+        name: null
+    },
     selectedV: {
         self: new Object(),
         view: new Object()
     },
-    signInUp:{
-        logIn:{
-            error:""
+    signInUp: {
+        logIn: {
+            error: ""
         },
-        register:{
-            error:""
+        register: {
+            error: ""
         }
     },
-    notification:{
-        type:"",
-        message:""
+    notification: {
+        type: "",
+        message: ""
     },
 }
 
 export default function reduce(state = initialState, action) {
-console.log("REDUCER ",action);
+    console.log("REDUCER ", action);
     if (action.type[2] === Actions.ACTION.REMOTE)
         throw new Error("Reducer invalid actions " + action.type.join('/'))
     switch (action.type[0]) {
@@ -44,17 +44,19 @@ console.log("REDUCER ",action);
                             localStorage.setItem("jwt", action.payload.data.jwt)
                             return { ...state, connected: true };
                         case Actions.ACTION.ERROR:
-                            console.log("register ",action.payload)
-                            if(action.payload.data.msg==="dupKey")
-                                return { ...state, 
-                                    signInUp:{ 
+                            console.log("register ", action.payload)
+                            if (action.payload.data.msg === "dupKey")
+                                return {
+                                    ...state,
+                                    signInUp: {
                                         ...state.signInUp,
-                                        register:{
-                                            error:"Email address already in use"
+                                        register: {
+                                            error: "Email address already in use"
                                         }
-                                    } } ;
+                                    }
+                                };
                         default:
-                            return{state};                            
+                            return { state };
                     }
                 case Actions.ACTION.SIGN_IN:
                     switch (action.type[3]) {
@@ -68,202 +70,210 @@ console.log("REDUCER ",action);
                             localStorage.setItem("jwt", action.payload.data.jwt)
                             return { ...state, connected: true };
                         case Actions.ACTION.ERROR:
-                            return { ...state, 
-                                signInUp:{ 
+                            return {
+                                ...state,
+                                signInUp: {
                                     ...state.signInUp,
-                                    logIn:{
-                                        error:"Bad credentials"
+                                    logIn: {
+                                        error: "Bad credentials"
                                     }
-                                } } ;
+                                }
+                            };
                         default:
-                            return{state};
+                            return { state };
                     }
                 case Actions.ACTION.LOG_OUT:
                     switch (action.type[3]) {
                         case Actions.ACTION.LOADING:
                             //loading
-                            return triggerNotifier(state,action.type[3],"Logging off ...")
+                            return triggerNotifier(state, action.type[3], "Logging off ...")
                         case Actions.ACTION.SUCCESS:
                             localStorage.removeItem("jwt")
                             localStorage.removeItem("refresh")
-                            return { ...state, 
-                                connected: false, 
-                                signInUp:{ 
+                            return {
+                                // ...state,
+                                connected: false,
+                                signInUp: {
                                     ...state.signInUp,
-                                    logIn:{
-                                        error:"You've been logged out"
+                                    logIn: {
+                                        error: "You've been logged out"
                                     }
-                                }, 
-                                notification:{
-                                    type:action.type[3],
-                                    message:false
-                            }
+                                },
+                                notification: {
+                                    type: action.type[3],
+                                    message: false
+                                }
                             };
                         case Actions.ACTION.ERROR:
-                            if(localStorage.getItem("jwt"))localStorage.removeItem("jwt")
-                            if(localStorage.getItem("refresh"))localStorage.removeItem("refresh")
-                            return { ...state, 
-                                connected: false, 
-                                signInUp:{ 
+                            if (localStorage.getItem("jwt")) localStorage.removeItem("jwt")
+                            if (localStorage.getItem("refresh")) localStorage.removeItem("refresh")
+                            return {
+                                ...state,
+                                connected: false,
+                                signInUp: {
                                     ...state.signInUp,
-                                    logIn:{
-                                        error:"you've been unexpectedly logged out"
+                                    logIn: {
+                                        error: "you've been unexpectedly logged out"
                                     }
-                                } };
+                                }
+                            };
                         default:
-                            return{state};
+                            return { state };
                     }
                 default:
-                    return{state};
-                }
- 
+                    return { state };
+            }
+
         case Actions.ACTION.TREE:
             switch (action.type[1]) {
-                case Actions.ACTION.REFRESH:{
-                    switch (action.type[3]){
-                        case Actions.ACTION.LOADING:{
-                            return triggerNotifier(state,action.type[3],"Creating ...")
+                case Actions.ACTION.REFRESH: {
+                    switch (action.type[3]) {
+                        case Actions.ACTION.LOADING: {
+                            return triggerNotifier(state, action.type[3], "Creating ...")
                         }
-                        case Actions.ACTION.SUCCESS:{
-                            return {...state,fileTree:action.payload};
+                        case Actions.ACTION.SUCCESS: {
+                            console.log(action)
+                            if (action.payload != null && action.payload != "")
+                                return { ...state, fileTree: action.payload };
+                            return state;
                         }
-                        case Actions.ACTION.ERROR:{
-                            return triggerNotifier(state,action.type[3],"Error occurred while creating ...")
-                        }
-                        default:
-                            return;
-                    } 
-                }
-
-                case Actions.ACTION.UPDATE:{
-                    switch (action.type[3]){
-                        case Actions.ACTION.LOADING:{
-                            return triggerNotifier(state,action.type[3],"Creating ...")
-                        }
-                        case Actions.ACTION.SUCCESS:{
-                            return {...state,fileTree:action.payload};
-                        }
-                        case Actions.ACTION.ERROR:{
-                            return triggerNotifier(state,action.type[3],"Error occurred while creating ...")
+                        case Actions.ACTION.ERROR: {
+                            return triggerNotifier(state, action.type[3], "Error occurred while creating ...")
                         }
                         default:
                             return;
-                    } 
+                    }
                 }
-                
-                case Actions.ACTION.CURRENT:{
 
-                    return{ ...state, branch:{index:action.payload}}
+                case Actions.ACTION.UPDATE: {
+                    switch (action.type[3]) {
+                        case Actions.ACTION.LOADING: {
+                            return triggerNotifier(state, action.type[3], "Creating ...")
+                        }
+                        case Actions.ACTION.SUCCESS: {
+                            return { ...state, fileTree: action.payload };
+                        }
+                        case Actions.ACTION.ERROR: {
+                            return triggerNotifier(state, action.type[3], "Error occurred while creating ...")
+                        }
+                        default:
+                            return;
+                    }
+                }
+
+                case Actions.ACTION.CURRENT: {
+
+                    return { ...state, branch: { index: action.payload } }
                 }
                 default:
                     return state;
 
             }
         case Actions.ACTION.SELECTED:
-            console.log("Reducer SELECTED ",action.payload)
-            return {...state,selectedV:action.payload.selectedV} 
+            console.log("Reducer SELECTED ", action.payload)
+            return { ...state, selectedV: action.payload.selectedV }
         case Actions.ACTION.FOLDER:
             switch (action.type[1]) {
-                case Actions.ACTION.CREATE:{
-                    switch (action.type[3]){
-                        case Actions.ACTION.LOADING:{
-                            console.log("Payload ",action.payload)
-                            return triggerNotifier(state,action.type[3],"Creating ...")
+                case Actions.ACTION.CREATE: {
+                    switch (action.type[3]) {
+                        case Actions.ACTION.LOADING: {
+                            console.log("Payload ", action.payload)
+                            return triggerNotifier(state, action.type[3], "Creating ...")
                         }
-                        case Actions.ACTION.SUCCESS:{
-                            return triggerNotifier(state,action.type[3],"... created successfully")
+                        case Actions.ACTION.SUCCESS: {
+                            return triggerNotifier(state, action.type[3], "... created successfully")
                         }
-                        case Actions.ACTION.ERROR:{
-                            console.log("Payload !",action.payload)
-                            return triggerNotifier(state,action.type[3],"Error occurred while creating ...")
-                        }
-                        default:
-                            return;
-                    }           
-                }
-                case Actions.ACTION.RENAME:{
-                    switch (action.type[3]){
-                        case Actions.ACTION.LOADING:{
-                            return triggerNotifier(state,action.type[3],"Renaming ...")
-                        }
-                        case Actions.ACTION.SUCCESS:{
-                            return triggerNotifier(state,action.type[3],"... renamed successfully")
-                        }
-                        case Actions.ACTION.ERROR:{
-                            return triggerNotifier(state,action.type[3],"Error occurred while renaming ...")
+                        case Actions.ACTION.ERROR: {
+                            console.log("Payload !", action.payload)
+                            return triggerNotifier(state, action.type[3], "Error occurred while creating ...")
                         }
                         default:
                             return;
                     }
                 }
-                case Actions.ACTION.DELETE:{
-                    console.log("DELETE",action.type)
-                    switch (action.type[3]){
-                        case Actions.ACTION.LOADING:{
-                            return triggerNotifier(state,action.type[3],"Deleting ...")
+                case Actions.ACTION.RENAME: {
+                    switch (action.type[3]) {
+                        case Actions.ACTION.LOADING: {
+                            return triggerNotifier(state, action.type[3], "Renaming ...")
                         }
-                        case Actions.ACTION.SUCCESS:{
-                            return triggerNotifier(state,action.type[3],"... deleted successfully")
+                        case Actions.ACTION.SUCCESS: {
+                            return triggerNotifier(state, action.type[3], "... renamed successfully")
                         }
-                        case Actions.ACTION.ERROR:{
-                            return triggerNotifier(state,action.type[3],"Error occurred while deleting ...")
-                        }
-                        default:
-                            return;
-                    }
-                }
-                case Actions.ACTION.DOWNLOAD:{
-                    switch (action.type[3]){
-                        case Actions.ACTION.LOADING:{
-                            return triggerNotifier(state,action.type[3],"Downloading ...")
-                        }
-                        case Actions.ACTION.SUCCESS:{
-                            return triggerNotifier(state,action.type[3],"... Downloaded successfully")
-                        }
-                        case Actions.ACTION.ERROR:{
-                            return triggerNotifier(state,action.type[3],"Error occurred while downloading ...")
+                        case Actions.ACTION.ERROR: {
+                            return triggerNotifier(state, action.type[3], "Error occurred while renaming ...")
                         }
                         default:
                             return;
                     }
                 }
-                case Actions.ACTION.UPLOAD:{
-                    switch (action.type[3]){
-                        case Actions.ACTION.LOADING:{
-                            return triggerNotifier(state,action.type[3],"Uploading ...")
+                case Actions.ACTION.DELETE: {
+                    console.log("DELETE", action.type)
+                    switch (action.type[3]) {
+                        case Actions.ACTION.LOADING: {
+                            return triggerNotifier(state, action.type[3], "Deleting ...")
                         }
-                        case Actions.ACTION.SUCCESS:{
-                            return triggerNotifier(state,action.type[3],"... uploaded successfully")
+                        case Actions.ACTION.SUCCESS: {
+                            return triggerNotifier(state, action.type[3], "... deleted successfully")
                         }
-                        case Actions.ACTION.ERROR:{
-                            return triggerNotifier(state,action.type[3],"Error occurred while uploading ...")
+                        case Actions.ACTION.ERROR: {
+                            return triggerNotifier(state, action.type[3], "Error occurred while deleting ...")
                         }
                         default:
                             return;
                     }
                 }
-                case Actions.ACTION.MOVE:{
-                    switch (action.type[3]){
-                        case Actions.ACTION.LOADING:{
-                            return triggerNotifier(state,action.type[3],"Moving ...")
+                case Actions.ACTION.DOWNLOAD: {
+                    switch (action.type[3]) {
+                        case Actions.ACTION.LOADING: {
+                            return triggerNotifier(state, action.type[3], "Downloading ...")
                         }
-                        case Actions.ACTION.SUCCESS:{
-                            return triggerNotifier(state,action.type[3],"... moved successfully")
+                        case Actions.ACTION.SUCCESS: {
+                            return triggerNotifier(state, action.type[3], "... Downloaded successfully")
                         }
-                        case Actions.ACTION.ERROR:{
-                            return triggerNotifier(state,action.type[3],"Error occurred while")
+                        case Actions.ACTION.ERROR: {
+                            return triggerNotifier(state, action.type[3], "Error occurred while downloading ...")
                         }
                         default:
                             return;
                     }
-                }    
+                }
+                case Actions.ACTION.UPLOAD: {
+                    switch (action.type[3]) {
+                        case Actions.ACTION.LOADING: {
+                            return triggerNotifier(state, action.type[3], "Uploading ...")
+                        }
+                        case Actions.ACTION.SUCCESS: {
+                            return triggerNotifier(state, action.type[3], "... uploaded successfully")
+                        }
+                        case Actions.ACTION.ERROR: {
+                            return triggerNotifier(state, action.type[3], "Error occurred while uploading ...")
+                        }
+                        default:
+                            return;
+                    }
+                }
+                case Actions.ACTION.MOVE: {
+                    switch (action.type[3]) {
+                        case Actions.ACTION.LOADING: {
+                            return triggerNotifier(state, action.type[3], "Moving ...")
+                        }
+                        case Actions.ACTION.SUCCESS: {
+                            return triggerNotifier(state, action.type[3], "... moved successfully")
+                        }
+                        case Actions.ACTION.ERROR: {
+                            return triggerNotifier(state, action.type[3], "Error occurred while")
+                        }
+                        default:
+                            return;
+                    }
+                }
             }
         default:
             return state;
     }
 }
 
-function triggerNotifier(state,type,message){
+function triggerNotifier(state, type, message) {
     // console.log("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
     // console.log("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
     // console.log("triggerNotifier !!!!!!!!!!!!!!!!!!11");
@@ -273,10 +283,10 @@ function triggerNotifier(state,type,message){
     // console.log("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
 
     return {
-        ...state,    
-        notification:{
-            type:type,
-            message:message
+        ...state,
+        notification: {
+            type: type,
+            message: message
+        }
     }
-}
 }

@@ -98,8 +98,6 @@ class FileTag extends React.Component {
 			let tmp = []
 			if (this.props.self.children && this.state.isToggled) {
 				return this.props.self.children.map((child, index) => {
-
-					child.path = this.props.self.path + "/" + child.name
 					child.index = this.props.self.index.concat(index)
 					return (
 						<FileTagC
