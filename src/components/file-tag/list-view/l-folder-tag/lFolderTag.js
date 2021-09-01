@@ -4,8 +4,6 @@ import { ImFolder } from 'react-icons/im';
 import { Actions, setAction } from '../../../../redux/actions/Actions';
 import './lFolderTag.scss';
 import { DragSource, DropTarget } from "react-dnd";
-import { DragContent, DropCall } from '../../DnDUtil';
-import LFileTag from '../l-file-tag/lFileTag';
 
 class LFolderTag_ extends React.Component {
 

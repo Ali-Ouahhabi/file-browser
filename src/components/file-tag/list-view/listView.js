@@ -3,18 +3,17 @@ import { NativeTypes } from 'react-dnd-html5-backend';
 import { Actions, setAction } from '../../../redux/actions/Actions';
 import LFileTag from './l-file-tag/lFileTag';
 import LFolderTag from './l-folder-tag/lFolderTag';
-import { DragSource, DropTarget } from "react-dnd";
+import { DropTarget } from "react-dnd";
 
 
 import './listView.scss';
-import { DragContent, DropCall } from '../DnDUtil';
 import { connect } from 'react-redux';
 
 class ListView_ extends React.Component {
 
-  constructor(props) {
-    super(props);
-  }
+  // constructor(props) {
+  //   super(props);
+  // }
 
   onDrop(props, monitor, component) {
 
@@ -45,7 +44,6 @@ class ListView_ extends React.Component {
   
   render() {
     let children=()=> {
-      let tmp = []
       if (this.props.self.children) {
         return this.props.self.children.map((child, index) => {
           child.index = this.props.self.index.concat(index);
@@ -61,9 +59,7 @@ class ListView_ extends React.Component {
       }
   
     }
-  
-    this.props.self.path = this.props.self.path
-    this.props.self.index = this.props.self.index
+
     return this.props.connectDropTarget((
       <div className="rootListView">
         <table className="list-view-table">
@@ -97,11 +93,6 @@ const dropCall = {
 
 }
 
-const dragContent = {
-	beginDrag(props, monitor, component) {
-		return props.self;
-	},
-}
 
 const ListView__ = DropTarget(['FT', NativeTypes.FILE], dropCall, (connect, monitor) => ({
 		connectDropTarget: connect.dropTarget(),

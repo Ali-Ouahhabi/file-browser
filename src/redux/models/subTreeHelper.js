@@ -26,7 +26,7 @@ export default class SubTreeHelper{
 
     static getSubtreeAt(tree,index){
         console.log("SubtreeHelper.getSubtree ",tree,index)
-        if(index == undefined || tree==undefined) return tree;
+        if(index === undefined || tree===undefined) return tree;
         let tmp=tree;
         for(let i=0;i<index.length;i++){
             console.log("  -> at",index[i]," for ",tmp)
@@ -62,7 +62,7 @@ export default class SubTreeHelper{
         // do n-a update 3op == a + 3(n-a) == 3n -2a <<< 5n - 1 
         //  
         let i = 0;
-        for (; i<subtree.children.length && Comparators.byTnN(subT,subtree.children[i])==1; i++);
+        for (; i<subtree.children.length && Comparators.byTnN(subT,subtree.children[i])===1; i++);
         // if Comparators.byTnN(subT,subtree.children[i])!=1 subT<=subtree.children[i] which mean 
         //  subT should reside in i and what's before i should be pushed
         let arr =  subtree.children.slice(0,i).concat(subT,subtree.children.slice(i));

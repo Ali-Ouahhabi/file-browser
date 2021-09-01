@@ -34,13 +34,13 @@ class FilesLayoutsViewBarr extends React.Component {
   }
 
   render() {
-    let item = (it, index) => [(<a onClick={this.clicked} index={index}>{it}</a>), (<div class="breadcrumb__separator">/</div>)]
+    let item = (it, index) => [(<a onClick={this.clicked} index={index}>{it}</a>), (<div className="breadcrumb__separator">/</div>)]
 
     let breadCrumb = () => {
       if (this.props.breadCrumb)
         return (
-          <div class="breadcrumb">
-            {this.props.breadCrumb.split('/').filter(a=>a!="").map(item)}
+          <div key="0"  className="breadcrumb">
+            {this.props.breadCrumb.split('/').filter(a=>a!=="").map(item)}
           </div>
         )
     }
@@ -48,17 +48,17 @@ class FilesLayoutsViewBarr extends React.Component {
     return (
       <div className="FilesLayouts">
         {breadCrumb()}
-        <div className="menu-block" onClick={(e) => this.setLayout(e, Layout.TREE)}>
+        <div className="menu-block" key="1" onClick={(e) => this.setLayout(e, Layout.TREE)}>
           <span className="menu-icon">
             <CgListTree />
           </span>
         </div>
-        <div className="menu-block" onClick={(e) => this.setLayout(e, Layout.LIST)}>
+        <div className="menu-block" key="2" onClick={(e) => this.setLayout(e, Layout.LIST)}>
           <span className="menu-icon">
             <ImList />
           </span>
         </div>
-        <div className="menu-block" onClick={(e) => this.setLayout(e, Layout.GRID)}>
+        <div className="menu-block" key="3" onClick={(e) => this.setLayout(e, Layout.GRID)}>
           <span className="menu-icon">
             <BsGridFill />
           </span>

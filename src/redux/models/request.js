@@ -71,7 +71,7 @@ function userRegister(payload){
 }
 
 function userRefresh(){
-    if(localStorage.getItem("refresh")==undefined) throw new Error();
+    if(localStorage.getItem("refresh")===undefined) throw new Error();
     return http({
         url:"/user/refresh",
         method:"get",

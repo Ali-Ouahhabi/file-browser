@@ -6,7 +6,7 @@ class Status extends React.Component {
 
   render() {
 
-    if(this.props.status == undefined) return "";
+    if(this.props.status === undefined) return "";
 
     if(this.props.status.state==='up')
     return <PulseLoader class="loader"></PulseLoader>

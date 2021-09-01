@@ -142,9 +142,9 @@ class FileManager_ extends React.Component {
     )
   }
 
-  render() { 
+  render() {
     let subtree;
-    if (this.props.branch.index != undefined)
+    if (this.props.branch.index !== undefined)
       subtree = SubTreeHelper.getSubtreeAt(this.props.fileTree, this.props.branch.index);
     else
       subtree = this.props.fileTree;
@@ -164,6 +164,8 @@ class FileManager_ extends React.Component {
               id={subtree.index.join("") + subtree.name}
               layout={this.state.layout}
             />)
+        default:
+          return;
       }
     }
 

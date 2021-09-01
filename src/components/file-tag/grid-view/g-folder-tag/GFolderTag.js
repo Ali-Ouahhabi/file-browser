@@ -1,10 +1,9 @@
 import React from 'react';
 import { NativeTypes } from 'react-dnd-html5-backend';
-import { ImFileText2, ImFolder } from 'react-icons/im';
+import { ImFolder } from 'react-icons/im';
 import { Actions, setAction } from '../../../../redux/actions/Actions';
 import './GFolderTag.scss';
 import { DragSource, DropTarget } from "react-dnd";
-import {GFileTag_} from '../g-file-tag/GFileTag';
 // import { DragContent, DropCall } from '../../DnDUtil';
 
 

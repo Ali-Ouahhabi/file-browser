@@ -6,8 +6,6 @@ import { NativeTypes } from "react-dnd-html5-backend";
 import { Actions, setAction } from "../../redux/actions/Actions";
 import { connect } from "react-redux";
 import Status from "../status/status";
-import { Layout } from "../util/layout";
-import { DragContent, DropCall } from "./DnDUtil";
 
 
 class FileTag extends React.Component {
@@ -95,7 +93,6 @@ class FileTag extends React.Component {
 	renderChildTreeView() {
 		let name = "file-tag-" + (this.props.self.isFile ? "file" : "folder")
 		let children = () => {
-			let tmp = []
 			if (this.props.self.children && this.state.isToggled) {
 				return this.props.self.children.map((child, index) => {
 					child.index = this.props.self.index.concat(index)

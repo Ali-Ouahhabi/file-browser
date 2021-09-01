@@ -133,7 +133,7 @@ export default function reduce(state = initialState, action) {
                         }
                         case Actions.ACTION.SUCCESS: {
                             console.log(action)
-                            if (action.payload != null && action.payload != "")
+                            if (action.payload !== null && action.payload !== "")
                                 return { ...state, fileTree: action.payload };
                             return state;
                         }

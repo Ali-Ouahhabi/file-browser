@@ -6,14 +6,14 @@ import GFolderTag from './g-folder-tag/GFolderTag';
 import { DragSource, DropTarget } from "react-dnd";
 
 import './gridView.scss';
-import { DragContent, DropCall } from '../DnDUtil';
+import { DragContent } from '../DnDUtil';
 import { connect } from 'react-redux';
 
 class GridView_ extends React.Component {
 
-	constructor(props) {
-		super(props);
-	}
+	// constructor(props) {
+	// 	super(props);
+	// }
 
 	onDrop(props, monitor, component) {
 		if (monitor.getItemType() === NativeTypes.FILE) {//mostly
@@ -46,9 +46,9 @@ class GridView_ extends React.Component {
 					return this.props.self.children.map((child, index) => {
 						child.index = this.props.self.index.concat(index);
 						if (child.isFile)
-							return (<GFileTag self={child} dispatch={this.props.dispatch} />);
+							return (<GFileTag key={child.index.join("")} self={child} dispatch={this.props.dispatch} />);
 						else
-							return (<GFolderTag self={child} dispatch={this.props.dispatch} />);
+							return (<GFolderTag key={child.index.join("")} self={child} dispatch={this.props.dispatch} />);
 					});
 				}
 

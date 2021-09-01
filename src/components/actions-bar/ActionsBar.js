@@ -23,10 +23,10 @@ class ActionsBar_ extends React.Component {
       <div className="ActionsBar">
         <div className="gear">
           <div className="logout-block" onClick={this.props.LogOut}>
-          <span class="logout-icon">
+          <span className="logout-icon">
               <RiLogoutCircleRLine />
             </span>
-            <span class="logout-title">
+            <span className="logout-title">
               logout
             </span>
 
