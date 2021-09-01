@@ -69,7 +69,7 @@ export default class SubTreeHelper{
         // if we want to update the index of the following sibling
         //  for each self.index = parent.index concate to my index 
         // we simply need to change the last value in my index (increment by 1)
-        // but for self children (call it theirs) on of them it.index = self.index concate index
+        // but for self children (call it theirs) one of them it.index = self.index concate index
         // which mean all the descendent of self should be updated wich will turn up to be too costly
         // the necessity of the index 
         // if an element is selected we can refer to it in the tree by the index

@@ -142,15 +142,11 @@ export default function DataConverter({ getState,dispatch }) {
                 return next(setAction(Actions.FileManager.FOLDER.CREATE.REMOTE,payload))
             }
             case Actions.DataConverter.SELECTED:
-                // let {self , view}  = action.payload.selectedV;
-                // let view = action.payload.view;
-                console.log("state ",getState())
+
                 let tmpS=getState()
-                console.log("tmpS ",tmpS)
                 if("selectedV" in tmpS && typeof tmpS.selectedV.view === 'function') {
                     tmpS.selectedV.view();
                 }
-                //view.selected=true;
                 tmpS.selectedV=action.payload.selectedV;
                 tmpS.selectedV.view();
                 return next(setAction(Actions.SELECTED, {selectedV:tmpS.selectedV}));

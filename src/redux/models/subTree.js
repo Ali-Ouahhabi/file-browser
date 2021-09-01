@@ -2,7 +2,7 @@ export class SubTree {
 
     constructor(name) {
         this.name = name?name:null;
-        this.path = name;
+        this.path = name+"/";
         this.index = [];
         this.parent = null;
         this.children = [];

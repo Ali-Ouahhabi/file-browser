@@ -119,7 +119,7 @@ class FileTag extends React.Component {
 					className={name + (!this.props.self.isFile && this.props.isOver ? "-hover" : "") + (this.state.selected ? "-selected" : '')}
 					index = {this.props.self.index}
 					onClick={this.clicked}
-					onDoubleClick={(e,t=this.props.self.index)=>this.doubleClick(t)}
+					onDoubleClick={this.doubleClick}
 				>
 					<div>{this.props.filter || ""}</div>
 					<span className={"file-tag-icon"}>
