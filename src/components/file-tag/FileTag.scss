@@ -81,23 +81,27 @@ height: 100%;
     border-collapse: separate;
     border-spacing: 0 5px;
     margin: 0 auto;
+    width: 100%;
+    margin: 5px;
     thead {
 
       th {
         padding-left: 10px;
         text-align: center;
 
-        border-top: $color5 solid 2px;
+        border-bottom: $color5 solid 1px;
+        // border-radius: 0 0 5px 0;
+
       }
       :first-child {
-        border-radius: 5px 0 0 0;
-        border-left: $color5 solid 2px;
+        border-radius: 0 0 0 5px ;
+        // border-left: $color5 solid 2px;
         
       }
 
       :last-child {
-        border-radius: 0 5px 0 0;
-        border-right: $color5 solid 2px;
+        border-radius: 0 0 5px 0;
+        // border-right: $color5 solid 2px;
       }
     }
     tbody {
@@ -111,6 +115,9 @@ height: 100%;
       tr:hover {
         background-color: $color1;
         color: $color3;
+        td{
+          border-color: $color3;
+        }
 
       }
       td {
@@ -143,13 +150,13 @@ height: 100%;
         min-width: 150px;
         padding-left: 5px;
         text-align: left;
-        border-right: $color5 solid 1px;
+        // border-right: $color5 solid 1px;
 
       }
       :nth-child(3) {
         max-width: 205px;
         min-width: 155px;
-        border-right: $color5 solid 1px;
+        // border-right: $color5 solid 1px;
 
       }
       :nth-child(4) {
@@ -157,13 +164,13 @@ height: 100%;
         min-width: 100px;
         word-break: break-all;
         max-height: 40px;
-        border-right: $color5 solid 1px;
+        // border-right: $color5 solid 1px;
 
       }
       :nth-child(5) {
         max-width: 150px;
         min-width: 30px;
-        border-right: solid 2px;
+        // border-right: solid 2px;
       }
     }
   }

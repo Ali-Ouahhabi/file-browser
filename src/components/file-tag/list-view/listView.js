@@ -17,7 +17,6 @@ class ListView_ extends React.Component {
 
   onDrop(props, monitor, component) {
 
-    console.log("list onDrop")
 
 		if (monitor.getItemType() === NativeTypes.FILE) {
 			let items = monitor.getItem().items
@@ -65,8 +64,7 @@ class ListView_ extends React.Component {
         <table className="list-view-table">
           <thead>
             <tr>
-              <th></th>
-              <th>name</th>
+              <th colspan="2">name</th>
               <th>lastModified</th>
               <th>type</th>
               <th>size</th>
@@ -84,7 +82,6 @@ class ListView_ extends React.Component {
 
 const dropCall = {
 	drop(props, monitor, component) {
-    console.log("list drop call ",component)
 		if (component instanceof ListView_) {
 			component.onDrop(props, monitor, component)
 			return

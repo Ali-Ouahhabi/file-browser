@@ -45,7 +45,6 @@ export class SubTree {
 
     addElAt(el, index) {
         if (!index) index = el.getIndex();
-        console.log("[SubTree] index ",index)
         index.shift();
         if (index.length > 1) {
             this.children[index[0]].addElAt(el,index)

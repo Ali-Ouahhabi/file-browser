@@ -22,9 +22,7 @@ class FilesLayoutsViewBarr extends React.Component {
 
   clicked(e){
     let i = parseInt( e.currentTarget.getAttribute("index"));
-    console.log("index read ",i)
     let p = this.props.index.slice(0,i);
-    console.log("index requested ",p, "from", this.props.index)
     this.props.dispatch(
 			setAction(
 				Actions.Tree.CURRENT,

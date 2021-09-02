@@ -29,7 +29,6 @@ const initialState = {
 }
 
 export default function reduce(state = initialState, action) {
-    console.log("REDUCER ", action);
     if (action.type[2] === Actions.ACTION.REMOTE)
         throw new Error("Reducer invalid actions " + action.type.join('/'))
     switch (action.type[0]) {
@@ -44,7 +43,6 @@ export default function reduce(state = initialState, action) {
                             localStorage.setItem("jwt", action.payload.data.jwt)
                             return { ...state, connected: true };
                         case Actions.ACTION.ERROR:
-                            console.log("register ", action.payload)
                             if (action.payload.data.msg === "dupKey")
                                 return {
                                     ...state,
@@ -65,7 +63,6 @@ export default function reduce(state = initialState, action) {
                             return { ...state, LOADING: true };
                         case Actions.ACTION.SUCCESS:
                             //success
-                            console.log("jwt", action.payload)
                             localStorage.setItem("refresh", action.payload.data.refresh)
                             localStorage.setItem("jwt", action.payload.data.jwt)
                             return { ...state, connected: true };
@@ -132,7 +129,6 @@ export default function reduce(state = initialState, action) {
                             return triggerNotifier(state, action.type[3], "Creating ...")
                         }
                         case Actions.ACTION.SUCCESS: {
-                            console.log(action)
                             if (action.payload !== null && action.payload !== "")
                                 return { ...state, fileTree: action.payload };
                             return state;
@@ -170,21 +166,18 @@ export default function reduce(state = initialState, action) {
 
             }
         case Actions.ACTION.SELECTED:
-            console.log("Reducer SELECTED ", action.payload)
             return { ...state, selectedV: action.payload.selectedV }
         case Actions.ACTION.FOLDER:
             switch (action.type[1]) {
                 case Actions.ACTION.CREATE: {
                     switch (action.type[3]) {
                         case Actions.ACTION.LOADING: {
-                            console.log("Payload ", action.payload)
                             return triggerNotifier(state, action.type[3], "Creating ...")
                         }
                         case Actions.ACTION.SUCCESS: {
                             return triggerNotifier(state, action.type[3], "... created successfully")
                         }
                         case Actions.ACTION.ERROR: {
-                            console.log("Payload !", action.payload)
                             return triggerNotifier(state, action.type[3], "Error occurred while creating ...")
                         }
                         default:
@@ -207,7 +200,6 @@ export default function reduce(state = initialState, action) {
                     }
                 }
                 case Actions.ACTION.DELETE: {
-                    console.log("DELETE", action.type)
                     switch (action.type[3]) {
                         case Actions.ACTION.LOADING: {
                             return triggerNotifier(state, action.type[3], "Deleting ...")

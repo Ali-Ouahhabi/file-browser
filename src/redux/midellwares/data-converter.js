@@ -13,7 +13,6 @@ import mime from "mime-types"
 //TODO: move is not sort inserting !!!! Primary
 export default function DataConverter({ getState,dispatch }) {
     return (next) => (action) => {
-        console.log("..........",action)
         switch (action.type) {
             case Actions.DataConverter.UPLOAD_File_Set:{
                 let items = action.payload.items;
@@ -39,7 +38,6 @@ export default function DataConverter({ getState,dispatch }) {
                         "type":mime.lookup(leaf.data.type?leaf.data.type:leaf.name.split(".").pop())||"application/octet-stream"
                     }
                     SubTreeHelper.addChildTo(subtree, leaf)
-                    console.log("file ",leaf.data)
                     files.append("files", leaf.data);
                     meta.push(leaf.meta)
                     })
@@ -63,7 +61,6 @@ export default function DataConverter({ getState,dispatch }) {
                         //let size=0;
                         Array.from(leafs).forEach(elements => {
                             Array.from(elements).forEach(element => {
-                                console.log("file ",element.data)
                                 if (element.isFile) {
                                     files.append("files", element.data);
                                     element.meta = {
@@ -89,7 +86,6 @@ export default function DataConverter({ getState,dispatch }) {
                     })
                 })
             case Actions.DataConverter.DOWNLOAD:{
-                console.log("Download......")
                 let branch = getState().selectedV.self
                 let payload={
                     isFile:branch.isFile?"true":"false",
@@ -110,7 +106,6 @@ export default function DataConverter({ getState,dispatch }) {
             }
             case Actions.DataConverter.RENAME:{
                 let branch = getState().selectedV.self
-                console.log("DC b",branch)
                 let payload={ ref:{
                     branch:branch,
                     newName:action.payload.newName
@@ -138,7 +133,6 @@ export default function DataConverter({ getState,dispatch }) {
                     selectedV:getState().selectedV,
                     name:action.payload.name
                 }
-                console.log(action.type,payload)
                 return next(setAction(Actions.FileManager.FOLDER.CREATE.REMOTE,payload))
             }
             case Actions.DataConverter.SELECTED:
@@ -152,7 +146,6 @@ export default function DataConverter({ getState,dispatch }) {
                 return next(setAction(Actions.SELECTED, {selectedV:tmpS.selectedV}));
                 
             default:
-                console.log("DataConverter forwarding ",action)
                 return next(action);
         }
     }

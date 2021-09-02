@@ -22,9 +22,7 @@ constructor(props) {
 		this.setState({ selected: !this.state.selected });
 	}
   onDrop(props, monitor, component) {
-		console.log("LFolderT droping ");
 		if (monitor.getItemType() === NativeTypes.FILE) {
-			console.log("                 file systems ");
 
 			let items = monitor.getItem().items
 			this.props.dispatch(
@@ -36,7 +34,6 @@ constructor(props) {
 
 		} else {
 			let item = monitor.getItem()
-			console.log("                 sub files ");
 
 			if (this.props.self.children[item.index[item.index.length - 1]] === item) return;
 			this.props.dispatch(
@@ -63,7 +60,6 @@ constructor(props) {
 	}
 
 	doubleClick(e) {
-		console.log("target",e.currentTarget)
 		this.props.dispatch(
 			setAction(
 				Actions.Tree.CURRENT,

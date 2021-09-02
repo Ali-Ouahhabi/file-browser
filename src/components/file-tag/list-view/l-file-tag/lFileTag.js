@@ -43,7 +43,6 @@ constructor(props) {
 	}
 
 	doubleClick(e) {
-		console.log("target",e.currentTarget)
 		this.props.dispatch(
 			setAction(
 				Actions.Tree.CURRENT,
@@ -104,7 +103,6 @@ const dropCall = {
 
 const dragContent = {
 	beginDrag(props, monitor, component) {
-		console.log("LFileT drag call")
 		return props.self;
 	},
 }

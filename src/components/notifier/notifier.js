@@ -25,8 +25,6 @@ class Notifier_ extends React.Component {
   }
 
   componentDidUpdate(){
-    console.log("NOTIFIER!!!!!!!!!!!!!!!!")
-    console.log(this.props.notification)
      this.show()
   }
 

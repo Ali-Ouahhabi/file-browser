@@ -25,7 +25,6 @@ class FileTag extends React.Component {
 	}
 
 	onDrop(props, monitor, component) {
-		console.log("File Tag Drop ",component)
 
 		if (this.props.self.isFile)
 			return this.props.parent.onDrop(props, monitor, component)
@@ -68,7 +67,6 @@ class FileTag extends React.Component {
 	}
 
 	doubleClick(e) {
-		console.log("target",e.currentTarget)
 		this.props.dispatch(
 			setAction(
 				Actions.Tree.CURRENT,
@@ -140,7 +138,6 @@ class FileTag extends React.Component {
 
 const dropCall = {
 	drop(props, monitor, component) {
-		console.log("drop CALL \n cndq",(component instanceof FileTag));
 		if (component instanceof FileTag) {
 			component.onDrop(props, monitor, component)
 			return
@@ -151,7 +148,6 @@ const dropCall = {
 
 const dragContent = {
 	beginDrag(props, monitor, component) {
-		console.log("beginDrag")
 		return props.self;
 	},
 }

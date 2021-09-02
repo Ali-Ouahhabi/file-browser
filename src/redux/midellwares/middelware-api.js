@@ -6,7 +6,6 @@ import SubTreeHelper from "../models/subTreeHelper";
 
 export default function apiService({getState , dispatch }) {
     return (next) => (action) => {
-        console.log("apiMid ", action)
 
         switch (action.type[2]) {
             case Actions.ACTION.REMOTE:
@@ -56,7 +55,6 @@ export default function apiService({getState , dispatch }) {
                                         );
                                     })
                                     .catch((error) => {
-                                        console.log(error)
                                         next(
                                             setAction(
                                                 Actions.UserManager.USER.SIGN_IN.LOCAL.ERROR,
@@ -182,13 +180,11 @@ export default function apiService({getState , dispatch }) {
                                         //         data
                                         //     )
                                         // )
-                                        console.log("received Data",data)
                                         let blb  = new Blob([data.data])
                                         var objectUrl = URL.createObjectURL(blb);
                                         const link = document.createElement('a');
 
                                         link.href = objectUrl;
-                                        console.log("HEADERS",data.headers)
                                         link.setAttribute('download', data.headers["content-disposition"]); //any other extension
 
                                         document.body.appendChild(link);
@@ -198,7 +194,6 @@ export default function apiService({getState , dispatch }) {
                                         link.remove();
                                     })
                                     .catch((error) => {
-                                        console.log(action.type,error)
                                         return next(
                                             setAction(
                                                 Actions.FileManager.FOLDER.DOWNLOAD.LOCAL.ERROR,
@@ -222,7 +217,6 @@ export default function apiService({getState , dispatch }) {
                                         return next(setAction(Actions.Tree.UPDATE,getState().fileTree))
                                     })
                                     .catch((error) => {
-                                        console.log(action.type,error)
                                         subtree.children = subtree.children.slice(0,reference)
                                         dispatch(
                                             setAction(
@@ -254,7 +248,6 @@ export default function apiService({getState , dispatch }) {
 
                                     })
                                     .catch((error) => {
-                                        console.log(action.type,error)
                                         return next(
                                             setAction(
                                                 Actions.FileManager.FOLDER.MOVE.LOCAL.ERROR,

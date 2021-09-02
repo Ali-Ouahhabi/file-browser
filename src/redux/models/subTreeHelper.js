@@ -18,18 +18,15 @@ export default class SubTreeHelper{
         if(index.length===0||!index) throw new Error("SubTreeHelper.getSubtreeParentByIndex param2 can't be null or empty")
         let cursor = subtree;  
         index.slice(0,index.length-1).forEach(i=>{
-            console.log(i+" at ", cursor)
             cursor=cursor.children[i]
         })
         return cursor;
     }
 
     static getSubtreeAt(tree,index){
-        console.log("SubtreeHelper.getSubtree ",tree,index)
         if(index === undefined || tree===undefined) return tree;
         let tmp=tree;
         for(let i=0;i<index.length;i++){
-            console.log("  -> at",index[i]," for ",tmp)
             if(tmp.children&&tmp.children.length>i)tmp = tmp.children[index[i]];
 
         }
@@ -37,7 +34,6 @@ export default class SubTreeHelper{
     }
 
     static addChildTo(subtree,subT) { 
-        console.log("addChildTo ",subtree)
         // if we assume that subtree it's nodes per layer are sorted by file type and name 
         // but it could also be sorted by size modification date 
         // if we choose sort while insert

@@ -44,7 +44,6 @@ class GFileTag_ extends React.Component {
 	}
 
 	doubleClick(e) {
-		console.log("target",e.currentTarget)
 		this.props.dispatch(
 			setAction(
 				Actions.Tree.CURRENT,

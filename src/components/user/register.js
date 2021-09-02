@@ -79,7 +79,6 @@ class Register extends React.Component {
     }
 
     render() {
-        console.log("Register props error val",this.props);
         return (
             <Container component="main" maxWidth="xs">
                 <div>
