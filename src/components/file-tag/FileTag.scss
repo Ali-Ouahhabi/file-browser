@@ -74,9 +74,10 @@ div {
 }
 
 .rootListView {
-  position: absolute;
-height: 100%;
+  position: fixed;
+  height: 100%;
   margin: auto;
+
   .list-view-table {
     border-collapse: separate;
     border-spacing: 0 5px;
@@ -84,19 +85,16 @@ height: 100%;
     width: 100%;
     margin: 5px;
     thead {
-
       th {
         padding-left: 10px;
         text-align: center;
 
         border-bottom: $color5 solid 1px;
         // border-radius: 0 0 5px 0;
-
       }
       :first-child {
-        border-radius: 0 0 0 5px ;
+        border-radius: 0 0 0 5px;
         // border-left: $color5 solid 2px;
-        
       }
 
       :last-child {
@@ -107,7 +105,7 @@ height: 100%;
     tbody {
       text-align: left;
       table-layout: fixed;
-      padding:0px;
+      padding: 0px;
       tr {
         height: 40px;
         margin-bottom: 100px;
@@ -115,10 +113,9 @@ height: 100%;
       tr:hover {
         background-color: $color1;
         color: $color3;
-        td{
+        td {
           border-color: $color3;
         }
-
       }
       td {
         padding: 0px 10px 0px 10px;
@@ -130,18 +127,17 @@ height: 100%;
       }
 
       :nth-child(1) {
-
         max-width: 20px;
         min-width: 20px;
         border-left: solid 2px;
 
         span {
-          border:none;
+          border: none;
           height: 100%;
           margin-right: 2px;
           padding-bottom: 5px;
-          svg{
-            border:none;
+          svg {
+            border: none;
           }
         }
       }
@@ -151,13 +147,11 @@ height: 100%;
         padding-left: 5px;
         text-align: left;
         // border-right: $color5 solid 1px;
-
       }
       :nth-child(3) {
         max-width: 205px;
         min-width: 155px;
         // border-right: $color5 solid 1px;
-
       }
       :nth-child(4) {
         max-width: 100px;
@@ -165,7 +159,6 @@ height: 100%;
         word-break: break-all;
         max-height: 40px;
         // border-right: $color5 solid 1px;
-
       }
       :nth-child(5) {
         max-width: 150px;
@@ -180,8 +173,9 @@ height: 100%;
   display: inline-block;
   margin: 10px;
   height: 100%;
-  position: absolute;
-  div.grid-file, div.grid-folder {
+  position: fixed;
+  div.grid-file,
+  div.grid-folder {
     display: inline-block;
     align-content: center;
     min-width: 120px;
@@ -198,14 +192,11 @@ height: 100%;
     .file-tag-icon {
       font-size: 50px;
     }
-
   }
 
-  div.grid-file:hover, div.grid-folder:hover  {
+  div.grid-file:hover,
+  div.grid-folder:hover {
     background-image: radial-gradient(circle, #dcdce1, #e2e2e6, #e8e8ec, #efeff1, #f5f5f7);
     cursor: pointer;
   }
 }
-
-
-
