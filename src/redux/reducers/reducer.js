@@ -4,7 +4,7 @@ const initialState = {
     fileTree: new SubTree("root"),
     branch: { index: [] },
     current: new SubTree("root"),
-    connected: false,
+    connected: localStorage.getItem("refresh")!==null,
     selected: {
         isFile: null,
         path: null,
