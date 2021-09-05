@@ -3,7 +3,6 @@ export class SubTree {
     constructor(name) {
         this.name = name?name:null;
         this.path = name+"/";
-        this.index = [];
         this.parent = null;
         this.children = [];
         this.status = new Status("s", null);
@@ -21,7 +20,6 @@ export class SubTree {
         if (dict["data"]) this.data = dict["data"];
     }
     setName(name) { this.name = name }
-    setIndex(index) { this.index = index }
     setParent(parent) { this.parent = parent }
     setChildren(children) { this.children = children }    
     setStatus(status) { this.status = status }
@@ -30,7 +28,6 @@ export class SubTree {
     
     getName() { return this.name }
     getPath() { return this.path }
-    getIndex() { return this.index }
         
     addChild(subT) { return this.children.push(subT) - 1 }
 

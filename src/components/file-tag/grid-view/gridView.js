@@ -9,11 +9,20 @@ import './gridView.scss';
 import { DragContent } from '../DnDUtil';
 import { connect } from 'react-redux';
 
-class GridView_ extends React.Component {
 
-	// constructor(props) {
-	// 	super(props);
-	// }
+
+function GrideViewChildren(props){
+	if (props.children) {
+		return props.children.map((child, index) => {
+			if (child.isFile)
+				return (<GFileTag key={index+child.name} self={child} name={child.name} dispatch={props.dispatch} />);
+			else
+				return (<GFolderTag key={index+child.name} self={child} name={child.name} dispatch={props.dispatch} />);
+		});
+	}else return '';
+}
+
+class GridView_ extends React.Component {
 
 	onDrop(props, monitor, component) {
 		if (monitor.getItemType() === NativeTypes.FILE) {//mostly
@@ -28,7 +37,7 @@ class GridView_ extends React.Component {
 		} else {
 			let item = monitor.getItem()
 
-			if (this.props.self.children[item.index[item.index.length - 1]] === item) return;
+			if (this.props.self.children.filter(e=>e.name===item.name).length!==0) return;
 			this.props.dispatch(
 				setAction(
 					Actions.FileManager.FOLDER.MOVE.REMOTE,
@@ -41,21 +50,10 @@ class GridView_ extends React.Component {
 
 	render() {
 		let renderChildGridView = () => {
-			let children = () => {
-				if (this.props.self.children) {
-					return this.props.self.children.map((child, index) => {
-						child.index = this.props.self.index.concat(index);
-						if (child.isFile)
-							return (<GFileTag key={child.index.join("")} self={child} dispatch={this.props.dispatch} />);
-						else
-							return (<GFolderTag key={child.index.join("")} self={child} dispatch={this.props.dispatch} />);
-					});
-				}
 
-			}
 			return this.props.connectDropTarget((
 				<div className="rootGridView">
-					{children()}
+					<GrideViewChildren children={this.props.self.children} dispatch={this.props.dispatch}/>
 				</div>
 			))
 

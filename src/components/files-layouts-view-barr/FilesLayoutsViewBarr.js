@@ -22,7 +22,7 @@ class FilesLayoutsViewBarr extends React.Component {
 
   clicked(e){
     let i = parseInt( e.currentTarget.getAttribute("index"));
-    let p = this.props.index.slice(0,i);
+    let p = this.props.breadCrumb.split('/').filter(a=>a!=="").slice(0,i+1);
     this.props.dispatch(
 			setAction(
 				Actions.Tree.CURRENT,

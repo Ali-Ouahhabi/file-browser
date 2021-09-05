@@ -1,10 +1,10 @@
 import { Actions, setAction } from "../actions/Actions"
-import { User, Folder, Tree,Error_log } from "../models/request"
+import { User, Folder, Tree, Error_log } from "../models/request"
 import { Status } from "../models/subTree";
 import SubTreeHelper from "../models/subTreeHelper";
 
 
-export default function apiService({getState , dispatch }) {
+export default function apiService({ getState, dispatch }) {
     return (next) => (action) => {
 
         switch (action.type[2]) {
@@ -86,7 +86,7 @@ export default function apiService({getState , dispatch }) {
                                             )
                                         )
                                     })
-                                
+
                             default:
                                 Error_log(action)
                                 return;
@@ -100,24 +100,28 @@ export default function apiService({getState , dispatch }) {
                                         action.payload
                                     )
                                 )
-                                let child = SubTreeHelper.addChildTo(action.payload.branch,{
-                                    name:action.payload.name,
-                                    isFile:false,
-                                    children:[],
-                                    status:new Status("s")
+                                console.log(" Create bf insert ",action.payload.selectedV.self)
+
+                                let childIndex = SubTreeHelper.addChildTo(action.payload.selectedV.self, {
+                                    name: action.payload.name,
+                                    isFile: false,
+                                    children: [],
+                                    status: new Status("s")
                                 })
-                                return Tree.updateTree(getState().fileTree).then((resp)=>{
+ 
+                                console.log(" Create bf update tree ",action.payload.selectedV.self)
+                                return Tree.updateTree(getState().fileTree).then((resp) => {
                                     return next(
                                         setAction(
-                                            Actions.FileManager.FOLDER.CREATE.LOCAL.SUCCESS,resp)
-                                        )
-                                    }
-                                ).catch(resp=>{
-                                    SubTreeHelper.removeElAt(getState().fileTree,child.index);
+                                            Actions.FileManager.FOLDER.CREATE.LOCAL.SUCCESS, resp)
+                                    )
+                                }
+                                ).catch(resp => {
+                                    SubTreeHelper.removeChildAt(getState().fileTree, childIndex);
                                     return next(
                                         setAction(
-                                            Actions.FileManager.FOLDER.CREATE.LOCAL.ERROR,resp)
-                                        )
+                                            Actions.FileManager.FOLDER.CREATE.LOCAL.ERROR, resp)
+                                    )
                                 });
                             case Actions.ACTION.RENAME:
                                 next(
@@ -126,12 +130,12 @@ export default function apiService({getState , dispatch }) {
                                         action.payload
                                     )
                                 )
-                                return Folder.folderRename(      
-                                   action.payload.req
-                                   )
+                                return Folder.folderRename(
+                                    action.payload.req
+                                )
                                     .then((data) => {
                                         SubTreeHelper.rename(action.payload.ref.branch, action.payload.ref.newName)
-                                        return next(setAction(Actions.Tree.UPDATE,getState().fileTree))
+                                        return next(setAction(Actions.Tree.UPDATE, getState().fileTree))
                                     })
                                     .catch((error) => {
                                         return next(
@@ -149,15 +153,20 @@ export default function apiService({getState , dispatch }) {
                                     )
                                 )
                                 return Folder.folderDelete({
-                                    isFile:action.payload.isFile,
-                                    path:action.payload.path,
-                                    name:action.payload.name
+                                    isFile: action.payload.isFile,
+                                    path: action.payload.path,
+                                    name: action.payload.name
                                 })
                                     .then((data) => {
-                                        SubTreeHelper.removeElAt(getState().fileTree,action.payload.index)
-                                        return next(setAction(Actions.Tree.UPDATE,getState().fileTree))
+                                        console.log("middelware Api ",action)
+                                        if (action.payload.isFile)
+                                            SubTreeHelper.removeLeafAtPath(getState().fileTree, action.payload.path, action.payload.name);
+                                        else
+                                            SubTreeHelper.removeElAtPath(getState().fileTree, action.payload.path);
+                                        return next(setAction(Actions.Tree.UPDATE, getState().fileTree))
                                     })
                                     .catch((error) => {
+                                        console.log("middelware Api err ",action)
                                         return next(
                                             setAction(
                                                 Actions.FileManager.FOLDER.DELETE.LOCAL.ERROR,
@@ -180,7 +189,7 @@ export default function apiService({getState , dispatch }) {
                                         //         data
                                         //     )
                                         // )
-                                        let blb  = new Blob([data.data])
+                                        let blb = new Blob([data.data])
                                         var objectUrl = URL.createObjectURL(blb);
                                         const link = document.createElement('a');
 
@@ -203,7 +212,7 @@ export default function apiService({getState , dispatch }) {
                                     })
                             case Actions.ACTION.UPLOAD:
                                 let data = action.payload.data;
-                                let subtree = action.payload.subTree; 
+                                let subtree = action.payload.subTree;
                                 let reference = action.payload.reference;
                                 next(
                                     setAction(
@@ -213,11 +222,11 @@ export default function apiService({getState , dispatch }) {
                                 )
                                 return Folder.folderUpload(data)
                                     .then((data) => {
-                                        SubTreeHelper.propStatus(subtree,new Status("sc", "uploaded"))
-                                        return next(setAction(Actions.Tree.UPDATE,getState().fileTree))
+                                        SubTreeHelper.propStatus(subtree, new Status("sc", "uploaded"))
+                                        return next(setAction(Actions.Tree.UPDATE, getState().fileTree))
                                     })
                                     .catch((error) => {
-                                        subtree.children = subtree.children.slice(0,reference)
+                                        subtree.children = subtree.children.slice(0, reference)
                                         dispatch(
                                             setAction(
                                                 Actions.FileManager.FOLDER.UPLOAD.LOCAL.ERROR,
@@ -226,12 +235,12 @@ export default function apiService({getState , dispatch }) {
                                         )
                                     })
                             case Actions.ACTION.MOVE:
-                                let from=action.payload.from
+                                let from = action.payload.from
                                 let to = action.payload.to
                                 let tmp = {
-                                    name:from.isFile?action.payload.from.getName:null,
-                                    from:from.path,
-                                    to:to.path
+                                    name: from.isFile ? action.payload.from.getName : null,
+                                    from: from.path,
+                                    to: to.path
                                 }
                                 next(
                                     setAction(
@@ -241,10 +250,13 @@ export default function apiService({getState , dispatch }) {
                                 )
                                 return Folder.folderMove(tmp)
                                     .then((data) => {
-                                        SubTreeHelper.removeElAt(getState().fileTree,from.index)
-                                        to.children=[].concat(to.children,from)
-                                        from.index=[].concat(to.index,to.children.length-1)
-                                        return next(setAction(Actions.Tree.UPDATE,getState().fileTree))
+                                        if (from.isFile)
+                                            SubTreeHelper.removeLeafAtPath(getState().fileTree, from.path);
+                                        else
+                                            SubTreeHelper.removeElAtPath(getState().fileTree, from.path);
+                                        SubTreeHelper.addChildTo(to, from)
+
+                                        return next(setAction(Actions.Tree.UPDATE, getState().fileTree))
 
                                     })
                                     .catch((error) => {
@@ -260,34 +272,34 @@ export default function apiService({getState , dispatch }) {
                                 return;
                         }
                     case Actions.ACTION.TREE:
-                        switch(action.type[1]){
+                        switch (action.type[1]) {
                             case Actions.ACTION.FETCH:
                                 return Tree.fetchTree(action.payload).then(
-                                    (e)=>{
+                                    (e) => {
                                         return next(setAction(
                                             Actions.Tree.REFRESH.SUCCESS,
                                             e.data
                                         ))
                                     }
-                                        )
-                                        .catch((e)=>{
-                                            return next(setAction(
-                                                Actions.Tree.REFRESH.ERROR,
-                                                e
-                                            ))
-                                        });
+                                )
+                                    .catch((e) => {
+                                        return next(setAction(
+                                            Actions.Tree.REFRESH.ERROR,
+                                            e
+                                        ))
+                                    });
                             default:
                                 Error_log(action)
                                 return;
+                        }
+                    default:
+                        return next(action);
                 }
             default:
                 return next(action);
         }
-        default:
-            return next(action);
+
     }
-    
-}
 }
 
 

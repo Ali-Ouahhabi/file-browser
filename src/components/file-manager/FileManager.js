@@ -30,7 +30,7 @@ class FileManager_ extends React.Component {
         isFirstCall: true,
         saveData: {}
       },
-      layout: Layout.GRID
+      layout: Layout.LIST
     }
 
     this.filtering = this.filtering.bind(this)
@@ -144,11 +144,11 @@ class FileManager_ extends React.Component {
 
   render() {
     let subtree;
-    if (this.props.branch.index !== undefined)
-      subtree = SubTreeHelper.getSubtreeAt(this.props.fileTree, this.props.branch.index);
+    if (this.props.branch.self.name !== undefined)
+      subtree = this.props.branch.self;
     else
       subtree = this.props.fileTree;
-
+    console.log("subtree ",this.props.branch.self.name)
     let panel = () => {
       switch (this.state.layout) {
         case Layout.GRID:
@@ -160,8 +160,7 @@ class FileManager_ extends React.Component {
             <FileTag
               self={subtree}
               parent={null}
-              key={subtree.index.join("")}
-              id={subtree.index.join("") + subtree.name}
+              key={"key"+subtree.path+subtree.name}
               layout={this.state.layout}
             />)
         default:
@@ -181,7 +180,6 @@ class FileManager_ extends React.Component {
         />
         <FilesLayoutsViewBarr SetLayout={this.SetLayout}
           breadCrumb={subtree.path}
-          index={subtree.index}
           dispatch={this.props.dispatch}
         />
         <DndProvider backend={HTML5Backend}>

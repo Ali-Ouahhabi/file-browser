@@ -6,26 +6,30 @@ import { DragSource, DropTarget } from "react-dnd";
 import { NativeTypes } from 'react-dnd-html5-backend';
 
 class LFileTag_ extends React.Component {
-  
-  state = {
+
+	state = {
 		selected: false
 	}
-  
-constructor(props) {
-    super(props);
-    this.clicked = this.clicked.bind(this)
-		this.onDrop = this.onDrop.bind(this)
-		this.selected = this.selected.bind(this)
-		this.doubleClick = this.doubleClick.bind(this)
-  }
 
-  selected() {
+	constructor(props) {
+		super(props);
+		this.onDrop = this.onDrop.bind(this)
+		this.doubleClick = this.doubleClick.bind(this)
+	}
+
+
+	componentDidMount() {
+		this.clicked = this.clicked.bind(this)
+		this.selected = this.selected.bind(this)
+	}
+
+	selected() {
 		this.setState({ selected: !this.state.selected });
 	}
 
-  onDrop(props, monitor, component) {
+	onDrop(props, monitor, component) {
 
-			return this.props.parent.onDrop(props, monitor, component)
+		return this.props.parent.onDrop(props, monitor, component)
 
 	}
 
@@ -46,7 +50,7 @@ constructor(props) {
 		this.props.dispatch(
 			setAction(
 				Actions.Tree.CURRENT,
-				this.props.self.index
+				this.props.self
 			)
 		)
 		e.preventDefault();
@@ -54,7 +58,7 @@ constructor(props) {
 
 	}
 
-  getDate(timestamp) {
+	getDate(timestamp) {
 		let date = new Date();
 		date.setTime(timestamp);
 		return date.toUTCString();
@@ -66,29 +70,27 @@ constructor(props) {
 		return Math.round(bytes / Math.pow(1024, i), 2) + ' ' + sizes[i];
 	}
 
-  render() {
-    
-    
-    return (
-      this.props.connectDragSource(
-        <tr key={this.props.self.index.join("")}
-          id={this.props.self.index.join("") + this.props.self.name}
-          index={this.props.self.index}
-          onClick={this.clicked}
-          onDoubleClick={this.doubleClick}
-        >
-          <td>
-            <span className={"file-tag-icon"}>
-              <ImFileText2 />
-            </span>
-          </td>
-          <td>{this.props.self.name.length > 20 ? this.props.self.name.substring(0, 20) + "..." : this.props.self.name}</td>
-          <td>{this.getDate(this.props.self.meta.lastModified)}</td>
-          <td>{this.props.self.meta.type.length > 20 ? this.props.self.meta.type.substring(0, 20) + "..." : this.props.self.meta.type}</td>
-          <td>{this.bytesToSize(this.props.self.meta.size)}</td>
-        </tr>
-      ));
-  }
+	render() {
+
+
+		return (
+			this.props.connectDragSource(
+				<tr key={this.props.name}
+					onClick={this.clicked}
+					onDoubleClick={this.doubleClick}
+				>
+					<td>
+						<span className={"file-tag-icon"}>
+							<ImFileText2 />
+						</span>
+					</td>
+					<td>{this.props.name.length > 20 ? this.props.name.substring(0, 20) + "..." : this.props.name}</td>
+					<td>{this.getDate(this.props.lastModified)}</td>
+					<td>{this.props.type.length > 20 ? this.props.type.substring(0, 20) + "..." : this.props.type}</td>
+					<td>{this.bytesToSize(this.props.size)}</td>
+				</tr>
+			));
+	}
 }
 
 const dropCall = {

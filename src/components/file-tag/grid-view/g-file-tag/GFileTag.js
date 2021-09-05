@@ -14,11 +14,15 @@ class GFileTag_ extends React.Component {
   
   constructor(props) {
     super(props);
-    this.clicked = this.clicked.bind(this)
 		this.onDrop = this.onDrop.bind(this)
-		this.selected = this.selected.bind(this)
 		this.doubleClick = this.doubleClick.bind(this)
   }
+
+
+	componentDidMount(){
+		this.clicked = this.clicked.bind(this)
+		this.selected = this.selected.bind(this)
+	}
 
   selected() {
 		this.setState({ selected: !this.state.selected });
@@ -47,7 +51,7 @@ class GFileTag_ extends React.Component {
 		this.props.dispatch(
 			setAction(
 				Actions.Tree.CURRENT,
-				this.props.self.index
+				this.props.self
 			)
 		)
 		e.preventDefault();
@@ -59,13 +63,12 @@ class GFileTag_ extends React.Component {
     return (
       this.props.connectDragSource(
         <div className="grid-file"
-          index={this.props.self.index}
           onClick={this.clicked}
           onDoubleClick={this.doubleClick}>
           <span className={"file-tag-icon"}>
             <ImFileText2 />
           </span>
-          <span className={"file-tag-title"}>{this.props.self.name.length > 11 ? this.props.self.name.substring(0, 11) + ".." : this.props.self.name}</span>
+          <span className={"file-tag-title"}>{this.props.name.length > 11 ? this.props.name.substring(0, 11) + ".." : this.props.name}</span>
         </div>
       ));
   }

@@ -1,8 +1,9 @@
 import { Actions } from "../actions/Actions";
 import { SubTree } from "../models/subTree"
+import SubTreeHelper from "../models/subTreeHelper";
 const initialState = {
     fileTree: new SubTree("root"),
-    branch: { index: [] },
+    branch: { self: {} },
     current: new SubTree("root"),
     connected: localStorage.getItem("refresh")!==null,
     selected: {
@@ -158,8 +159,10 @@ export default function reduce(state = initialState, action) {
                 }
 
                 case Actions.ACTION.CURRENT: {
-
-                    return { ...state, branch: { index: action.payload } }
+                    if(Array.isArray(action.payload))
+                    return { ...state, branch: { self: SubTreeHelper.getSubtreeAtPath(state.fileTree,action.payload) } }
+                    else
+                    return { ...state, branch: { self: action.payload } }
                 }
                 default:
                     return state;
@@ -275,7 +278,7 @@ function triggerNotifier(state, type, message) {
     // console.log("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
 
     return {
-        ...state,
+        ...state, ...state.fileTree,
         notification: {
             type: type,
             message: message

@@ -4,10 +4,32 @@ import { Actions, setAction } from '../../../redux/actions/Actions';
 import LFileTag from './l-file-tag/lFileTag';
 import LFolderTag from './l-folder-tag/lFolderTag';
 import { DropTarget } from "react-dnd";
-
-
 import './listView.scss';
 import { connect } from 'react-redux';
+
+
+
+function ListViewChildren(props){
+  if (props.children) {
+    return props.children.map((child, index) => {
+      if (child.isFile)
+        return (
+          <LFileTag 
+            name={child.name}
+            lastModified={child.meta.lastModified}
+            type={child.meta.type}
+            size={child.meta.size}
+            self={child} 
+            dispatch={props.dispatch}/>
+          );
+      else
+        return (
+          <LFolderTag self= {child} name={child.name} dispatch={props.dispatch}/>
+         )
+    });
+  }else return'';
+
+}
 
 class ListView_ extends React.Component {
 
@@ -30,7 +52,7 @@ class ListView_ extends React.Component {
 		} else {
 			let item = monitor.getItem()
 
-			if (this.props.self.children[item.index[item.index.length - 1]] === item) return;
+			if (this.props.self.children.filter(e=>e.name===item.name).length!==0) return;
 			this.props.dispatch(
 				setAction(
 					Actions.FileManager.FOLDER.MOVE.REMOTE,
@@ -42,22 +64,7 @@ class ListView_ extends React.Component {
 	}
   
   render() {
-    let children=()=> {
-      if (this.props.self.children) {
-        return this.props.self.children.map((child, index) => {
-          child.index = this.props.self.index.concat(index);
-          if (child.isFile)
-            return (
-              <LFileTag self={child} dispatch={this.props.dispatch}/>
-              );
-          else
-            return (
-              <LFolderTag self= {child} dispatch={this.props.dispatch}/>
-             )
-        });
-      }
-  
-    }
+
 
     return this.props.connectDropTarget((
       <div className="rootListView">
@@ -71,7 +78,7 @@ class ListView_ extends React.Component {
             </tr>
           </thead>
           <tbody>
-            {children()}
+            <ListViewChildren children={this.props.self.children} dispatch={this.props.dispatch}/>
           </tbody>
         </table>
       </div>

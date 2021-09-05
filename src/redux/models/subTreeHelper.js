@@ -14,6 +14,35 @@ export default class SubTreeHelper{
         return;
     }
 
+    static removeLeafAtPath(subtree,path,name){
+        console.log("removeLeafAtPath ",path,name)
+        let index;
+        if(Array.isArray(path)) index =path;
+        else index = path.split('/').filter(a=>a!=="")
+        if(index.length===0||!index) throw new Error("SubTreeHelper.removeElAt param2 can't be null or empty")
+
+        let parent = SubTreeHelper.getSubtreeAtPath(subtree,index)
+        parent.children = parent.children.filter(e=>e.name!==name);
+        return;
+    }
+
+    static removeElAtPath(subtree,path) {
+                console.log("removeLeafAtPath ",path)
+
+        let index;
+        if(Array.isArray(path)) index =path;
+        else index = path.split('/').filter(a=>a!=="")
+
+        if(index.length===0||!index) throw new Error("SubTreeHelper.removeElAt param2 can't be null or empty")
+        let parent = SubTreeHelper.getSubtreeAtPath(subtree,index.slice(0,index.length-1))
+        parent.children = parent.children.filter(e=>e.name!==index[index.length-1]);
+        
+    }
+
+    static removeChildAt(subtree,index){
+        subtree.children = subtree.children(0,index).concat(subtree.children.slice(index+1))
+    }
+
     static getSubtreeParentByIndex(subtree,index){
         if(index.length===0||!index) throw new Error("SubTreeHelper.getSubtreeParentByIndex param2 can't be null or empty")
         let cursor = subtree;  
@@ -30,6 +59,32 @@ export default class SubTreeHelper{
             if(tmp.children&&tmp.children.length>i)tmp = tmp.children[index[i]];
 
         }
+        return tmp;
+    }
+
+    static getSubtreeAtPath(tree,path){
+
+        if(path === undefined || tree===undefined) return tree;
+        let walk;
+        if(!Array.isArray(path)&&typeof path === 'string')
+            walk = path.split('/');
+        else if(Array.isArray(path))
+            walk = path;
+        else
+            return tree;
+        
+        
+        let tmp = tree;
+        if(walk[0]===tree.name)
+        for(let i=1; i<walk.length; i++){
+            let j=0;
+            for(;j<tmp.children.length;j++){
+                if(tmp.children[j].name===walk[i])
+                    break;
+            }
+            tmp = tmp.children[j];
+        }
+
         return tmp;
     }
 
@@ -81,7 +136,7 @@ export default class SubTreeHelper{
         // to get it for otherwhere    
         subT.path = subT.isFile?subtree.path:subtree.path+subT.name+"/";
         subtree.children = arr;
-        return subT;
+        return i;
     }
 
     static setIndex(subtree,index) { 

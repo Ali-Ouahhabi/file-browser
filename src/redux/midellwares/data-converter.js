@@ -16,7 +16,8 @@ export default function DataConverter({ getState,dispatch }) {
         switch (action.type) {
             case Actions.DataConverter.UPLOAD_File_Set:{
                 let items = action.payload.items;
-                let subtree = SubTreeHelper.getSubtreeAt(getState().fileTree,getState().branch.index);                let reference = subtree.children.length
+                let subtree = getState().branch.self||getState().fileTree;    
+                let reference = subtree.children.length
                 let files = new FormData();
                 let meta = []
                 //let size=0;
@@ -32,7 +33,6 @@ export default function DataConverter({ getState,dispatch }) {
                     leaf.meta = {
                         "path": subtree.path,
                         "name": leaf.name,
-                        "index":leaf.index,
                         "lastModified":leaf.data.lastModified,
                         "size":leaf.data.size,
                         "type":mime.lookup(leaf.data.type?leaf.data.type:leaf.name.split(".").pop())||"application/octet-stream"
@@ -66,7 +66,6 @@ export default function DataConverter({ getState,dispatch }) {
                                     element.meta = {
                                         "path": element.path,
                                         "name": element.name,
-                                        "index":element.index,
                                         "lastModified":element.data.lastModified,
                                         "size":element.data.size,
                                         "type":mime.lookup(element.data.type?element.data.type:element.name.split(".").pop())||"application/octet-stream"
@@ -100,7 +99,6 @@ export default function DataConverter({ getState,dispatch }) {
                     isFile:branch.isFile,
                     path:branch.path,
                     name:branch.name,
-                    index:branch.index//TODO: trace..??
                 };
                 return next(setAction(Actions.FileManager.FOLDER.DELETE.REMOTE,payload))
             }

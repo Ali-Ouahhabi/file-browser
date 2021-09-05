@@ -15,11 +15,16 @@ class GFolderTag_ extends React.Component {
 
 constructor(props) {
     super(props);
-    this.clicked = this.clicked.bind(this)
 		this.onDrop = this.onDrop.bind(this)
-		this.selected = this.selected.bind(this)
 		this.doubleClick = this.doubleClick.bind(this)
   }
+
+
+  componentDidMount(){
+	this.clicked = this.clicked.bind(this)
+	this.selected = this.selected.bind(this)
+}
+
   selected() {
 		this.setState({ selected: !this.state.selected });
 	}
@@ -39,7 +44,7 @@ constructor(props) {
 		} else {
 			let item = monitor.getItem()
 
-			if (this.props.self.children[item.index[item.index.length - 1]] === item) return;
+			if (this.props.self.children.filter(e=>e.name===item.name).length!==0) return;
 			this.props.dispatch(
 				setAction(
 					Actions.FileManager.FOLDER.MOVE.REMOTE,
@@ -67,7 +72,7 @@ constructor(props) {
 		this.props.dispatch(
 			setAction(
 				Actions.Tree.CURRENT,
-				this.props.self.index
+				this.props.self
 			)
 		)
 		e.preventDefault();
@@ -79,13 +84,12 @@ constructor(props) {
     return (
 		this.props.connectDragSource(this.props.connectDropTarget(
       <div className="grid-folder"
-        index={this.props.self.index}
         onClick={this.clicked}
         onDoubleClick={this.doubleClick}>
         <span className={"file-tag-icon"}>
           <ImFolder />
         </span>
-        <span className={"file-tag-title"}>{this.props.self.name.length > 11 ? this.props.self.name.substring(0, 11) + ".." : this.props.self.name}</span>
+        <span className={"file-tag-title"}>{this.props.name.length > 11 ? this.props.name.substring(0, 11) + ".." : this.props.name}</span>
 
       </div>
 		))
@@ -95,9 +99,6 @@ constructor(props) {
 }
 const dropCall = {
 	drop(props, monitor, component) {
-		// console.log("Gfolder Drop \n cnd 1 ",component instanceof GFolderTag)
-		// console.log(" cnd 2",component instanceof )
-		// console.log(" cnd 2",component instanceof GFileTag_)
 		if (component instanceof GFolderTag_) {
 			component.onDrop(props, monitor, component)
 			return

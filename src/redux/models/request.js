@@ -35,7 +35,9 @@ request=>{
 http.interceptors.response.use(
     response=>{return response},
     (error)=>{
-        if(!error.url.startsWith("/user")&&error.response.status===403){
+        console.log("interceptor errore ",error)
+        console.log("interceptor errore keys ", error.request.responseURL)
+        if(!error.request.responseURL.includes("/user")&&error.response.status===403){
             return new Promise((resolve,reject)=> userRefresh().then((data)=>{
                 localStorage.setItem("jwt",data.data)
                 return http(error.config).then(resolve).catch(reject)
