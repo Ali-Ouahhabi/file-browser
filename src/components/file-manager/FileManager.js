@@ -143,24 +143,20 @@ class FileManager_ extends React.Component {
   }
 
   render() {
-    let subtree;
-    if (this.props.branch.self.name !== undefined)
-      subtree = this.props.branch.self;
-    else
-      subtree = this.props.fileTree;
-    console.log("subtree ",this.props.branch.self.name)
+
+    console.log("subtree ",this.props.branch.name)
     let panel = () => {
       switch (this.state.layout) {
         case Layout.GRID:
-          return (<GridView self={subtree} />);
+          return (<GridView self={this.props.branch} />);
         case Layout.LIST:
-          return (<ListView self={subtree} />);
+          return (<ListView self={this.props.branch} />);
         case Layout.TREE:
           return (
             <FileTag
-              self={subtree}
+              self={this.props.branch}
               parent={null}
-              key={"key"+subtree.path+subtree.name}
+              key={this.props.branch.name}
               layout={this.state.layout}
             />)
         default:
@@ -179,7 +175,7 @@ class FileManager_ extends React.Component {
           LogOut={this.LogOut}
         />
         <FilesLayoutsViewBarr SetLayout={this.SetLayout}
-          breadCrumb={subtree.path}
+          breadCrumb={this.props.branch.path}
           dispatch={this.props.dispatch}
         />
         <DndProvider backend={HTML5Backend}>
@@ -195,7 +191,7 @@ class FileManager_ extends React.Component {
 const mapStateToProps = state => {
   return {
     fileTree: state.fileTree,
-    branch: state.branch
+    branch: state.branch.self
   };
 };
 

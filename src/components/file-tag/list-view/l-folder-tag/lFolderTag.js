@@ -72,8 +72,6 @@ class LFolderTag_ extends React.Component {
 			)
 		)
 		e.preventDefault();
-
-
 	}
 
 	render() {

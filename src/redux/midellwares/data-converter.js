@@ -13,6 +13,7 @@ import mime from "mime-types"
 //TODO: move is not sort inserting !!!! Primary
 export default function DataConverter({ getState,dispatch }) {
     return (next) => (action) => {
+        console.log("data converter ",action)
         switch (action.type) {
             case Actions.DataConverter.UPLOAD_File_Set:{
                 let items = action.payload.items;
@@ -94,6 +95,7 @@ export default function DataConverter({ getState,dispatch }) {
                 return next(setAction(Actions.FileManager.FOLDER.DOWNLOAD.REMOTE,payload))
             }
             case Actions.DataConverter.DELETE:{
+                console.log("DC state ",getState())
                 let branch = getState().selectedV.self
                 let payload={
                     isFile:branch.isFile,
@@ -141,7 +143,8 @@ export default function DataConverter({ getState,dispatch }) {
                 }
                 tmpS.selectedV=action.payload.selectedV;
                 tmpS.selectedV.view();
-                return next(setAction(Actions.SELECTED, {selectedV:tmpS.selectedV}));
+                // return next(setAction(Actions.SELECTED, {selectedV:tmpS.selectedV}));
+                return;
                 
             default:
                 return next(action);

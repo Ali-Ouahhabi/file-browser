@@ -5,7 +5,7 @@ const initialState = {
     fileTree: new SubTree("root"),
     branch: { self: {} },
     current: new SubTree("root"),
-    connected: localStorage.getItem("refresh")!==null,
+    connected: localStorage.getItem("refresh") !== null,
     selected: {
         isFile: null,
         path: null,
@@ -30,6 +30,8 @@ const initialState = {
 }
 
 export default function reduce(state = initialState, action) {
+    console.log("state ", state)
+    console.log("Reducer ", action)
     if (action.type[2] === Actions.ACTION.REMOTE)
         throw new Error("Reducer invalid actions " + action.type.join('/'))
     switch (action.type[0]) {
@@ -130,8 +132,26 @@ export default function reduce(state = initialState, action) {
                             return triggerNotifier(state, action.type[3], "Creating ...")
                         }
                         case Actions.ACTION.SUCCESS: {
-                            if (action.payload !== null && action.payload !== "")
-                                return { ...state, fileTree: action.payload };
+                            if (action.payload !== null && action.payload !== "") {
+                                if (state.branch.self.path) {
+                                    let path = state.branch.self.path
+                                    console.log("PATH ",path)
+                                    state.fileTree = action.payload;
+                                    let old = state.branch.self;
+                                    let newww = SubTreeHelper.getSubtreeAtPath(state.fileTree, path)
+                                    console.log("\t\t\t\ ", old==newww);
+                                    console.log("\t\t\t\ ", old===newww);
+
+                                    state.branch.self = newww;
+                                    return { ...state } // branch is not pointing anymore at the same ref the ref that it's point to is the old one then we should update it here to one of the best thin is to keep the branch alwayse pointing to the root wich mean we need to use the path a walk it that bad 
+
+                                } else {
+                                    state.fileTree = action.payload;
+                                    state.branch.self = state.fileTree;
+                                    return { ...state }
+                                }
+                            }
+
                             return state;
                         }
                         case Actions.ACTION.ERROR: {
@@ -148,7 +168,16 @@ export default function reduce(state = initialState, action) {
                             return triggerNotifier(state, action.type[3], "Creating ...")
                         }
                         case Actions.ACTION.SUCCESS: {
-                            return { ...state, fileTree: action.payload };
+                            if (state.branch.self.path) {
+                                state.fileTree = action.payload;
+                                state.branch.self = SubTreeHelper.getSubtreeAtPath(state.fileTree, state.branch.self.path)
+                                return { ...state } // branch is not pointing anymore at the same ref the ref that it's point to is the old one then we should update it here to one of the best thin is to keep the branch alwayse pointing to the root wich mean we need to use the path a walk it that bad 
+
+                            } else {
+                                state.fileTree = action.payload;
+                                state.branch.self = state.fileTree;
+                                return { ...state }
+                            }
                         }
                         case Actions.ACTION.ERROR: {
                             return triggerNotifier(state, action.type[3], "Error occurred while creating ...")
@@ -159,16 +188,22 @@ export default function reduce(state = initialState, action) {
                 }
 
                 case Actions.ACTION.CURRENT: {
-                    if(Array.isArray(action.payload))
-                    return { ...state, branch: { self: SubTreeHelper.getSubtreeAtPath(state.fileTree,action.payload) } }
-                    else
-                    return { ...state, branch: { self: action.payload } }
+                    console.log("Reducer Current ", action)
+                    if (Array.isArray(action.payload)) {
+                        console.log("is array")
+                        return { ...state, branch: { self: SubTreeHelper.getSubtreeAtPath(state.fileTree, action.payload) } }
+                    }
+                    else {
+                        console.log("is not array")
+
+                        return { ...state, branch: { self: action.payload } }
+                    }
                 }
                 default:
                     return state;
 
             }
-        case Actions.ACTION.SELECTED:
+        case Actions.ACTION.SELECTED://should be removed 
             return { ...state, selectedV: action.payload.selectedV }
         case Actions.ACTION.FOLDER:
             switch (action.type[1]) {

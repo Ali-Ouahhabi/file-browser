@@ -63,11 +63,11 @@ export default class SubTreeHelper{
     }
 
     static getSubtreeAtPath(tree,path){
-
         if(path === undefined || tree===undefined) return tree;
         let walk;
-        if(!Array.isArray(path)&&typeof path === 'string')
-            walk = path.split('/');
+        if(!Array.isArray(path)&&typeof path === "string"){
+            walk = path.split('/').filter(e=>e!=="");
+        }
         else if(Array.isArray(path))
             walk = path;
         else
@@ -75,6 +75,7 @@ export default class SubTreeHelper{
         
         
         let tmp = tree;
+        console.log("WALK ",walk)
         if(walk[0]===tree.name)
         for(let i=1; i<walk.length; i++){
             let j=0;
@@ -84,7 +85,6 @@ export default class SubTreeHelper{
             }
             tmp = tmp.children[j];
         }
-
         return tmp;
     }
 
