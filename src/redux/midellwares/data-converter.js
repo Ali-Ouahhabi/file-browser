@@ -132,7 +132,7 @@ export default function DataConverter({ getState, dispatch }) {
             }
             case Actions.DataConverter.CREATE: {
                 let payload = {
-                    selectedV: getState().selectedV,
+                    selectedV: getState().branch,
                     name: action.payload.name
                 }
                 return next(setAction(Actions.FileManager.FOLDER.CREATE.REMOTE, payload))
@@ -169,7 +169,7 @@ const getFileStructure = (items, subtree) => {
                     name: '',
                     lastModified: '',
                     size: '',
-                    type:'' 
+                    type: ''
                 }
             }
             SubTreeHelper.addChildTo(subtree, leaf)

@@ -100,29 +100,14 @@ export default function apiService({ getState, dispatch }) {
                                         action.payload
                                     )
                                 )
-                                console.log(" Create bf insert ",action.payload.selectedV.self)
-
                                 let childIndex = SubTreeHelper.addChildTo(action.payload.selectedV.self, {
                                     name: action.payload.name,
                                     isFile: false,
                                     children: [],
                                     status: new Status("s")
                                 })
- 
-                                console.log(" Create bf update tree ",action.payload.selectedV.self)
-                                return Tree.updateTree(getState().fileTree).then((resp) => {
-                                    return next(
-                                        setAction(
-                                            Actions.FileManager.FOLDER.CREATE.LOCAL.SUCCESS, resp)
-                                    )
-                                }
-                                ).catch(resp => {
-                                    SubTreeHelper.removeChildAt(getState().fileTree, childIndex);
-                                    return next(
-                                        setAction(
-                                            Actions.FileManager.FOLDER.CREATE.LOCAL.ERROR, resp)
-                                    )
-                                });
+                                return next(setAction(Actions.Tree.UPDATE, getState().fileTree))
+
                             case Actions.ACTION.RENAME:
                                 next(
                                     setAction(
@@ -158,7 +143,7 @@ export default function apiService({ getState, dispatch }) {
                                     name: action.payload.name
                                 })
                                     .then((data) => {
-                                        console.log("middelware Api ",action)
+                                        console.log("middelware Api ", action)
                                         if (action.payload.isFile)
                                             SubTreeHelper.removeLeafAtPath(getState().fileTree, action.payload.path, action.payload.name);
                                         else
@@ -166,7 +151,7 @@ export default function apiService({ getState, dispatch }) {
                                         return next(setAction(Actions.Tree.UPDATE, getState().fileTree))
                                     })
                                     .catch((error) => {
-                                        console.log("middelware Api err ",action)
+                                        console.log("middelware Api err ", action)
                                         return next(
                                             setAction(
                                                 Actions.FileManager.FOLDER.DELETE.LOCAL.ERROR,
@@ -251,7 +236,7 @@ export default function apiService({ getState, dispatch }) {
                                 return Folder.folderMove(tmp)
                                     .then((data) => {
                                         if (from.isFile)
-                                            SubTreeHelper.removeLeafAtPath(getState().fileTree, from.path,from.name);
+                                            SubTreeHelper.removeLeafAtPath(getState().fileTree, from.path, from.name);
                                         else
                                             SubTreeHelper.removeElAtPath(getState().fileTree, from.path);
                                         SubTreeHelper.addChildTo(to, from)
