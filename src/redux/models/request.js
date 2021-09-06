@@ -182,7 +182,6 @@ function folderDownload(payload){
         method:"POST",
         data: payload,
         responseType: 'blob'
-       // headers:{'Content-Type': 'multipart/form-data'}// TODO ??
     })
 }
 

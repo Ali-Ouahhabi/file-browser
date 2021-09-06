@@ -9,8 +9,6 @@ import mime from "mime-types"
 // const MaxBatchSize = ??
 // TODO group by batch size 
 
-//TODO: check if folder is selected in the dependent actions 
-//TODO: move is not sort inserting !!!! Primary
 export default function DataConverter({ getState, dispatch }) {
     return (next) => (action) => {
         console.log("data converter ", action)
@@ -55,7 +53,7 @@ export default function DataConverter({ getState, dispatch }) {
                 let items = action.payload.items;
                 let subtree = action.payload.subTree;
                 let reference = subtree.children.length;
-                return getFileStructure(items, subtree).then(e => {//TODO catch .......
+                return getFileStructure(items, subtree).then(e => {
                     return Promise.all(e).then(leafs => {
                         let files = new FormData();
                         let meta = []

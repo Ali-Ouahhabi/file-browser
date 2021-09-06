@@ -13,7 +13,7 @@ const mapStateToProps = state => {
 
 class App_ extends React.Component {
 
-  render() {//TODO huge cleaning || a router with a menu for a home page login/register logout 
+  render() {
     console.log("APP connected ",this.props.connected)
 
     return (
