@@ -3,7 +3,7 @@ import { Status } from "../models/subTree";
 import SubTreeHelper from "../models/subTreeHelper";
 import mime from "mime-types"
 
-	//TODO: check for duplicate name or path
+//TODO: check for duplicate name or path
 
 
 // const MaxBatchSize = ??
@@ -11,13 +11,13 @@ import mime from "mime-types"
 
 //TODO: check if folder is selected in the dependent actions 
 //TODO: move is not sort inserting !!!! Primary
-export default function DataConverter({ getState,dispatch }) {
+export default function DataConverter({ getState, dispatch }) {
     return (next) => (action) => {
-        console.log("data converter ",action)
+        console.log("data converter ", action)
         switch (action.type) {
-            case Actions.DataConverter.UPLOAD_File_Set:{
+            case Actions.DataConverter.UPLOAD_File_Set: {
                 let items = action.payload.items;
-                let subtree = getState().branch.self||getState().fileTree;    
+                let subtree = getState().branch.self || getState().fileTree;
                 let reference = subtree.children.length
                 let files = new FormData();
                 let meta = []
@@ -34,14 +34,14 @@ export default function DataConverter({ getState,dispatch }) {
                     leaf.meta = {
                         "path": subtree.path,
                         "name": leaf.name,
-                        "lastModified":leaf.data.lastModified,
-                        "size":leaf.data.size,
-                        "type":mime.lookup(leaf.data.type?leaf.data.type:leaf.name.split(".").pop())||"application/octet-stream"
+                        "lastModified": leaf.data.lastModified,
+                        "size": leaf.data.size,
+                        "type": mime.lookup(leaf.data.type ? leaf.data.type : leaf.name.split(".").pop()) || "application/octet-stream"
                     }
                     SubTreeHelper.addChildTo(subtree, leaf)
                     files.append("files", leaf.data);
                     meta.push(leaf.meta)
-                    })
+                })
                 files.append(
                     'metadata',
                     new Blob(
@@ -49,12 +49,12 @@ export default function DataConverter({ getState,dispatch }) {
                         { type: 'application/json' }
                     )
                 );
-                return next(setAction(Actions.FileManager.FOLDER.UPLOAD.REMOTE , { subTree: subtree, data: files, reference: reference }))   
-                }
+                return next(setAction(Actions.FileManager.FOLDER.UPLOAD.REMOTE, { subTree: subtree, data: files, reference: reference }))
+            }
             case Actions.DataConverter.UPLOAD:
                 let items = action.payload.items;
                 let subtree = action.payload.subTree;
-                let reference =subtree.children.length;
+                let reference = subtree.children.length;
                 return getFileStructure(items, subtree).then(e => {//TODO catch .......
                     return Promise.all(e).then(leafs => {
                         let files = new FormData();
@@ -67,9 +67,9 @@ export default function DataConverter({ getState,dispatch }) {
                                     element.meta = {
                                         "path": element.path,
                                         "name": element.name,
-                                        "lastModified":element.data.lastModified,
-                                        "size":element.data.size,
-                                        "type":mime.lookup(element.data.type?element.data.type:element.name.split(".").pop())||"application/octet-stream"
+                                        "lastModified": element.data.lastModified,
+                                        "size": element.data.size,
+                                        "type": mime.lookup(element.data.type ? element.data.type : element.name.split(".").pop()) || "application/octet-stream"
                                     }
                                     meta.push(element.meta)
                                 }
@@ -82,70 +82,72 @@ export default function DataConverter({ getState,dispatch }) {
                                 { type: 'application/json' }
                             )
                         );
-                        return next(setAction(Actions.FileManager.FOLDER.UPLOAD.REMOTE , { subTree: subtree, data: files, reference:reference })) 
+                        return next(setAction(Actions.FileManager.FOLDER.UPLOAD.REMOTE, { subTree: subtree, data: files, reference: reference }))
                     })
                 })
-            case Actions.DataConverter.DOWNLOAD:{
+            case Actions.DataConverter.DOWNLOAD: {
                 let branch = getState().selectedV.self
-                let payload={
-                    isFile:branch.isFile?"true":"false",
-                    path:branch.path,
-                    name:branch.name
-                };
-                return next(setAction(Actions.FileManager.FOLDER.DOWNLOAD.REMOTE,payload))
-            }
-            case Actions.DataConverter.DELETE:{
-                console.log("DC state ",getState())
-                let branch = getState().selectedV.self
-                let payload={
-                    isFile:branch.isFile,
-                    path:branch.path,
-                    name:branch.name,
-                };
-                return next(setAction(Actions.FileManager.FOLDER.DELETE.REMOTE,payload))
-            }
-            case Actions.DataConverter.RENAME:{
-                let branch = getState().selectedV.self
-                let payload={ ref:{
-                    branch:branch,
-                    newName:action.payload.newName
-                },
-                req:{
-                    isFile:branch.isFile,
-                    path:branch.path
-                }
-                };
-                if(branch.isFile){
-                payload.req ={
-                    ...payload.req,
-                    name:branch.name,
-                    newName:action.payload.newName
-                }}else{
-                payload.req ={
-                    ...payload.req,
-                    newPath:branch.path.replace(RegExp("/"+branch.name+"/$"),"/"+action.payload.newName+"/")
-                }
-                }
-                return next(setAction(Actions.FileManager.FOLDER.RENAME.REMOTE,payload))
-            }
-            case Actions.DataConverter.CREATE:{
                 let payload = {
-                    selectedV:getState().selectedV,
-                    name:action.payload.name
+                    isFile: branch.isFile ? "true" : "false",
+                    path: branch.path,
+                    name: branch.name
+                };
+                return next(setAction(Actions.FileManager.FOLDER.DOWNLOAD.REMOTE, payload))
+            }
+            case Actions.DataConverter.DELETE: {
+                console.log("DC state ", getState())
+                let branch = getState().selectedV.self
+                let payload = {
+                    isFile: branch.isFile,
+                    path: branch.path,
+                    name: branch.name,
+                };
+                return next(setAction(Actions.FileManager.FOLDER.DELETE.REMOTE, payload))
+            }
+            case Actions.DataConverter.RENAME: {
+                let branch = getState().selectedV.self
+                let payload = {
+                    ref: {
+                        branch: branch,
+                        newName: action.payload.newName
+                    },
+                    req: {
+                        isFile: branch.isFile,
+                        path: branch.path
+                    }
+                };
+                if (branch.isFile) {
+                    payload.req = {
+                        ...payload.req,
+                        name: branch.name,
+                        newName: action.payload.newName
+                    }
+                } else {
+                    payload.req = {
+                        ...payload.req,
+                        newPath: branch.path.replace(RegExp("/" + branch.name + "/$"), "/" + action.payload.newName + "/")
+                    }
                 }
-                return next(setAction(Actions.FileManager.FOLDER.CREATE.REMOTE,payload))
+                return next(setAction(Actions.FileManager.FOLDER.RENAME.REMOTE, payload))
+            }
+            case Actions.DataConverter.CREATE: {
+                let payload = {
+                    selectedV: getState().selectedV,
+                    name: action.payload.name
+                }
+                return next(setAction(Actions.FileManager.FOLDER.CREATE.REMOTE, payload))
             }
             case Actions.DataConverter.SELECTED:
 
-                let tmpS=getState()
-                if("selectedV" in tmpS && typeof tmpS.selectedV.view === 'function') {
+                let tmpS = getState()
+                if ("selectedV" in tmpS && typeof tmpS.selectedV.view === 'function') {
                     tmpS.selectedV.view();
                 }
-                tmpS.selectedV=action.payload.selectedV;
+                tmpS.selectedV = action.payload.selectedV;
                 tmpS.selectedV.view();
                 // return next(setAction(Actions.SELECTED, {selectedV:tmpS.selectedV}));
                 return;
-                
+
             default:
                 return next(action);
         }
@@ -156,18 +158,25 @@ const getFileStructure = (items, subtree) => {
 
     return new Promise((R) => R(Array.from(items).map(item => {
         if (item instanceof DataTransferItem) item = item.webkitGetAsEntry();
-        if (item.isFile) { 
+        if (item.isFile) {
             let leaf = {
                 name: item.name,
                 isFile: item.isFile,
                 children: null,
                 status: new Status("up", "init"),
+                meta: {
+                    path: '',
+                    name: '',
+                    lastModified: '',
+                    size: '',
+                    type:'' 
+                }
             }
             SubTreeHelper.addChildTo(subtree, leaf)
 
             return new Promise((resolve) => {
                 item.file((file) => {
-                    leaf.data=file
+                    leaf.data = file
                     resolve([leaf])
                 })
             });
@@ -179,10 +188,10 @@ const getFileStructure = (items, subtree) => {
                 children: [],
                 status: new Status("up", "init")
             }
-           SubTreeHelper.addChildTo(subtree, subTree);
+            SubTreeHelper.addChildTo(subtree, subTree);
 
             var dirReader = item.createReader();
-                
+
             return new Promise((resolve) => {
                 dirReader.readEntries((entries) =>
                     getFileStructure(entries, subTree).then(e => {

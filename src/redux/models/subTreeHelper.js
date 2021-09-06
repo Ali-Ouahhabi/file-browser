@@ -15,7 +15,7 @@ export default class SubTreeHelper{
     }
 
     static removeLeafAtPath(subtree,path,name){
-        console.log("removeLeafAtPath ",path,name)
+        
         let index;
         if(Array.isArray(path)) index =path;
         else index = path.split('/').filter(a=>a!=="")
@@ -27,7 +27,7 @@ export default class SubTreeHelper{
     }
 
     static removeElAtPath(subtree,path) {
-                console.log("removeLeafAtPath ",path)
+                
 
         let index;
         if(Array.isArray(path)) index =path;
@@ -75,7 +75,7 @@ export default class SubTreeHelper{
         
         
         let tmp = tree;
-        console.log("WALK ",walk)
+        
         if(walk[0]===tree.name)
         for(let i=1; i<walk.length; i++){
             let j=0;

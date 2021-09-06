@@ -251,7 +251,7 @@ export default function apiService({ getState, dispatch }) {
                                 return Folder.folderMove(tmp)
                                     .then((data) => {
                                         if (from.isFile)
-                                            SubTreeHelper.removeLeafAtPath(getState().fileTree, from.path);
+                                            SubTreeHelper.removeLeafAtPath(getState().fileTree, from.path,from.name);
                                         else
                                             SubTreeHelper.removeElAtPath(getState().fileTree, from.path);
                                         SubTreeHelper.addChildTo(to, from)
