@@ -27,7 +27,7 @@ function ListViewChildren(props){
           <LFolderTag self= {child} name={child.name} dispatch={props.dispatch}/>
          )
     });
-  }else return'';
+  }else return null;
 
 }
 
@@ -71,7 +71,7 @@ class ListView_ extends React.Component {
         <table className="list-view-table">
           <thead>
             <tr>
-              <th colspan="2">name</th>
+              <th colSpan="2">name</th>
               <th>lastModified</th>
               <th>type</th>
               <th>size</th>

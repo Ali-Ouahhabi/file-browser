@@ -32,7 +32,7 @@ class FilesLayoutsViewBarr extends React.Component {
   }
 
   render() {
-    let item = (it, index) => [(<a onClick={this.clicked} index={index}>{it}</a>), (<div className="breadcrumb__separator">/</div>)]
+    let item = (it, index) => [(<a onClick={this.clicked} key={"k"+index} index={index}>{it}</a>), (<div key={index} className="breadcrumb__separator">/</div>)]
 
     let breadCrumb = () => {
       if (this.props.breadCrumb)
