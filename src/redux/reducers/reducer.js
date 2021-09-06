@@ -4,7 +4,6 @@ import SubTreeHelper from "../models/subTreeHelper";
 const initialState = {
     fileTree: new SubTree("root"),
     branch: { self: {} },
-    current: new SubTree("root"),
     connected: localStorage.getItem("refresh") !== null,
     selected: {
         isFile: null,
@@ -91,7 +90,8 @@ export default function reduce(state = initialState, action) {
                             localStorage.removeItem("jwt")
                             localStorage.removeItem("refresh")
                             return {
-                                ...state,
+                                fileTree: new SubTree("root"),
+                                branch: { self: {} },
                                 connected: false,
                                 signInUp: {
                                     ...state.signInUp,
@@ -134,17 +134,9 @@ export default function reduce(state = initialState, action) {
                         case Actions.ACTION.SUCCESS: {
                             if (action.payload !== null && action.payload !== "") {
                                 if (state.branch.self.path) {
-                                    let path = state.branch.self.path
-                                    console.log("PATH ",path)
                                     state.fileTree = action.payload;
-                                    let old = state.branch.self;
-                                    let newww = SubTreeHelper.getSubtreeAtPath(state.fileTree, path)
-                                    console.log("\t\t\t\ ", old==newww);
-                                    console.log("\t\t\t\ ", old===newww);
-
-                                    state.branch.self = newww;
-                                    return { ...state } // branch is not pointing anymore at the same ref the ref that it's point to is the old one then we should update it here to one of the best thin is to keep the branch alwayse pointing to the root wich mean we need to use the path a walk it that bad 
-
+                                    state.branch.self = SubTreeHelper.getSubtreeAtPath(state.fileTree, state.branch.self.path);
+                                    return { ...state }
                                 } else {
                                     state.fileTree = action.payload;
                                     state.branch.self = state.fileTree;
@@ -152,7 +144,13 @@ export default function reduce(state = initialState, action) {
                                 }
                             }
 
-                            return state;
+                            return {
+                                ...state,
+                                fileTree: new SubTree("root"),
+                                branch: {
+                                    self: new SubTree("root"),
+                                }
+                            };
                         }
                         case Actions.ACTION.ERROR: {
                             return triggerNotifier(state, action.type[3], "Error occurred while creating ...")
