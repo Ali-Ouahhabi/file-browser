@@ -13,13 +13,6 @@ import GridView from '../file-tag/grid-view/gridView';
 import ListView from '../file-tag/list-view/listView';
 
 
-//TODO: we have selected branche and displayed or curent branch
-// in the init state the root brache is the curent branch the selected branch is also the root 
-// at curenet branch on subtree
-// the selected branch can only be the sub of the sub tree so??
-// you define curenet and selected branch whe nothin is selected point to the curent by default
-// also at init the root branch is the curent view.
-// need also to defin a pointer to the structure to check if ther is already a curent branch pointed to it !!!!
 class FileManager_ extends React.Component {
 
   constructor(props) {

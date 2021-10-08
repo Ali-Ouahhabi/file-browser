@@ -1,5 +1,7 @@
 import axios from "axios";
 
+
+//TDOD CORS
 const PORT=":"+8080;
 // const BASE_URL= "https://dscp.herokuapp.com/api/v1";
 const BASE_URL= "http://localhost"+PORT+"/api/v1";
